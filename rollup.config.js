@@ -18,11 +18,9 @@ export default {
 	format: 'umd',
 	name: pkg.name,
 	external: [
-		'moment',
 		'chart.js'
 	],
 	globals: {
-		moment: 'moment',
 		'chart.js': 'Chart'
 	}
 };
