@@ -21,10 +21,10 @@ export default function(Chart) {
 				strokeStyle: dataset.borderColor,
 				pointStyle: dataset.pointStyle,
 
-				shadowOffsetX: dataset.shadowOffsetX,
-				shadowOffsetY: dataset.shadowOffsetY,
-				shadowBlur: dataset.shadowBlur,
-				shadowColor: dataset.shadowColor,
+				shadowOffsetX: (!helpers.isArray(dataset.shadowOffsetX) ? dataset.shadowOffsetX : dataset.shadowOffsetX[0]),
+				shadowOffsetY: (!helpers.isArray(dataset.shadowOffsetY) ? dataset.shadowOffsetY : dataset.shadowOffsetY[0]),
+				shadowBlur: (!helpers.isArray(dataset.shadowBlur) ? dataset.shadowBlur : dataset.shadowBlur[0]),
+				shadowColor: (!helpers.isArray(dataset.shadowColor) ? dataset.shadowColor : dataset.shadowColor[0]),
 
 				// Below is extra data used for toggling the datasets
 				datasetIndex: i

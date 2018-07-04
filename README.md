@@ -59,10 +59,10 @@ To configure this plugin, you can simply add the following properties to your da
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `shadowOffsetX` | `Number` | 0 | Indicates the horizontal distance the shadow should extend from the element.
-| `shadowOffsetY` | `Number` | 0 | Indicates the vertical distance the shadow should extend from the element.
-| `shadowBlur` | `Number` | 0 | Indicates the size of the blurring effect; this value doesn't correspond to a number of pixels.
-| `shadowColor` | `Number` | `'rgba(0, 0, 0, 0)'` | A standard CSS color value indicating the color of the shadow effect.
+| `shadowOffsetX` | `Number/Number[]` | 0 | Indicates the horizontal distance the shadow should extend from the element.
+| `shadowOffsetY` | `Number/Number[]` | 0 | Indicates the vertical distance the shadow should extend from the element.
+| `shadowBlur` | `Number/Number[]` | 0 | Indicates the size of the blurring effect; this value doesn't correspond to a number of pixels.
+| `shadowColor` | `Number/Number[]` | `'rgba(0, 0, 0, 0)'` | A standard CSS color value indicating the color of the shadow effect.
 | `hoverShadowOffsetX` | `Number/Number[]` | 0 | The horizontal distance the shadow should extend from the element when hovered.
 | `hoverShadowOffsetY` | `Number/Number[]` | 0 | The vertical distance the shadow should extend from the element when hovered.
 | `hoverShadowBlur` | `Number/Number[]` | 0 | The size of the blurring effect when hovered.

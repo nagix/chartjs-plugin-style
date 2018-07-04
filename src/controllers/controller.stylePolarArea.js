@@ -5,6 +5,41 @@ export default function(Chart) {
 	var elements = Chart.elements;
 	var helpers = Chart.helpers;
 
+	// Ported from Chart.js 2.7.2. Modified for style tooltip.
+	Chart.defaults.doughnut.legend.labels.generateLabels = function(chart) {
+		var data = chart.data;
+		if (data.labels.length && data.datasets.length) {
+			return data.labels.map(function(label, i) {
+				var meta = chart.getDatasetMeta(0);
+				var ds = data.datasets[0];
+				var arc = meta.data[i];
+				var custom = arc.custom || {};
+				var valueAtIndexOrDefault = helpers.valueAtIndexOrDefault;
+				var arcOpts = chart.options.elements.arc;
+				var fill = custom.backgroundColor ? custom.backgroundColor : valueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
+				var stroke = custom.borderColor ? custom.borderColor : valueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
+				var bw = custom.borderWidth ? custom.borderWidth : valueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
+
+				return {
+					text: label,
+					fillStyle: fill,
+					strokeStyle: stroke,
+					lineWidth: bw,
+					hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+
+					shadowOffsetX: custom.shadowOffsetX ? custom.shadowOffsetX : valueAtIndexOrDefault(ds.shadowOffsetX, i, arcOpts.shadowOffsetX),
+					shadowOffsetY: custom.shadowOffsetY ? custom.shadowOffsetY : valueAtIndexOrDefault(ds.shadowOffsetY, i, arcOpts.shadowOffsetY),
+					shadowBlur: custom.shadowBlur ? custom.shadowBlur : valueAtIndexOrDefault(ds.shadowBlur, i, arcOpts.shadowBlur),
+					shadowColor: custom.shadowColor ? custom.shadowColor : valueAtIndexOrDefault(ds.shadowColor, i, arcOpts.shadowColor),
+
+					// Extra data used for toggling the correct item
+					index: i
+				};
+			});
+		}
+		return [];
+	};
+
 	var PolarAreaController = Chart.controllers.polarArea;
 
 	return Chart.controllers.polarArea.extend({
