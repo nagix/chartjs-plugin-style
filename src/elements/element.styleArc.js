@@ -4,23 +4,12 @@ export default function(Chart) {
 
 	return Chart.elements.Arc.extend({
 
-		// Ported from Chart.js 2.7.2. Modified for style tooltip.
 		draw: function() {
-			var ctx = this._chart.ctx;
-			var vm = this._view;
-			var sA = vm.startAngle;
-			var eA = vm.endAngle;
+			var me = this;
+			var ctx = me._chart.ctx;
+			var vm = me._view;
 
-			ctx.beginPath();
-
-			ctx.arc(vm.x, vm.y, vm.outerRadius, sA, eA);
-			ctx.arc(vm.x, vm.y, vm.innerRadius, eA, sA, true);
-
-			ctx.closePath();
-			ctx.strokeStyle = vm.borderColor;
-			ctx.lineWidth = vm.borderWidth;
-
-			ctx.fillStyle = vm.backgroundColor;
+			Chart.elements.Arc.prototype.draw.apply(me, arguments);
 
 			ctx.save();
 
@@ -29,16 +18,16 @@ export default function(Chart) {
 			ctx.shadowBlur = vm.shadowBlur;
 			ctx.shadowColor = vm.shadowColor;
 
+			// Shadow has to be drawn in background
+			ctx.globalCompositeOperation = 'destination-over';
+
 			ctx.fill();
-
-			ctx.restore();
-
-			ctx.lineJoin = 'bevel';
 
 			if (vm.borderWidth) {
 				ctx.stroke();
 			}
-		}
 
+			ctx.restore();
+		}
 	});
 }

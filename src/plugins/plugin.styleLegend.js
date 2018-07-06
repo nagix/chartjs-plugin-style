@@ -4,7 +4,7 @@ export default function(Chart) {
 	var helpers = Chart.helpers;
 	var layouts = Chart.layouts;
 
-	// Ported from Chart.js 2.7.2. Modified for style tooltip.
+	// Ported from Chart.js 2.7.2. Modified for style legend.
 	// Generates labels shown in the legend
 	defaults.global.legend.labels.generateLabels = function(chart) {
 		var data = chart.data;
@@ -33,7 +33,7 @@ export default function(Chart) {
 	};
 
 	/**
-	 * Ported from Chart.js 2.7.2. Modified for style tooltip.
+	 * Ported from Chart.js 2.7.2.
 	 *
 	 * Helper function to get the box width based on the usePointStyle option
 	 * @param labelopts {Object} the label options on the legend
@@ -48,7 +48,7 @@ export default function(Chart) {
 
 	var StyleLegend = Chart.Legend.extend({
 
-		// Ported from Chart.js 2.7.2. Modified for style tooltip.
+		// Ported from Chart.js 2.7.2. Modified for style legend.
 		// Actually draw the legend on the canvas
 		draw: function() {
 			var me = this;
@@ -102,11 +102,6 @@ export default function(Chart) {
 						ctx.setLineDash(valueOrDefault(legendItem.lineDash, lineDefault.borderDash));
 					}
 
-					ctx.shadowOffsetX = valueOrDefault(legendItem.shadowOffsetX, lineDefault.shadowOffsetX);
-					ctx.shadowOffsetY = valueOrDefault(legendItem.shadowOffsetY, lineDefault.shadowOffsetY);
-					ctx.shadowBlur = valueOrDefault(legendItem.shadowBlur, lineDefault.shadowBlur);
-					ctx.shadowColor = valueOrDefault(legendItem.shadowColor, lineDefault.shadowColor);
-
 					if (opts.labels && opts.labels.usePointStyle) {
 						// Recalculate x and y for drawPoint() because its expecting
 						// x and y to be center of figure (instead of top left)
@@ -117,12 +112,43 @@ export default function(Chart) {
 
 						// Draw pointStyle as legend symbol
 						helpers.canvas.drawPoint(ctx, legendItem.pointStyle, radius, centerX, centerY);
+
+						ctx.shadowOffsetX = valueOrDefault(legendItem.shadowOffsetX, lineDefault.shadowOffsetX);
+						ctx.shadowOffsetY = valueOrDefault(legendItem.shadowOffsetY, lineDefault.shadowOffsetY);
+						ctx.shadowBlur = valueOrDefault(legendItem.shadowBlur, lineDefault.shadowBlur);
+						ctx.shadowColor = valueOrDefault(legendItem.shadowColor, lineDefault.shadowColor);
+
+						// Shadow has to be drawn in background
+						ctx.globalCompositeOperation = 'destination-over';
+
+						switch (legendItem.pointStyle) {
+						default:
+							ctx.fill();
+							break;
+						case 'cross': case 'crossRot': case 'star': case 'line': case 'dash':
+							break;
+						}
+
+						ctx.stroke();
 					} else {
 						// Draw box as legend symbol
+						ctx.fillRect(x, y, boxWidth, fontSize);
 						if (!isLineWidthZero) {
 							ctx.strokeRect(x, y, boxWidth, fontSize);
 						}
+
+						ctx.shadowOffsetX = valueOrDefault(legendItem.shadowOffsetX, lineDefault.shadowOffsetX);
+						ctx.shadowOffsetY = valueOrDefault(legendItem.shadowOffsetY, lineDefault.shadowOffsetY);
+						ctx.shadowBlur = valueOrDefault(legendItem.shadowBlur, lineDefault.shadowBlur);
+						ctx.shadowColor = valueOrDefault(legendItem.shadowColor, lineDefault.shadowColor);
+
+						// Shadow has to be drawn in background
+						ctx.globalCompositeOperation = 'destination-over';
+
 						ctx.fillRect(x, y, boxWidth, fontSize);
+						if (!isLineWidthZero) {
+							ctx.strokeRect(x, y, boxWidth, fontSize);
+						}
 					}
 
 					ctx.restore();
@@ -198,7 +224,7 @@ export default function(Chart) {
 		},
 	});
 
-	// Ported from Chart.js 2.7.2. Modified for style tooltip.
+	// Ported from Chart.js 2.7.2. Modified for style legend.
 	function createNewLegendAndAttach(chart, legendOpts) {
 		var legend = new StyleLegend({
 			ctx: chart.ctx,
@@ -216,7 +242,7 @@ export default function(Chart) {
 
 		_element: StyleLegend,
 
-		// Ported from Chart.js 2.7.2. Modified for style tooltip.
+		// Ported from Chart.js 2.7.2.
 		beforeInit: function(chart) {
 			var legendOpts = chart.options.legend;
 
@@ -225,7 +251,7 @@ export default function(Chart) {
 			}
 		},
 
-		// Ported from Chart.js 2.7.2. Modified for style tooltip.
+		// Ported from Chart.js 2.7.2.
 		beforeUpdate: function(chart) {
 			var legendOpts = chart.options.legend;
 			var legend = chart.legend;
@@ -245,7 +271,7 @@ export default function(Chart) {
 			}
 		},
 
-		// Ported from Chart.js 2.7.2. Modified for style tooltip.
+		// Ported from Chart.js 2.7.2.
 		afterEvent: function(chart, e) {
 			var legend = chart.legend;
 			if (legend) {

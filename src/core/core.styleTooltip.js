@@ -7,6 +7,8 @@ export default function(Chart) {
 	var Tooltip = Chart.Tooltip;
 
 	/**
+	 * Ported from Chart.js 2.7.2.
+	 *
 	 * Helper method to merge the opacity into a color
 	 */
 	function mergeOpacity(colorString, opacity) {
