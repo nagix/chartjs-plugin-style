@@ -7,6 +7,7 @@ export default function(Chart) {
 
 	var LineController = Chart.controllers.line;
 
+	// Ported from Chart.js 2.7.2.
 	function lineEnabled(dataset, options) {
 		return helpers.valueOrDefault(dataset.showLine, options.showLines);
 	}
