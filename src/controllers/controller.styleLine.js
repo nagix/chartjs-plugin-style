@@ -152,6 +152,54 @@ export default function(Chart) {
 			return shadowColor;
 		},
 
+		getPointBevelWidth: function(point, index) {
+			var bevelWidth = this.chart.options.elements.point.bevelWidth;
+			var dataset = this.getDataset();
+			var custom = point.custom || {};
+
+			if (custom.bevelWidth) {
+				bevelWidth = custom.bevelWidth;
+			} else if (dataset.pointBevelWidth) {
+				bevelWidth = helpers.valueAtIndexOrDefault(dataset.pointBevelWidth, index, bevelWidth);
+			} else if (dataset.bevelWidth) {
+				bevelWidth = dataset.bevelWidth;
+			}
+
+			return bevelWidth;
+		},
+
+		getPointBevelHighlightColor: function(point, index) {
+			var bevelHighlightColor = this.chart.options.elements.point.bevelHighlightColor;
+			var dataset = this.getDataset();
+			var custom = point.custom || {};
+
+			if (custom.bevelHighlightColor) {
+				bevelHighlightColor = custom.bevelHighlightColor;
+			} else if (dataset.pointBevelHighlightColor) {
+				bevelHighlightColor = helpers.valueAtIndexOrDefault(dataset.pointBevelHighlightColor, index, bevelHighlightColor);
+			} else if (dataset.bevelHighlightColor) {
+				bevelHighlightColor = dataset.bevelHighlightColor;
+			}
+
+			return bevelHighlightColor;
+		},
+
+		getPointBevelShadowColor: function(point, index) {
+			var bevelShadowColor = this.chart.options.elements.point.bevelShadowColor;
+			var dataset = this.getDataset();
+			var custom = point.custom || {};
+
+			if (custom.bevelShadowColor) {
+				bevelShadowColor = custom.bevelShadowColor;
+			} else if (dataset.pointBevelShadowColor) {
+				bevelShadowColor = helpers.valueAtIndexOrDefault(dataset.pointBevelShadowColor, index, bevelShadowColor);
+			} else if (dataset.bevelShadowColor) {
+				bevelShadowColor = dataset.bevelShadowColor;
+			}
+
+			return bevelShadowColor;
+		},
+
 		updateElement: function(point, index) {
 			LineController.prototype.updateElement.apply(this, arguments);
 
@@ -161,6 +209,9 @@ export default function(Chart) {
 			point._model.shadowOffsetY = me.getPointShadowOffsetY(point, index);
 			point._model.shadowBlur = me.getPointShadowBlur(point, index);
 			point._model.shadowColor = me.getPointShadowColor(point, index);
+			point._model.bevelWidth = me.getPointBevelWidth(point, index);
+			point._model.bevelHighlightColor = me.getPointBevelHighlightColor(point, index);
+			point._model.bevelShadowColor = me.getPointBevelShadowColor(point, index);
 		},
 
 		setHoverStyle: function(element) {
@@ -178,12 +229,18 @@ export default function(Chart) {
 				element.$previousStyle.shadowOffsetY = model.shadowOffsetY;
 				element.$previousStyle.shadowBlur = model.shadowBlur;
 				element.$previousStyle.shadowColor = model.shadowColor;
+				element.$previousStyle.bevelWidth = model.bevelWidth;
+				element.$previousStyle.bevelHighlightColor = model.bevelHighlightColor;
+				element.$previousStyle.bevelShadowColor = model.bevelShadowColor;
 			}
 
 			model.shadowOffsetX = custom.hoverShadowOffsetX || valueOrDefault(dataset.pointHoverShadowOffsetX, index, model.shadowOffsetX);
 			model.shadowOffsetY = custom.hoverShadowOffsetY || valueOrDefault(dataset.pointHoverShadowOffsetY, index, model.shadowOffsetY);
 			model.shadowBlur = custom.hoverShadowBlur || valueOrDefault(dataset.pointHoverShadowBlur, index, model.shadowBlur);
 			model.shadowColor = custom.hoverShadowColor || valueOrDefault(dataset.pointHoverShadowColor, index, helpers.getHoverColor(model.shadowColor));
+			model.bevelWidth = custom.hoverBevelWidth || valueOrDefault(dataset.pointHoverBevelWidth, index, model.bevelWidth);
+			model.bevelHighlightColor = custom.hoverBevelHighlightColor || valueOrDefault(dataset.pointHoverBevelHighlightColor, index, helpers.getHoverColor(model.bevelHighlightColor));
+			model.bevelShadowColor = custom.hoverBevelShadowColor || valueOrDefault(dataset.pointHoverBevelShadowColor, index, helpers.getHoverColor(model.bevelShadowColor));
 		},
 
 		removeHoverStyle: function(element) {
@@ -197,6 +254,9 @@ export default function(Chart) {
 				model.shadowOffsetY = me.getPointShadowOffsetY(element, index);
 				model.shadowBlur = me.getPointShadowBlur(element, index);
 				model.shadowColor = me.getPointShadowColor(element, index);
+				model.bevelWidth = me.getPointBevelWidth(element, index);
+				model.bevelHighlightColor = me.getPointBevelHighlightColor(element, index);
+				model.bevelShadowColor = me.getPointBevelShadowColor(element, index);
 			}
 
 			LineController.prototype.removeHoverStyle.apply(this, arguments);

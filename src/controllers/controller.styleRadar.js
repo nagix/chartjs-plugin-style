@@ -75,10 +75,13 @@ export default function(Chart) {
 			var dataset = me.getDataset();
 			var pointElementOptions = me.chart.options.elements.point;
 
-			point._model.shadowOffsetX = custom.shadowOffsetX ? custom.shadowOffsetX : helpers.valueAtIndexOrDefault(dataset.pointShadowOffsetX, index, pointElementOptions.shadowOffsetX);
-			point._model.shadowOffsetY = custom.shadowOffsetY ? custom.shadowOffsetY : helpers.valueAtIndexOrDefault(dataset.pointShadowOffsetY, index, pointElementOptions.shadowOffsetY);
-			point._model.shadowBlur = custom.shadowBlur ? custom.shadowBlur : helpers.valueAtIndexOrDefault(dataset.pointShadowBlur, index, pointElementOptions.shadowBlur);
-			point._model.shadowColor = custom.shadowColor ? custom.shadowColor : helpers.valueAtIndexOrDefault(dataset.pointShadowColor, index, pointElementOptions.shadowColor);
+			point._model.shadowOffsetX = !isNaN(custom.shadowOffsetX) ? custom.shadowOffsetX : helpers.valueAtIndexOrDefault(dataset.pointShadowOffsetX, index, !isNaN(dataset.shadowOffsetX) ? dataset.shadowOffsetX : pointElementOptions.shadowOffsetX);
+			point._model.shadowOffsetY = !isNaN(custom.shadowOffsetY) ? custom.shadowOffsetY : helpers.valueAtIndexOrDefault(dataset.pointShadowOffsetY, index, !isNaN(dataset.shadowOffsetY) ? dataset.shadowOffsetY : pointElementOptions.shadowOffsetY);
+			point._model.shadowBlur = !isNaN(custom.shadowBlur) ? custom.shadowBlur : helpers.valueAtIndexOrDefault(dataset.pointShadowBlur, index, !isNaN(dataset.shadowBlur) ? dataset.shadowBlur : pointElementOptions.shadowBlur);
+			point._model.shadowColor = custom.shadowColor ? custom.shadowColor : helpers.valueAtIndexOrDefault(dataset.pointShadowColor, index, dataset.shadowColor ? dataset.shadowColor : pointElementOptions.shadowColor);
+			point._model.bevelWidth = !isNaN(custom.bevelWidth) ? custom.bevelWidth : helpers.valueAtIndexOrDefault(dataset.pointBevelWidth, index, !isNaN(dataset.bevelWidth) ? dataset.bevelWidth : pointElementOptions.bevelWidth);
+			point._model.bevelHighlightColor = custom.bevelHighlightColor ? custom.bevelHighlightColor : helpers.valueAtIndexOrDefault(dataset.pointBevelHighlightColor, index, dataset.bevelHighlightColor ? dataset.bevelHighlightColor : pointElementOptions.bevelHighlightColor);
+			point._model.bevelShadowColor = custom.bevelShadowColor ? custom.bevelShadowColor : helpers.valueAtIndexOrDefault(dataset.pointBevelShadowColor, index, dataset.bevelShadowColor ? dataset.bevelShadowColor : pointElementOptions.bevelShadowColor);
 		},
 
 		setHoverStyle: function(element) {
@@ -96,12 +99,18 @@ export default function(Chart) {
 				element.$previousStyle.shadowOffsetY = model.shadowOffsetY;
 				element.$previousStyle.shadowBlur = model.shadowBlur;
 				element.$previousStyle.shadowColor = model.shadowColor;
+				element.$previousStyle.bevelWidth = model.bevelWidth;
+				element.$previousStyle.bevelHighlightColor = model.bevelHighlightColor;
+				element.$previousStyle.bevelShadowColor = model.bevelShadowColor;
 			}
 
 			model.shadowOffsetX = custom.hoverShadowOffsetX ? custom.hoverShadowOffsetX : valueOrDefault(dataset.pointHoverShadowOffsetX, index, model.shadowOffsetX);
 			model.shadowOffsetY = custom.hoverShadowOffsetY ? custom.hoverShadowOffsetY : valueOrDefault(dataset.pointHoverShadowOffsetY, index, model.shadowOffsetY);
 			model.shadowBlur = custom.hoverShadowBlur ? custom.hoverShadowBlur : valueOrDefault(dataset.pointHoverShadowBlur, index, model.shadowBlur);
 			model.shadowColor = custom.hoverShadowColor ? custom.hoverShadowColor : valueOrDefault(dataset.pointHoverShadowColor, index, helpers.getHoverColor(model.shadowColor));
+			model.bevelWidth = custom.hoverBevelWidth ? custom.hoverBevelWidth : valueOrDefault(dataset.pointHoverBevelWidth, index, model.bevelWidth);
+			model.bevelHighlightColor = custom.hoverBevelHighlightColor ? custom.hoverBevelHighlightColor : valueOrDefault(dataset.pointHoverBevelHighlightColor, index, helpers.getHoverColor(model.bevelHighlightColor));
+			model.bevelShadowColor = custom.hoverBevelShadowColor ? custom.hoverBevelShadowColor : valueOrDefault(dataset.pointHoverBevelShadowColor, index, helpers.getHoverColor(model.bevelShadowColor));
 		},
 
 		removeHoverStyle: function(element) {
@@ -110,13 +119,17 @@ export default function(Chart) {
 			var custom = element.custom || {};
 			var valueOrDefault = helpers.valueAtIndexOrDefault;
 			var model = element._model;
+			var elementOpts = this.chart.options.elements.point;
 
 			// For Chart.js 2.7.2 backward compatibility
 			if (!element.$previousStyle) {
-				model.shadowOffsetX = custom.shadowOffsetX ? custom.shadowOffsetX : valueOrDefault(dataset.shadowOffsetX, index, model.shadowOffsetX);
-				model.shadowOffsetY = custom.shadowOffsetY ? custom.shadowOffsetY : valueOrDefault(dataset.shadowOffsetY, index, model.shadowOffsetY);
-				model.shadowBlur = custom.shadowBlur ? custom.shadowBlur : valueOrDefault(dataset.shadowBlur, index, model.shadowBlur);
-				model.shadowColor = custom.shadowColor ? custom.shadowColor : valueOrDefault(dataset.shadowColor, index, model.shadowColor);
+				model.shadowOffsetX = !isNaN(custom.shadowOffsetX) ? custom.shadowOffsetX : valueOrDefault(dataset.pointShadowOffsetX, index, !isNaN(dataset.shadowOffsetX) ? dataset.shadowOffsetX : elementOpts.shadowOffsetX);
+				model.shadowOffsetY = !isNaN(custom.shadowOffsetY) ? custom.shadowOffsetY : valueOrDefault(dataset.pointShadowOffsetY, index, !isNaN(dataset.shadowOffsetY) ? dataset.shadowOffsetY : elementOpts.shadowOffsetY);
+				model.shadowBlur = !isNaN(custom.shadowBlur) ? custom.shadowBlur : valueOrDefault(dataset.pointShadowBlur, index, !isNaN(dataset.shadowBlur) ? dataset.shadowBlur : elementOpts.shadowBlur);
+				model.shadowColor = custom.shadowColor ? custom.shadowColor : valueOrDefault(dataset.pointShadowColor, index, dataset.shadowColor ? dataset.shadowColor : elementOpts.shadowColor);
+				model.bevelWidth = !isNaN(custom.bevelWidth) ? custom.bevelWidth : valueOrDefault(dataset.pointBevelWidth, index, !isNaN(dataset.bevelWidth) ? dataset.bevelWidth : elementOpts.bevelWidth);
+				model.bevelHighlightColor = custom.bevelHighlightColor ? custom.bevelHighlightColor : valueOrDefault(dataset.pointBevelHighlightColor, index, dataset.bevelHighlightColor ? dataset.bevelHighlightColor : elementOpts.bevelHighlightColor);
+				model.bevelShadowColor = custom.bevelShadowColor ? custom.bevelShadowColor : valueOrDefault(dataset.pointBevelShadowColor, index, dataset.bevelShadowColor ? dataset.bevelShadowColor : elementOpts.bevelShadowColor);
 			}
 
 			RadarController.prototype.removeHoverStyle.apply(this, arguments);

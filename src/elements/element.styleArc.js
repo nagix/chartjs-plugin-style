@@ -2,32 +2,34 @@
 
 export default function(Chart) {
 
+	var helpers = Chart.helpers;
+	var styleHelpers = helpers.style;
+
 	return Chart.elements.Arc.extend({
 
 		draw: function() {
 			var me = this;
-			var ctx = me._chart.ctx;
+			var args = arguments;
+			var chart = me._chart;
 			var vm = me._view;
+			var borderAlpha = helpers.color(vm.borderColor).alpha();
+			var backgroundAlpha = helpers.color(vm.backgroundColor).alpha();
+			var bevelExtra = borderAlpha > 0 && vm.borderWidth > 0 ? vm.borderWidth / 2 : 0;
 
-			Chart.elements.Arc.prototype.draw.apply(me, arguments);
+			var drawCallback = function() {
+				Chart.elements.Arc.prototype.draw.apply(me, args);
+			};
 
-			ctx.save();
+			styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
+				vm.shadowBlur, vm.shadowColor, drawCallback, true);
 
-			ctx.shadowOffsetX = vm.shadowOffsetX;
-			ctx.shadowOffsetY = vm.shadowOffsetY;
-			ctx.shadowBlur = vm.shadowBlur;
-			ctx.shadowColor = vm.shadowColor;
-
-			// Shadow has to be drawn in background
-			ctx.globalCompositeOperation = 'destination-over';
-
-			ctx.fill();
-
-			if (vm.borderWidth) {
-				ctx.stroke();
+			if (backgroundAlpha > 0) {
+				styleHelpers.drawBackground(vm, drawCallback);
+				styleHelpers.drawBevel(chart, vm.bevelWidth + bevelExtra,
+					vm.bevelHighlightColor, vm.bevelShadowColor);
 			}
 
-			ctx.restore();
+			styleHelpers.drawBorder(vm, drawCallback);
 		}
 	});
 }

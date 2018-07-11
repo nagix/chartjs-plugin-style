@@ -2,6 +2,8 @@
 
 import Chart from 'chart.js';
 
+import StyleHelper from './helpers/helpers.style';
+
 import StyleArcElement from './elements/element.styleArc';
 import StyleLineElement from './elements/element.styleLine';
 import StylePointElement from './elements/element.stylePoint';
@@ -47,6 +49,8 @@ Chart.helpers.options.resolve = Chart.helpers.options.resolve || function(inputs
 
 // For Chart.js 2.7.1 backward compatibility
 Chart.layouts = Chart.layouts || Chart.layoutService;
+
+Chart.helpers.style = StyleHelper(Chart);
 
 Chart.elements.StyleArc = StyleArcElement(Chart);
 Chart.elements.StyleLine = StyleLineElement(Chart);

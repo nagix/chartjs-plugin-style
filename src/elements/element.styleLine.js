@@ -2,23 +2,19 @@
 
 export default function(Chart) {
 
+	var styleHelpers = Chart.helpers.style;
+
 	return Chart.elements.Line.extend({
 
 		draw: function() {
 			var me = this;
+			var args = arguments;
 			var vm = me._view;
-			var ctx = me._chart.ctx;
 
-			ctx.save();
-
-			ctx.shadowOffsetX = vm.shadowOffsetX;
-			ctx.shadowOffsetY = vm.shadowOffsetY;
-			ctx.shadowBlur = vm.shadowBlur;
-			ctx.shadowColor = vm.shadowColor;
-
-			Chart.elements.Line.prototype.draw.apply(me, arguments);
-
-			ctx.restore();
+			styleHelpers.drawShadow(me._chart, vm.shadowOffsetX, vm.shadowOffsetY,
+				vm.shadowBlur, vm.shadowColor, function() {
+					Chart.elements.Line.prototype.draw.apply(me, args);
+				});
 		}
 	});
 }

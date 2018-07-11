@@ -47,7 +47,10 @@ export default function(Chart) {
 				shadowOffsetX: options.shadowOffsetX,
 				shadowOffsetY: options.shadowOffsetY,
 				shadowBlur: options.shadowBlur,
-				shadowColor: options.shadowColor
+				shadowColor: options.shadowColor,
+				bevelWidth: options.bevelWidth,
+				bevelHighlightColor: options.bevelHighlightColor,
+				bevelShadowColor: options.bevelShadowColor
 			};
 
 			point.pivot();
@@ -74,6 +77,9 @@ export default function(Chart) {
 			model.shadowOffsetY = valueOrDefault(options.hoverShadowOffsetY, options.shadowOffsetY);
 			model.shadowBlur = valueOrDefault(options.hoverShadowBlur, options.shadowBlur);
 			model.shadowColor = valueOrDefault(options.hoverShadowColor, helpers.getHoverColor(options.shadowColor));
+			model.bevelWidth = valueOrDefault(options.hoverBevelWidth, options.bevelWidth);
+			model.bevelHighlightColor = valueOrDefault(options.hoverBevelHighlightColor, helpers.getHoverColor(options.bevelHighlightColor));
+			model.bevelShadowColor = valueOrDefault(options.hoverBevelShadowColor, helpers.getHoverColor(options.bevelShadowColor));
 		},
 
 		/**
@@ -89,6 +95,9 @@ export default function(Chart) {
 				model.shadowOffsetY = options.shadowOffsetY;
 				model.shadowBlur = options.shadowBlur;
 				model.shadowColor = options.shadowColor;
+				model.bevelWidth = options.bevelWidth;
+				model.bevelHighlightColor = options.bevelHighlightColor;
+				model.bevelShadowColor = options.bevelShadowColor;
 			}
 
 			BubbleController.prototype.removeHoverStyle.apply(this, arguments);
@@ -135,7 +144,10 @@ export default function(Chart) {
 				'hoverShadowOffsetX',
 				'hoverShadowOffsetY',
 				'hoverShadowBlur',
-				'hoverShadowColor'
+				'hoverShadowColor',
+				'bevelWidth',
+				'bevelHighlightColor',
+				'bevelShadowColor'
 			];
 
 			for (i = 0, ilen = keys.length; i < ilen; ++i) {

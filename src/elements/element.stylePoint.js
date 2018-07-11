@@ -2,46 +2,34 @@
 
 export default function(Chart) {
 
+	var helpers = Chart.helpers;
+	var styleHelpers = helpers.style;
+
 	return Chart.elements.Point.extend({
 
-		draw: function(chartArea) {
+		draw: function() {
 			var me = this;
+			var args = arguments;
+			var chart = me._chart;
 			var vm = me._view;
-			var model = me._model;
-			var ctx = me._chart.ctx;
-			var pointStyle = vm.pointStyle;
-			var errMargin = 1.01; // 1.01 is margin for Accumulated error. (Especially Edge, IE.)
+			var borderAlpha = helpers.color(vm.borderColor).alpha();
+			var backgroundAlpha = helpers.color(vm.backgroundColor).alpha();
+			var bevelExtra = borderAlpha > 0 && vm.borderWidth > 0 ? vm.borderWidth / 2 : 0;
 
-			Chart.elements.Point.prototype.draw.apply(me, arguments);
+			var drawCallback = function() {
+				Chart.elements.Point.prototype.draw.apply(me, args);
+			};
 
-			if (vm.skip) {
-				return;
+			styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
+				vm.shadowBlur, vm.shadowColor, drawCallback, true);
+
+			if (backgroundAlpha > 0) {
+				styleHelpers.drawBackground(vm, drawCallback);
+				styleHelpers.drawBevel(chart, vm.bevelWidth + bevelExtra,
+					vm.bevelHighlightColor, vm.bevelShadowColor);
 			}
 
-			// Clipping for Points.
-			if (chartArea === undefined || (model.x >= chartArea.left && chartArea.right * errMargin >= model.x && model.y >= chartArea.top && chartArea.bottom * errMargin >= model.y)) {
-				ctx.save();
-
-				ctx.shadowOffsetX = vm.shadowOffsetX;
-				ctx.shadowOffsetY = vm.shadowOffsetY;
-				ctx.shadowBlur = vm.shadowBlur;
-				ctx.shadowColor = vm.shadowColor;
-
-				// Shadow has to be drawn in background
-				ctx.globalCompositeOperation = 'destination-over';
-
-				switch (pointStyle) {
-				default:
-					ctx.fill();
-					break;
-				case 'cross': case 'crossRot': case 'star': case 'line': case 'dash':
-					break;
-				}
-
-				ctx.stroke();
-
-				ctx.restore();
-			}
+			styleHelpers.drawBorder(vm, drawCallback);
 		}
 	});
 }

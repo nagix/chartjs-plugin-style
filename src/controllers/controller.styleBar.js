@@ -36,7 +36,10 @@ export default function(Chart) {
 				shadowOffsetX: custom.shadowOffsetX ? custom.shadowOffsetX : helpers.valueAtIndexOrDefault(dataset.shadowOffsetX, index, rectangleOptions.shadowOffsetX),
 				shadowOffsetY: custom.shadowOffsetY ? custom.shadowOffsetY : helpers.valueAtIndexOrDefault(dataset.shadowOffsetY, index, rectangleOptions.shadowOffsetY),
 				shadowBlur: custom.shadowBlur ? custom.shadowBlur : helpers.valueAtIndexOrDefault(dataset.shadowBlur, index, rectangleOptions.shadowBlur),
-				shadowColor: custom.shadowColor ? custom.shadowColor : helpers.valueAtIndexOrDefault(dataset.shadowColor, index, rectangleOptions.shadowColor)
+				shadowColor: custom.shadowColor ? custom.shadowColor : helpers.valueAtIndexOrDefault(dataset.shadowColor, index, rectangleOptions.shadowColor),
+				bevelWidth: custom.bevelWidth ? custom.bevelWidth : helpers.valueAtIndexOrDefault(dataset.bevelWidth, index, rectangleOptions.bevelWidth),
+				bevelHighlightColor: custom.bevelHighlightColor ? custom.bevelHighlightColor : helpers.valueAtIndexOrDefault(dataset.bevelHighlightColor, index, rectangleOptions.bevelHighlightColor),
+				bevelShadowColor: custom.bevelShadowColor ? custom.bevelShadowColor : helpers.valueAtIndexOrDefault(dataset.bevelShadowColor, index, rectangleOptions.bevelShadowColor)
 			};
 
 			me.updateElementGeometry(rectangle, index, reset);
@@ -58,12 +61,18 @@ export default function(Chart) {
 				element.$previousStyle.shadowOffsetY = model.shadowOffsetY;
 				element.$previousStyle.shadowBlur = model.shadowBlur;
 				element.$previousStyle.shadowColor = model.shadowColor;
+				element.$previousStyle.bevelWidth = model.bevelWidth;
+				element.$previousStyle.bevelHighlightColor = model.bevelHighlightColor;
+				element.$previousStyle.bevelShadowColor = model.bevelShadowColor;
 			}
 
 			model.shadowOffsetX = custom.hoverShadowOffsetX ? custom.hoverShadowOffsetX : valueOrDefault(dataset.hoverShadowOffsetX, index, model.shadowOffsetX);
 			model.shadowOffsetY = custom.hoverShadowOffsetY ? custom.hoverShadowOffsetY : valueOrDefault(dataset.hoverShadowOffsetY, index, model.shadowOffsetY);
 			model.shadowBlur = custom.hoverShadowBlur ? custom.hoverShadowBlur : valueOrDefault(dataset.hoverShadowBlur, index, model.shadowBlur);
 			model.shadowColor = custom.hoverShadowColor ? custom.hoverShadowColor : valueOrDefault(dataset.hoverShadowColor, index, helpers.getHoverColor(model.shadowColor));
+			model.bevelWidth = custom.hoverBevelWidth ? custom.hoverBevelWidth : valueOrDefault(dataset.hoverBevelWidth, index, model.bevelWidth);
+			model.bevelHighlightColor = custom.hoverBevelHighlightColor ? custom.hoverBevelHighlightColor : valueOrDefault(dataset.hoverBevelHighlightColor, index, helpers.getHoverColor(model.bevelHighlightColor));
+			model.bevelShadowColor = custom.hoverBevelShadowColor ? custom.hoverBevelShadowColor : valueOrDefault(dataset.hoverBevelShadowColor, index, helpers.getHoverColor(model.bevelShadowColor));
 		},
 
 		removeHoverStyle: function(element) {
@@ -72,13 +81,17 @@ export default function(Chart) {
 			var custom = element.custom || {};
 			var valueOrDefault = helpers.valueAtIndexOrDefault;
 			var model = element._model;
+			var elementOpts = this.chart.options.elements.rectangle;
 
 			// For Chart.js 2.7.2 backward compatibility
 			if (!element.$previousStyle) {
-				model.shadowOffsetX = custom.shadowOffsetX ? custom.shadowOffsetX : valueOrDefault(dataset.shadowOffsetX, index, model.shadowOffsetX);
-				model.shadowOffsetY = custom.shadowOffsetY ? custom.shadowOffsetY : valueOrDefault(dataset.shadowOffsetY, index, model.shadowOffsetY);
-				model.shadowBlur = custom.shadowBlur ? custom.shadowBlur : valueOrDefault(dataset.shadowBlur, index, model.shadowBlur);
-				model.shadowColor = custom.shadowColor ? custom.shadowColor : valueOrDefault(dataset.shadowColor, index, model.shadowColor);
+				model.shadowOffsetX = custom.shadowOffsetX ? custom.shadowOffsetX : valueOrDefault(dataset.shadowOffsetX, index, elementOpts.shadowOffsetX);
+				model.shadowOffsetY = custom.shadowOffsetY ? custom.shadowOffsetY : valueOrDefault(dataset.shadowOffsetY, index, elementOpts.shadowOffsetY);
+				model.shadowBlur = custom.shadowBlur ? custom.shadowBlur : valueOrDefault(dataset.shadowBlur, index, elementOpts.shadowBlur);
+				model.shadowColor = custom.shadowColor ? custom.shadowColor : valueOrDefault(dataset.shadowColor, index, elementOpts.shadowColor);
+				model.bevelWidth = custom.bevelWidth ? custom.bevelWidth : valueOrDefault(dataset.bevelWidth, index, elementOpts.bevelWidth);
+				model.bevelHighlightColor = custom.bevelHighlightColor ? custom.bevelHighlightColor : valueOrDefault(dataset.bevelHighlightColor, index, elementOpts.bevelHighlightColor);
+				model.bevelShadowColor = custom.bevelShadowColor ? custom.bevelShadowColor : valueOrDefault(dataset.bevelShadowColor, index, elementOpts.bevelShadowColor);
 			}
 
 			BarController.prototype.removeHoverStyle.apply(this, arguments);

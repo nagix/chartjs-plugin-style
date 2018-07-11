@@ -2,6 +2,7 @@ export default function(Chart) {
 
 	var defaults = Chart.defaults;
 	var helpers = Chart.helpers;
+	var styleHelpers = Chart.helpers.style;
 	var layouts = Chart.layouts;
 
 	// Ported from Chart.js 2.7.2. Modified for style legend.
@@ -25,6 +26,9 @@ export default function(Chart) {
 				shadowOffsetY: (!helpers.isArray(dataset.shadowOffsetY) ? dataset.shadowOffsetY : dataset.shadowOffsetY[0]),
 				shadowBlur: (!helpers.isArray(dataset.shadowBlur) ? dataset.shadowBlur : dataset.shadowBlur[0]),
 				shadowColor: (!helpers.isArray(dataset.shadowColor) ? dataset.shadowColor : dataset.shadowColor[0]),
+				bevelWidth: helpers.valueOrDefault((!helpers.isArray(dataset.pointBevelWidth) ? dataset.pointBevelWidth : dataset.pointBevelWidth[0]), dataset.bevelWidth),
+				bevelHighlightColor: helpers.valueOrDefault((!helpers.isArray(dataset.pointBevelHighlightColor) ? dataset.pointBevelHighlightColor : dataset.pointBevelHighlightColor[0]), dataset.bevelHighlightColor),
+				bevelShadowColor: helpers.valueOrDefault((!helpers.isArray(dataset.pointBevelShadowColor) ? dataset.pointBevelShadowColor : dataset.pointBevelShadowColor[0]), dataset.bevelShadowColor),
 
 				// Below is extra data used for toggling the datasets
 				datasetIndex: i
@@ -82,6 +86,8 @@ export default function(Chart) {
 
 				// current position
 				var drawLegendBox = function(x, y, legendItem) {
+					var drawCallback;
+
 					if (isNaN(boxWidth) || boxWidth <= 0) {
 						return;
 					}
@@ -110,45 +116,43 @@ export default function(Chart) {
 						var centerX = x + offSet;
 						var centerY = y + offSet;
 
-						// Draw pointStyle as legend symbol
-						helpers.canvas.drawPoint(ctx, legendItem.pointStyle, radius, centerX, centerY);
-
-						ctx.shadowOffsetX = valueOrDefault(legendItem.shadowOffsetX, lineDefault.shadowOffsetX);
-						ctx.shadowOffsetY = valueOrDefault(legendItem.shadowOffsetY, lineDefault.shadowOffsetY);
-						ctx.shadowBlur = valueOrDefault(legendItem.shadowBlur, lineDefault.shadowBlur);
-						ctx.shadowColor = valueOrDefault(legendItem.shadowColor, lineDefault.shadowColor);
-
-						// Shadow has to be drawn in background
-						ctx.globalCompositeOperation = 'destination-over';
-
-						switch (legendItem.pointStyle) {
-						default:
-							ctx.fill();
-							break;
-						case 'cross': case 'crossRot': case 'star': case 'line': case 'dash':
-							break;
-						}
-
-						ctx.stroke();
+						drawCallback = function() {
+							// Draw pointStyle as legend symbol
+							helpers.canvas.drawPoint(ctx, legendItem.pointStyle, radius, centerX, centerY);
+						};
 					} else {
-						// Draw box as legend symbol
-						ctx.fillRect(x, y, boxWidth, fontSize);
-						if (!isLineWidthZero) {
-							ctx.strokeRect(x, y, boxWidth, fontSize);
-						}
+						drawCallback = function() {
+							// Draw box as legend symbol
+							ctx.beginPath();
+							ctx.rect(x, y, boxWidth, fontSize);
+							ctx.fill();
+							if (!isLineWidthZero) {
+								ctx.stroke();
+							}
+						};
+					}
 
-						ctx.shadowOffsetX = valueOrDefault(legendItem.shadowOffsetX, lineDefault.shadowOffsetX);
-						ctx.shadowOffsetY = valueOrDefault(legendItem.shadowOffsetY, lineDefault.shadowOffsetY);
-						ctx.shadowBlur = valueOrDefault(legendItem.shadowBlur, lineDefault.shadowBlur);
-						ctx.shadowColor = valueOrDefault(legendItem.shadowColor, lineDefault.shadowColor);
+					styleHelpers.drawShadow(me.chart, legendItem.shadowOffsetX, legendItem.shadowOffsetY,
+						legendItem.shadowBlur, legendItem.shadowColor, drawCallback, true);
 
-						// Shadow has to be drawn in background
-						ctx.globalCompositeOperation = 'destination-over';
+					if (helpers.color(ctx.fillStyle).alpha() > 0) {
+						var borderAlpha = helpers.color(ctx.strokeStyle).alpha();
+						var bevelExtra = borderAlpha > 0 && ctx.lineWidth > 0 ? ctx.lineWidth / 2 : 0;
 
-						ctx.fillRect(x, y, boxWidth, fontSize);
-						if (!isLineWidthZero) {
-							ctx.strokeRect(x, y, boxWidth, fontSize);
-						}
+						ctx.save();
+
+						ctx.strokeStyle = 'rgba(0, 0, 0, 0)';
+						drawCallback();
+
+						styleHelpers.drawBevel(me.chart, legendItem.bevelWidth + bevelExtra,
+							legendItem.bevelHighlightColor, legendItem.bevelShadowColor);
+
+						ctx.restore();
+					}
+
+					if (!isLineWidthZero) {
+						ctx.fillStyle = 'rgba(0, 0, 0, 0)';
+						drawCallback();
 					}
 
 					ctx.restore();
