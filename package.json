@@ -1,6 +1,6 @@
 {
   "name": "chartjs-plugin-style",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Chart.js plugin for more styling options",
   "main": "dist/chartjs-plugin-style.js",
   "directories": {
@@ -8,7 +8,7 @@
     "test": "test"
   },
   "dependencies": {
-    "chart.js": "^2.7.2"
+    "chart.js": "^2.6.0"
   },
   "devDependencies": {
     "eslint-config-chartjs": "^0.1.0",

@@ -4,7 +4,7 @@
 
 *[Chart.js](https://www.chartjs.org) plugin for more styling options*
 
-This plugin requires Chart.js 2.7.2.
+This plugin requires Chart.js 2.6.0 or later.
 
 ## Installation
 
@@ -28,7 +28,7 @@ chartjs-plugin-style can be used with ES6 modules, plain JavaScript and module l
 
 chartjs-plugin-style requires [Chart.js](https://www.chartjs.org). Include Chart.js and chartjs-plugin-style.js to your page to enable style options.
 
-Version 0.1 only supports shadows for datasets and the tooltip. More options are to be added in the upcoming releases.
+Version 0.2 supports the bevel and shadow effects for datasets and the tooltip. More options are to be added in the upcoming releases.
 
 ## Tutorial and Samples
 
@@ -45,37 +45,52 @@ To configure this plugin, you can simply add the following properties to your da
 | `shadowOffsetX` | `Number` | 0 | Indicates the horizontal distance the shadow should extend from the line. See [MDN](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowOffsetX).
 | `shadowOffsetY` | `Number` | 0 | Indicates the vertical distance the shadow should extend from the line. See [MDN](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowOffsetY).
 | `shadowBlur` | `Number` | 0 | Indicates the size of the blurring effect for the line; this value doesn't correspond to a number of pixels. See [MDN](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowBlur).
-| `shadowColor` | `Number` | `'rgba(0, 0, 0, 0)'` | A standard CSS color value indicating the color of the shadow effect for the line. See [Colors](http://www.chartjs.org/docs/latest/general/colors.html#colors).
+| `shadowColor` | `Color` | `'rgba(0, 0, 0, 0)'` | A standard CSS color value indicating the color of the shadow effect for the line. See [Colors](http://www.chartjs.org/docs/latest/general/colors.html#colors).
+| `pointBevelWidth` | `Number/Number[]` | `0` | The width of the bevel effect for the point.
+| `pointBevelHighlightColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The highlight color of the bevel effect for the point.
+| `pointBevelShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The shadow color of the bevel effect for the point.
 | `pointShadowOffsetX` | `Number/Number[]` | 0 | The horizontal distance the shadow should extend from the point.
 | `pointShadowOffsetY` | `Number/Number[]` | 0 | The vertical distance the shadow should extend from the point.
 | `pointShadowBlur` | `Number/Number[]` | 0 | The size of the blurring effect for the point.
-| `pointShadowColor` | `Number/Number[]` | `'rgba(0, 0, 0, 0)'` | The color of the shadow effect for the point.
+| `pointShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the shadow effect for the point.
+| `pointHoverBevelWidth` | `Number/Number[]` | `0` | The width of the bevel effect for the point when hovered.
+| `pointHoverBevelHighlightColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The highlight color of the bevel effect for the point when hovered.
+| `pointHoverBevelShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The shadow color of the bevel effect for the point when hovered.
 | `pointHoverShadowOffsetX` | `Number/Number[]` | 0 | The horizontal distance the shadow should extend from the point when hovered.
 | `pointHoverShadowOffsetY` | `Number/Number[]` | 0 | The vertical distance the shadow should extend from the point when hovered.
 | `pointHoverShadowBlur` | `Number/Number[]` | 0 | The size of the blurring effect for the point when hovered.
-| `pointHoverShadowColor` | `Number/Number[]` | `'rgba(0, 0, 0, 0)'` | The color of the shadow effect for the point when hovered.
+| `pointHoverShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the shadow effect for the point when hovered.
 
 ### Bar, Doughnut, Pie, Polar Area and Bubble
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
+| `bevelWidth` | `Number/Number[]` | `0` | The width of the bevel effect.
+| `bevelHighlightColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The highlight color of the bevel effect.
+| `bevelShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The shadow color of the bevel effect.
 | `shadowOffsetX` | `Number/Number[]` | 0 | Indicates the horizontal distance the shadow should extend from the element.
 | `shadowOffsetY` | `Number/Number[]` | 0 | Indicates the vertical distance the shadow should extend from the element.
 | `shadowBlur` | `Number/Number[]` | 0 | Indicates the size of the blurring effect; this value doesn't correspond to a number of pixels.
-| `shadowColor` | `Number/Number[]` | `'rgba(0, 0, 0, 0)'` | A standard CSS color value indicating the color of the shadow effect.
+| `shadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | A standard CSS color value indicating the color of the shadow effect.
+| `hoverBevelWidth` | `Number/Number[]` | `0` | The width of the bevel effect when hovered.
+| `hoverBevelHighlightColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The highlight color of the bevel effect when hovered.
+| `hoverBevelShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The shadow color of the bevel effect when hovered.
 | `hoverShadowOffsetX` | `Number/Number[]` | 0 | The horizontal distance the shadow should extend from the element when hovered.
 | `hoverShadowOffsetY` | `Number/Number[]` | 0 | The vertical distance the shadow should extend from the element when hovered.
 | `hoverShadowBlur` | `Number/Number[]` | 0 | The size of the blurring effect when hovered.
-| `hoverShadowColor` | `Number/Number[]` | `'rgba(0, 0, 0, 0)'` | The color of the shadow effect when hovered.
+| `hoverShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the shadow effect when hovered.
 
 ### Tooltip
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
+| `bevelWidth` | `Number/Number[]` | `0` | The width of the bevel effect.
+| `bevelHighlightColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The highlight color of the bevel effect.
+| `bevelShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The shadow color of the bevel effect.
 | `shadowOffsetX` | `Number` | 0 | Indicates the horizontal distance the shadow should extend from the tooltip.
 | `shadowOffsetY` | `Number` | 0 | Indicates the vertical distance the shadow should extend from the tooltip.
 | `shadowBlur` | `Number` | 0 | Indicates the size of the blurring effect; this value doesn't correspond to a number of pixels.
-| `shadowColor` | `Number` | `'rgba(0, 0, 0, 0)'` | A standard CSS color value indicating the color of the shadow effect.
+| `shadowColor` | `Color` | `'rgba(0, 0, 0, 0)'` | A standard CSS color value indicating the color of the shadow effect.
 
 For example:
 
@@ -86,24 +101,30 @@ For example:
         labels: ['January', 'February', 'March', 'April', 'May', 'June'],
         datasets: [{
             data: [45, 20, 64, 32, 76, 51],
-            shadowOffsetX: 5,
-            shadowOffsetY: 5,
-            shadowBlur: 20,
+            shadowOffsetX: 3,
+            shadowOffsetY: 3,
+            shadowBlur: 10,
             shadowColor: 'rgba(0, 0, 0, 0.5)',
-            pointShadowOffsetX: 5,
-            pointShadowOffsetY: 5,
-            pointShadowBlur: 20,
+            pointBevelWidth: 3,
+            pointBevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
+            pointBevelShadowColor: 'rgba(0, 0, 0, 0.5)',
+            pointShadowOffsetX: 3,
+            pointShadowOffsetY: 3,
+            pointShadowBlur: 10,
             pointShadowColor: 'rgba(0, 0, 0, 0.5)',
-            pointHoverShadowOffsetX: 5,
-            pointHoverShadowOffsetY: 5,
-            pointHoverShadowBlur: 40,
-            pointHoverShadowColor: 'rgba(0, 0, 0, 1)'
+            pointHoverShadowOffsetX: 0,
+            pointHoverShadowOffsetY: 0,
+            pointHoverShadowBlur: 20,
+            pointHoverShadowColor: 'rgba(255, 255, 0, 1)'
         }]
     },
     options: {
         tooltips: {
-            shadowOffsetX: 5,
-            shadowOffsetY: 5,
+            bevelWidth: 3,
+            bevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
+            bevelShadowColor: 'rgba(0, 0, 0, 0.5)'
+            shadowOffsetX: 3,
+            shadowOffsetY: 3,
             shadowBlur: 10,
             shadowColor: 'rgba(0, 0, 0, 0.5)'
         }
