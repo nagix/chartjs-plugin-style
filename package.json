@@ -26,14 +26,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nagix/chartjs-plugin-style.git"
+    "url": "https://github.com/nagix/chartjs-plugin-style.git"
   },
   "keywords": [
     "chart.js",
     "plugin",
-    "live",
-    "streaming",
-    "scroll"
+    "style",
+    "shadow",
+    "bevel"
   ],
   "author": "Akihiko Kusanagi <nagi@nagi-p.com> (https://nagix.github.io/)",
   "license": "MIT",
