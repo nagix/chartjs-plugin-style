@@ -67,7 +67,9 @@ export default function(Chart) {
 					shadowOffsetX: custom.shadowOffsetX ? custom.shadowOffsetX : (dataset.shadowOffsetX || lineElementOptions.shadowOffsetX),
 					shadowOffsetY: custom.shadowOffsetY ? custom.shadowOffsetY : (dataset.shadowOffsetY || lineElementOptions.shadowOffsetY),
 					shadowBlur: custom.shadowBlur ? custom.shadowBlur : (dataset.shadowBlur || lineElementOptions.shadowBlur),
-					shadowColor: custom.shadowColor ? custom.shadowColor : (dataset.shadowColor || lineElementOptions.shadowColor)
+					shadowColor: custom.shadowColor ? custom.shadowColor : (dataset.shadowColor || lineElementOptions.shadowColor),
+					outerGlowWidth: custom.outerGlowWidth ? custom.outerGlowWidth : (dataset.outerGlowWidth || lineElementOptions.outerGlowWidth),
+					outerGlowColor: custom.outerGlowColor ? custom.outerGlowColor : (dataset.outerGlowColor || lineElementOptions.outerGlowColor)
 				};
 
 				line.pivot();
@@ -200,6 +202,70 @@ export default function(Chart) {
 			return bevelShadowColor;
 		},
 
+		getPointInnerGlowWidth: function(point, index) {
+			var innerGlowWidth = this.chart.options.elements.point.innerGlowWidth;
+			var dataset = this.getDataset();
+			var custom = point.custom || {};
+
+			if (custom.innerGlowWidth) {
+				innerGlowWidth = custom.innerGlowWidth;
+			} else if (dataset.pointInnerGlowWidth) {
+				innerGlowWidth = helpers.valueAtIndexOrDefault(dataset.pointInnerGlowWidth, index, innerGlowWidth);
+			} else if (dataset.innerGlowWidth) {
+				innerGlowWidth = dataset.innerGlowWidth;
+			}
+
+			return innerGlowWidth;
+		},
+
+		getPointInnerGlowColor: function(point, index) {
+			var innerGlowColor = this.chart.options.elements.point.innerGlowColor;
+			var dataset = this.getDataset();
+			var custom = point.custom || {};
+
+			if (custom.innerGlowColor) {
+				innerGlowColor = custom.innerGlowColor;
+			} else if (dataset.pointInnerGlowColor) {
+				innerGlowColor = helpers.valueAtIndexOrDefault(dataset.pointInnerGlowColor, index, innerGlowColor);
+			} else if (dataset.innerGlowColor) {
+				innerGlowColor = dataset.innerGlowColor;
+			}
+
+			return innerGlowColor;
+		},
+
+		getPointOuterGlowWidth: function(point, index) {
+			var outerGlowWidth = this.chart.options.elements.point.outerGlowWidth;
+			var dataset = this.getDataset();
+			var custom = point.custom || {};
+
+			if (custom.outerGlowWidth) {
+				outerGlowWidth = custom.outerGlowWidth;
+			} else if (dataset.pointOuterGlowWidth) {
+				outerGlowWidth = helpers.valueAtIndexOrDefault(dataset.pointOuterGlowWidth, index, outerGlowWidth);
+			} else if (dataset.outerGlowWidth) {
+				outerGlowWidth = dataset.outerGlowWidth;
+			}
+
+			return outerGlowWidth;
+		},
+
+		getPointOuterGlowColor: function(point, index) {
+			var outerGlowColor = this.chart.options.elements.point.outerGlowColor;
+			var dataset = this.getDataset();
+			var custom = point.custom || {};
+
+			if (custom.outerGlowColor) {
+				outerGlowColor = custom.outerGlowColor;
+			} else if (dataset.pointOuterGlowColor) {
+				outerGlowColor = helpers.valueAtIndexOrDefault(dataset.pointOuterGlowColor, index, outerGlowColor);
+			} else if (dataset.outerGlowColor) {
+				outerGlowColor = dataset.outerGlowColor;
+			}
+
+			return outerGlowColor;
+		},
+
 		updateElement: function(point, index) {
 			LineController.prototype.updateElement.apply(this, arguments);
 
@@ -212,6 +278,10 @@ export default function(Chart) {
 			point._model.bevelWidth = me.getPointBevelWidth(point, index);
 			point._model.bevelHighlightColor = me.getPointBevelHighlightColor(point, index);
 			point._model.bevelShadowColor = me.getPointBevelShadowColor(point, index);
+			point._model.innerGlowWidth = me.getPointInnerGlowWidth(point, index);
+			point._model.innerGlowColor = me.getPointInnerGlowColor(point, index);
+			point._model.outerGlowWidth = me.getPointOuterGlowWidth(point, index);
+			point._model.outerGlowColor = me.getPointOuterGlowColor(point, index);
 		},
 
 		setHoverStyle: function(element) {
@@ -232,6 +302,10 @@ export default function(Chart) {
 				element.$previousStyle.bevelWidth = model.bevelWidth;
 				element.$previousStyle.bevelHighlightColor = model.bevelHighlightColor;
 				element.$previousStyle.bevelShadowColor = model.bevelShadowColor;
+				element.$previousStyle.innerGlowWidth = model.innerGlowWidth;
+				element.$previousStyle.innerGlowColor = model.innerGlowColor;
+				element.$previousStyle.outerGlowWidth = model.outerGlowWidth;
+				element.$previousStyle.outerGlowColor = model.outerGlowColor;
 			}
 
 			model.shadowOffsetX = custom.hoverShadowOffsetX || valueOrDefault(dataset.pointHoverShadowOffsetX, index, model.shadowOffsetX);
@@ -241,6 +315,10 @@ export default function(Chart) {
 			model.bevelWidth = custom.hoverBevelWidth || valueOrDefault(dataset.pointHoverBevelWidth, index, model.bevelWidth);
 			model.bevelHighlightColor = custom.hoverBevelHighlightColor || valueOrDefault(dataset.pointHoverBevelHighlightColor, index, helpers.getHoverColor(model.bevelHighlightColor));
 			model.bevelShadowColor = custom.hoverBevelShadowColor || valueOrDefault(dataset.pointHoverBevelShadowColor, index, helpers.getHoverColor(model.bevelShadowColor));
+			model.innerGlowWidth = custom.hoverInnerGlowWidth || valueOrDefault(dataset.pointHoverInnerGlowWidth, index, model.innerGlowWidth);
+			model.innerGlowColor = custom.hoverInnerGlowColor || valueOrDefault(dataset.pointHoverInnerGlowColor, index, helpers.getHoverColor(model.innerGlowColor));
+			model.outerGlowWidth = custom.hoverOuterGlowWidth || valueOrDefault(dataset.pointHoverOuterGlowWidth, index, model.outerGlowWidth);
+			model.outerGlowColor = custom.hoverOuterGlowColor || valueOrDefault(dataset.pointHoverOuterGlowColor, index, helpers.getHoverColor(model.outerGlowColor));
 		},
 
 		removeHoverStyle: function(element) {
@@ -257,6 +335,10 @@ export default function(Chart) {
 				model.bevelWidth = me.getPointBevelWidth(element, index);
 				model.bevelHighlightColor = me.getPointBevelHighlightColor(element, index);
 				model.bevelShadowColor = me.getPointBevelShadowColor(element, index);
+				model.innerGlowWidth = me.getPointInnerGlowWidth(element, index);
+				model.innerGlowColor = me.getPointInnerGlowColor(element, index);
+				model.outerGlowWidth = me.getPointOuterGlowWidth(element, index);
+				model.outerGlowColor = me.getPointOuterGlowColor(element, index);
 			}
 
 			LineController.prototype.removeHoverStyle.apply(this, arguments);

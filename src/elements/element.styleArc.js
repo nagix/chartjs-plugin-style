@@ -26,8 +26,13 @@ export default function(Chart) {
 			if (backgroundAlpha > 0) {
 				styleHelpers.drawBackground(vm, drawCallback);
 				styleHelpers.drawBevel(chart, vm.bevelWidth + bevelExtra,
-					vm.bevelHighlightColor, vm.bevelShadowColor);
+					vm.bevelHighlightColor, vm.bevelShadowColor, drawCallback);
 			}
+
+			styleHelpers.drawInnerGlow(chart, vm.innerGlowWidth, vm.innerGlowColor,
+				vm.borderWidth, drawCallback);
+			styleHelpers.drawOuterGlow(chart, vm.outerGlowWidth, vm.outerGlowColor,
+				vm.borderWidth, drawCallback);
 
 			styleHelpers.drawBorder(vm, drawCallback);
 		}

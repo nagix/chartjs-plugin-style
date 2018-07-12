@@ -34,6 +34,10 @@ export default function(Chart) {
 					bevelWidth: custom.bevelWidth ? custom.bevelWidth : valueAtIndexOrDefault(ds.bevelWidth, i, arcOpts.bevelWidth),
 					bevelHighlightColor: custom.bevelHighlightColor ? custom.bevelHighlightColor : valueAtIndexOrDefault(ds.bevelHighlightColor, i, arcOpts.bevelHighlightColor),
 					bevelShadowColor: custom.bevelShadowColor ? custom.bevelShadowColor : valueAtIndexOrDefault(ds.bevelShadowColor, i, arcOpts.bevelShadowColor),
+					innerGlowWidth: custom.innerGlowWidth ? custom.innerGlowWidth : valueAtIndexOrDefault(ds.innerGlowWidth, i, arcOpts.innerGlowWidth),
+					innerGlowColor: custom.innerGlowColor ? custom.innerGlowColor : valueAtIndexOrDefault(ds.innerGlowColor, i, arcOpts.innerGlowColor),
+					outerGlowWidth: custom.outerGlowWidth ? custom.outerGlowWidth : valueAtIndexOrDefault(ds.outerGlowWidth, i, arcOpts.outerGlowWidth),
+					outerGlowColor: custom.outerGlowColor ? custom.outerGlowColor : valueAtIndexOrDefault(ds.outerGlowColor, i, arcOpts.outerGlowColor),
 
 					// Extra data used for toggling the correct item
 					index: i
@@ -121,6 +125,10 @@ export default function(Chart) {
 			model.bevelWidth = custom.bevelWidth ? custom.bevelWidth : valueOrDefault(dataset.bevelWidth, index, elementOpts.bevelWidth);
 			model.bevelHighlightColor = custom.bevelHighlightColor ? custom.bevelHighlightColor : valueOrDefault(dataset.bevelHighlightColor, index, elementOpts.bevelHighlightColor);
 			model.bevelShadowColor = custom.bevelShadowColor ? custom.bevelShadowColor : valueOrDefault(dataset.bevelShadowColor, index, elementOpts.bevelShadowColor);
+			model.innerGlowWidth = custom.innerGlowWidth ? custom.innerGlowWidth : valueOrDefault(dataset.innerGlowWidth, index, elementOpts.innerGlowWidth);
+			model.innerGlowColor = custom.innerGlowColor ? custom.innerGlowColor : valueOrDefault(dataset.innerGlowColor, index, elementOpts.innerGlowColor);
+			model.outerGlowWidth = custom.outerGlowWidth ? custom.outerGlowWidth : valueOrDefault(dataset.outerGlowWidth, index, elementOpts.outerGlowWidth);
+			model.outerGlowColor = custom.outerGlowColor ? custom.outerGlowColor : valueOrDefault(dataset.outerGlowColor, index, elementOpts.outerGlowColor);
 
 			arc.pivot();
 		},
@@ -142,6 +150,10 @@ export default function(Chart) {
 				element.$previousStyle.bevelWidth = model.bevelWidth;
 				element.$previousStyle.bevelHighlightColor = model.bevelHighlightColor;
 				element.$previousStyle.bevelShadowColor = model.bevelShadowColor;
+				element.$previousStyle.innerGlowWidth = model.innerGlowWidth;
+				element.$previousStyle.innerGlowColor = model.innerGlowColor;
+				element.$previousStyle.outerGlowWidth = model.outerGlowWidth;
+				element.$previousStyle.outerGlowColor = model.outerGlowColor;
 			}
 
 			model.shadowOffsetX = custom.hoverShadowOffsetX ? custom.hoverShadowOffsetX : valueOrDefault(dataset.hoverShadowOffsetX, index, model.shadowOffsetX);
@@ -151,6 +163,10 @@ export default function(Chart) {
 			model.bevelWidth = custom.hoverBevelWidth ? custom.hoverBevelWidth : valueOrDefault(dataset.hoverBevelWidth, index, model.bevelWidth);
 			model.bevelHighlightColor = custom.hoverBevelHighlightColor ? custom.hoverBevelHighlightColor : valueOrDefault(dataset.hoverBevelHighlightColor, index, helpers.getHoverColor(model.bevelHighlightColor));
 			model.bevelShadowColor = custom.hoverBevelShadowColor ? custom.hoverBevelShadowColor : valueOrDefault(dataset.hoverBevelShadowColor, index, helpers.getHoverColor(model.bevelShadowColor));
+			model.innerGlowWidth = custom.hoverInnerGlowWidth ? custom.hoverInnerGlowWidth : valueOrDefault(dataset.hoverInnerGlowWidth, index, model.innerGlowWidth);
+			model.innerGlowColor = custom.hoverInnerGlowColor ? custom.hoverInnerGlowColor : valueOrDefault(dataset.hoverInnerGlowColor, index, helpers.getHoverColor(model.innerGlowColor));
+			model.outerGlowWidth = custom.hoverOuterGlowWidth ? custom.hoverOuterGlowWidth : valueOrDefault(dataset.hoverOuterGlowWidth, index, model.outerGlowWidth);
+			model.outerGlowColor = custom.hoverOuterGlowColor ? custom.hoverOuterGlowColor : valueOrDefault(dataset.hoverOuterGlowColor, index, helpers.getHoverColor(model.outerGlowColor));
 		},
 
 		removeHoverStyle: function(element) {
@@ -170,6 +186,10 @@ export default function(Chart) {
 				model.bevelWidth = custom.bevelWidth ? custom.bevelWidth : valueOrDefault(dataset.bevelWidth, index, elementOpts.bevelWidth);
 				model.bevelHighlightColor = custom.bevelHighlightColor ? custom.bevelHighlightColor : valueOrDefault(dataset.bevelHighlightColor, index, elementOpts.bevelHighlightColor);
 				model.bevelShadowColor = custom.bevelShadowColor ? custom.bevelShadowColor : valueOrDefault(dataset.bevelShadowColor, index, elementOpts.bevelShadowColor);
+				model.innerGlowWidth = custom.innerGlowWidth ? custom.innerGlowWidth : valueOrDefault(dataset.innerGlowWidth, index, elementOpts.innerGlowWidth);
+				model.innerGlowColor = custom.innerGlowColor ? custom.innerGlowColor : valueOrDefault(dataset.innerGlowColor, index, elementOpts.innerGlowColor);
+				model.outerGlowWidth = custom.outerGlowWidth ? custom.outerGlowWidth : valueOrDefault(dataset.outerGlowWidth, index, elementOpts.outerGlowWidth);
+				model.outerGlowColor = custom.outerGlowColor ? custom.outerGlowColor : valueOrDefault(dataset.outerGlowColor, index, elementOpts.outerGlowColor);
 			}
 
 			PolarAreaController.prototype.removeHoverStyle.apply(this, arguments);

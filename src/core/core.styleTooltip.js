@@ -32,6 +32,10 @@ export default function(Chart) {
 			model.bevelWidth = tooltipOpts.bevelWidth;
 			model.bevelHighlightColor = tooltipOpts.bevelHighlightColor;
 			model.bevelShadowColor = tooltipOpts.bevelShadowColor;
+			model.innerGlowWidth = tooltipOpts.innerGlowWidth;
+			model.innerGlowColor = tooltipOpts.innerGlowColor;
+			model.outerGlowWidth = tooltipOpts.outerGlowWidth;
+			model.outerGlowColor = tooltipOpts.outerGlowColor;
 		},
 
 		update: function() {
@@ -48,6 +52,10 @@ export default function(Chart) {
 			model.bevelWidth = opts.bevelWidth;
 			model.bevelHighlightColor = opts.bevelHighlightColor;
 			model.bevelShadowColor = opts.bevelShadowColor;
+			model.innerGlowWidth = opts.innerGlowWidth;
+			model.innerGlowColor = opts.innerGlowColor;
+			model.outerGlowWidth = opts.outerGlowWidth;
+			model.outerGlowColor = opts.outerGlowColor;
 
 			return me;
 		},
@@ -65,13 +73,19 @@ export default function(Chart) {
 			};
 
 			styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
-				vm.shadowBlur, mergeOpacity(vm.shadowColor, opacity), drawCallback);
+				vm.shadowBlur, vm.shadowColor, drawCallback);
 
 			if (backgroundAlpha > 0) {
+				styleHelpers.drawBackground(vm, drawCallback);
 				styleHelpers.drawBevel(chart, vm.bevelWidth + bevelExtra,
 					mergeOpacity(vm.bevelHighlightColor, opacity),
-					mergeOpacity(vm.bevelShadowColor, opacity));
+					mergeOpacity(vm.bevelShadowColor, opacity), drawCallback);
 			}
+
+			styleHelpers.drawInnerGlow(chart, vm.innerGlowWidth,
+				mergeOpacity(vm.innerGlowColor, opacity), vm.borderWidth, drawCallback);
+			styleHelpers.drawOuterGlow(chart, vm.outerGlowWidth,
+				mergeOpacity(vm.outerGlowColor, opacity), vm.borderWidth, drawCallback);
 
 			styleHelpers.drawBorder(vm, drawCallback);
 		}

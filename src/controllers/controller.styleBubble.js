@@ -50,7 +50,11 @@ export default function(Chart) {
 				shadowColor: options.shadowColor,
 				bevelWidth: options.bevelWidth,
 				bevelHighlightColor: options.bevelHighlightColor,
-				bevelShadowColor: options.bevelShadowColor
+				bevelShadowColor: options.bevelShadowColor,
+				innerGlowWidth: options.innerGlowWidth,
+				innerGlowColor: options.innerGlowColor,
+				outerGlowWidth: options.outerGlowWidth,
+				outerGlowColor: options.outerGlowColor
 			};
 
 			point.pivot();
@@ -71,6 +75,13 @@ export default function(Chart) {
 				element.$previousStyle.shadowOffsetY = model.shadowOffsetY;
 				element.$previousStyle.shadowBlur = model.shadowBlur;
 				element.$previousStyle.shadowColor = model.shadowColor;
+				element.$previousStyle.bevelWidth = model.bevelWidth;
+				element.$previousStyle.bevelHighlightColor = model.bevelHighlightColor;
+				element.$previousStyle.bevelShadowColor = model.bevelShadowColor;
+				element.$previousStyle.innerGlowWidth = model.innerGlowWidth;
+				element.$previousStyle.innerGlowColor = model.innerGlowColor;
+				element.$previousStyle.outerGlowWidth = model.outerGlowWidth;
+				element.$previousStyle.outerGlowColor = model.outerGlowColor;
 			}
 
 			model.shadowOffsetX = valueOrDefault(options.hoverShadowOffsetX, options.shadowOffsetX);
@@ -80,6 +91,10 @@ export default function(Chart) {
 			model.bevelWidth = valueOrDefault(options.hoverBevelWidth, options.bevelWidth);
 			model.bevelHighlightColor = valueOrDefault(options.hoverBevelHighlightColor, helpers.getHoverColor(options.bevelHighlightColor));
 			model.bevelShadowColor = valueOrDefault(options.hoverBevelShadowColor, helpers.getHoverColor(options.bevelShadowColor));
+			model.innerGlowWidth = valueOrDefault(options.hoverInnerGlowWidth, options.innerGlowWidth);
+			model.innerGlowColor = valueOrDefault(options.hoverInnerGlowColor, helpers.getHoverColor(options.innerGlowColor));
+			model.outerGlowWidth = valueOrDefault(options.hoverOuterGlowWidth, options.outerGlowWidth);
+			model.outerGlowColor = valueOrDefault(options.hoverOuterGlowColor, helpers.getHoverColor(options.outerGlowColor));
 		},
 
 		/**
@@ -98,6 +113,10 @@ export default function(Chart) {
 				model.bevelWidth = options.bevelWidth;
 				model.bevelHighlightColor = options.bevelHighlightColor;
 				model.bevelShadowColor = options.bevelShadowColor;
+				model.innerGlowWidth = options.innerGlowWidth;
+				model.innerGlowColor = options.innerGlowColor;
+				model.outerGlowWidth = options.outerGlowWidth;
+				model.outerGlowColor = options.outerGlowColor;
 			}
 
 			BubbleController.prototype.removeHoverStyle.apply(this, arguments);
@@ -147,7 +166,18 @@ export default function(Chart) {
 				'hoverShadowColor',
 				'bevelWidth',
 				'bevelHighlightColor',
-				'bevelShadowColor'
+				'bevelShadowColor',
+				'hoverBevelWidth',
+				'hoverBevelHighlightColor',
+				'hoverBevelShadowColor',
+				'innerGlowWidth',
+				'innerGlowColor',
+				'outerGlowWidth',
+				'outerGlowColor',
+				'hoverInnerGlowWidth',
+				'hoverInnerGlowColor',
+				'hoverOuterGlowWidth',
+				'hoverOuterGlowColor'
 			];
 
 			for (i = 0, ilen = keys.length; i < ilen; ++i) {

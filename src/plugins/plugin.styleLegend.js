@@ -29,6 +29,10 @@ export default function(Chart) {
 				bevelWidth: helpers.valueOrDefault((!helpers.isArray(dataset.pointBevelWidth) ? dataset.pointBevelWidth : dataset.pointBevelWidth[0]), dataset.bevelWidth),
 				bevelHighlightColor: helpers.valueOrDefault((!helpers.isArray(dataset.pointBevelHighlightColor) ? dataset.pointBevelHighlightColor : dataset.pointBevelHighlightColor[0]), dataset.bevelHighlightColor),
 				bevelShadowColor: helpers.valueOrDefault((!helpers.isArray(dataset.pointBevelShadowColor) ? dataset.pointBevelShadowColor : dataset.pointBevelShadowColor[0]), dataset.bevelShadowColor),
+				innerGlowWidth: helpers.valueOrDefault((!helpers.isArray(dataset.pointInnerGlowWidth) ? dataset.pointInnerGlowWidth : dataset.pointInnerGlowWidth[0]), dataset.innerGlowWidth),
+				innerGlowColor: helpers.valueOrDefault((!helpers.isArray(dataset.pointInnerGlowColor) ? dataset.pointInnerGlowColor : dataset.pointInnerGlowColor[0]), dataset.innerGlowColor),
+				outerGlowWidth: helpers.valueOrDefault((!helpers.isArray(dataset.pointOuterGlowWidth) ? dataset.pointOuterGlowWidth : dataset.pointOuterGlowWidth[0]), dataset.outerGlowWidth),
+				outerGlowColor: helpers.valueOrDefault((!helpers.isArray(dataset.pointOuterGlowColor) ? dataset.pointOuterGlowColor : dataset.pointOuterGlowColor[0]), dataset.outerGlowColor),
 
 				// Below is extra data used for toggling the datasets
 				datasetIndex: i
@@ -145,10 +149,15 @@ export default function(Chart) {
 						drawCallback();
 
 						styleHelpers.drawBevel(me.chart, legendItem.bevelWidth + bevelExtra,
-							legendItem.bevelHighlightColor, legendItem.bevelShadowColor);
+							legendItem.bevelHighlightColor, legendItem.bevelShadowColor, drawCallback);
 
 						ctx.restore();
 					}
+
+					styleHelpers.drawInnerGlow(me.chart, legendItem.innerGlowWidth, legendItem.innerGlowColor,
+						ctx.lineWidth, drawCallback);
+					styleHelpers.drawOuterGlow(me.chart, legendItem.outerGlowWidth, legendItem.outerGlowColor,
+						ctx.lineWidth, drawCallback);
 
 					if (!isLineWidthZero) {
 						ctx.fillStyle = 'rgba(0, 0, 0, 0)';

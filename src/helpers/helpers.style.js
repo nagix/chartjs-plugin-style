@@ -21,9 +21,9 @@ export default function() {
 			}
 		},
 
-		drawShadow: function(chart, offsetX, offsetY, blur, color, drawCallback, shadowOnly) {
+		drawShadow: function(chart, offsetX, offsetY, blur, color, drawCallback, backmost) {
 			var ctx = chart.ctx;
-			var offset = shadowOnly ? chart.width : 0;
+			var offset = chart.width;
 			var pixelRatio = chart.currentDevicePixelRatio;
 
 			ctx.save();
@@ -32,7 +32,7 @@ export default function() {
 			ctx.shadowOffsetY = offsetY * pixelRatio;
 			ctx.shadowBlur = blur * pixelRatio;
 			ctx.shadowColor = color;
-			if (shadowOnly) {
+			if (backmost) {
 				ctx.globalCompositeOperation = 'destination-over';
 			}
 			ctx.translate(-offset, 0);
@@ -42,9 +42,19 @@ export default function() {
 			ctx.restore();
 		},
 
-		drawBevel: function(chart, width, highlightColor, shadowColor) {
+		setPath: function(ctx, drawCallback) {
+			ctx.save();
+			ctx.beginPath();
+			ctx.clip();
+			drawCallback();
+			ctx.restore();
+		},
+
+		drawBevel: function(chart, width, highlightColor, shadowColor, drawCallback) {
 			var ctx = chart.ctx;
-			var offset = (width * chart.currentDevicePixelRatio) / 2;
+			var offset = chart.width;
+			var pixelRatio = chart.currentDevicePixelRatio;
+			var shadowOffset = (width * pixelRatio) / 2;
 
 			if (!width) {
 				return;
@@ -53,25 +63,75 @@ export default function() {
 			ctx.save();
 			ctx.clip();
 
-			// Add rect to make stencil
-			ctx.rect(-offset, -offset, chart.width + offset * 2, chart.height + offset * 2);
+			// Make stencil
+			ctx.translate(-offset, 0);
+			this.setPath(ctx, drawCallback);
+			ctx.rect(0, 0, chart.width, chart.height);
 
 			// Draw bevel shadow
-			ctx.fillStyle = 'gray';
-			ctx.shadowOffsetX = -offset;
-			ctx.shadowOffsetY = -offset;
-			ctx.shadowBlur = offset;
+			ctx.fillStyle = 'black';
+			ctx.shadowOffsetX = offset * pixelRatio - shadowOffset;
+			ctx.shadowOffsetY = -shadowOffset;
+			ctx.shadowBlur = shadowOffset;
 			ctx.shadowColor = shadowColor;
 			ctx.globalCompositeOperation = 'source-atop';
 			ctx.fill('evenodd');
 
 			// Draw Bevel highlight
-			ctx.shadowOffsetX = offset;
-			ctx.shadowOffsetY = offset;
+			ctx.shadowOffsetX = offset * pixelRatio + shadowOffset;
+			ctx.shadowOffsetY = shadowOffset;
 			ctx.shadowColor = highlightColor;
 			ctx.fill('evenodd');
 
 			ctx.restore();
+		},
+
+		drawGlow: function(chart, width, color, borderWidth, drawCallback, isOuter) {
+			var ctx = chart.ctx;
+			var offset = chart.width;
+			var pixelRatio = chart.currentDevicePixelRatio;
+
+			if (!width) {
+				return;
+			}
+
+			ctx.save();
+
+			// Clip inner or outer area
+			this.setPath(ctx, drawCallback);
+			if (isOuter) {
+				ctx.rect(0, 0, chart.width, chart.height);
+			}
+			ctx.clip('evenodd');
+
+			// Set path
+			ctx.translate(-offset, 0);
+			this.setPath(ctx, drawCallback);
+			if (!isOuter) {
+				ctx.rect(0, 0, chart.width, chart.height);
+			}
+
+			// Draw glow
+			ctx.lineWidth = borderWidth;
+			ctx.strokeStyle = 'black';
+			ctx.fillStyle = 'black';
+			ctx.shadowOffsetX = offset * pixelRatio;
+			ctx.shadowBlur = width * pixelRatio;
+			ctx.shadowColor = color;
+			ctx.fill('evenodd');
+			if (borderWidth) {
+				ctx.stroke();
+			}
+
+			ctx.restore();
+		},
+
+		drawInnerGlow: function(chart, width, color, borderWidth, drawCallback) {
+			this.drawGlow(chart, width, color, borderWidth, drawCallback);
+		},
+
+		drawOuterGlow: function(chart, width, color, borderWidth, drawCallback) {
+			this.drawGlow(chart, width, color, borderWidth, drawCallback, true);
 		}
 	};
 }
