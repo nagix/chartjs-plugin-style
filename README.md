@@ -102,9 +102,9 @@ To configure this plugin, you can simply add the following properties to your da
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `bevelWidth` | `Number/Number[]` | `0` | The width of the bevel effect.
-| `bevelHighlightColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The highlight color of the bevel effect.
-| `bevelShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The shadow color of the bevel effect.
+| `bevelWidth` | `Number` | `0` | The width of the bevel effect.
+| `bevelHighlightColor` | `Color` | `'rgba(0, 0, 0, 0)'` | The highlight color of the bevel effect.
+| `bevelShadowColor` | `Color` | `'rgba(0, 0, 0, 0)'` | The shadow color of the bevel effect.
 | `shadowOffsetX` | `Number` | 0 | Indicates the horizontal distance the shadow should extend from the tooltip.
 | `shadowOffsetY` | `Number` | 0 | Indicates the vertical distance the shadow should extend from the tooltip.
 | `shadowBlur` | `Number` | 0 | Indicates the size of the blurring effect; this value doesn't correspond to a number of pixels.
