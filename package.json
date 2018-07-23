@@ -1,6 +1,6 @@
 {
   "name": "chartjs-plugin-style",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Chart.js plugin for more styling options",
   "main": "dist/chartjs-plugin-style.js",
   "directories": {
@@ -32,8 +32,9 @@
     "chart.js",
     "plugin",
     "style",
+    "bevel",
     "shadow",
-    "bevel"
+    "glow"
   ],
   "author": "Akihiko Kusanagi <nagi@nagi-p.com> (https://nagix.github.io/)",
   "license": "MIT",

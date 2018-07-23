@@ -28,7 +28,7 @@ chartjs-plugin-style can be used with ES6 modules, plain JavaScript and module l
 
 chartjs-plugin-style requires [Chart.js](https://www.chartjs.org). Include Chart.js and chartjs-plugin-style.js to your page to enable style options.
 
-Version 0.2 supports the bevel and shadow effects for datasets and the tooltip. More options are to be added in the upcoming releases.
+Version 0.3 supports the bevel, drop shadow, inner glow and outer glow effects for datasets and the tooltip. More options are to be added in the upcoming releases.
 
 ## Tutorial and Samples
 
@@ -46,6 +46,8 @@ To configure this plugin, you can simply add the following properties to your da
 | `shadowOffsetY` | `Number` | 0 | Indicates the vertical distance the shadow should extend from the line. See [MDN](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowOffsetY).
 | `shadowBlur` | `Number` | 0 | Indicates the size of the blurring effect for the line; this value doesn't correspond to a number of pixels. See [MDN](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowBlur).
 | `shadowColor` | `Color` | `'rgba(0, 0, 0, 0)'` | A standard CSS color value indicating the color of the shadow effect for the line. See [Colors](http://www.chartjs.org/docs/latest/general/colors.html#colors).
+| `outerGlowWidth` | `Number` | 0 | The width of the outer glow effect for the line.
+| `outerGlowColor` | `Color` | `'rgba(0, 0, 0, 0)'` | The color of the outer glow effect for the line.
 | `pointBevelWidth` | `Number/Number[]` | `0` | The width of the bevel effect for the point.
 | `pointBevelHighlightColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The highlight color of the bevel effect for the point.
 | `pointBevelShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The shadow color of the bevel effect for the point.
@@ -53,6 +55,10 @@ To configure this plugin, you can simply add the following properties to your da
 | `pointShadowOffsetY` | `Number/Number[]` | 0 | The vertical distance the shadow should extend from the point.
 | `pointShadowBlur` | `Number/Number[]` | 0 | The size of the blurring effect for the point.
 | `pointShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the shadow effect for the point.
+| `pointInnerGlowWidth` | `Number/Number[]` | 0 | The width of the inner glow effect for the point.
+| `pointInnerGlowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the inner glow effect for the point.
+| `pointOuterGlowWidth` | `Number/Number[]` | 0 | The width of the outer glow effect for the point.
+| `pointOuterGlowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the outer glow effect for the point.
 | `pointHoverBevelWidth` | `Number/Number[]` | `0` | The width of the bevel effect for the point when hovered.
 | `pointHoverBevelHighlightColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The highlight color of the bevel effect for the point when hovered.
 | `pointHoverBevelShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The shadow color of the bevel effect for the point when hovered.
@@ -60,6 +66,10 @@ To configure this plugin, you can simply add the following properties to your da
 | `pointHoverShadowOffsetY` | `Number/Number[]` | 0 | The vertical distance the shadow should extend from the point when hovered.
 | `pointHoverShadowBlur` | `Number/Number[]` | 0 | The size of the blurring effect for the point when hovered.
 | `pointHoverShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the shadow effect for the point when hovered.
+| `pointHoverInnerGlowWidth` | `Number/Number[]` | 0 | The width of the inner glow effect for the point when hovered.
+| `pointHoverInnerGlowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the inner glow effect for the point when hovered.
+| `pointHoverOuterGlowWidth` | `Number/Number[]` | 0 | The width of the outer glow effect for the point when hovered.
+| `pointHoverOuterGlowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the outer glow effect for the point when hovered.
 
 ### Bar, Doughnut, Pie, Polar Area and Bubble
 
@@ -72,6 +82,10 @@ To configure this plugin, you can simply add the following properties to your da
 | `shadowOffsetY` | `Number/Number[]` | 0 | Indicates the vertical distance the shadow should extend from the element.
 | `shadowBlur` | `Number/Number[]` | 0 | Indicates the size of the blurring effect; this value doesn't correspond to a number of pixels.
 | `shadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | A standard CSS color value indicating the color of the shadow effect.
+| `innerGlowWidth` | `Number/Number[]` | 0 | The width of the inner glow effect.
+| `innerGlowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the inner glow effect.
+| `outerGlowWidth` | `Number/Number[]` | 0 | The width of the outer glow effect.
+| `outerGlowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the outer glow effect.
 | `hoverBevelWidth` | `Number/Number[]` | `0` | The width of the bevel effect when hovered.
 | `hoverBevelHighlightColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The highlight color of the bevel effect when hovered.
 | `hoverBevelShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The shadow color of the bevel effect when hovered.
@@ -79,6 +93,10 @@ To configure this plugin, you can simply add the following properties to your da
 | `hoverShadowOffsetY` | `Number/Number[]` | 0 | The vertical distance the shadow should extend from the element when hovered.
 | `hoverShadowBlur` | `Number/Number[]` | 0 | The size of the blurring effect when hovered.
 | `hoverShadowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the shadow effect when hovered.
+| `hoverInnerGlowWidth` | `Number/Number[]` | 0 | The width of the inner glow effect when hovered.
+| `hoverInnerGlowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the inner glow effect when hovered.
+| `hoverOuterGlowWidth` | `Number/Number[]` | 0 | The width of the outer glow effect when hovered.
+| `hoverOuterGlowColor` | `Color/Color[]` | `'rgba(0, 0, 0, 0)'` | The color of the outer glow effect when hovered.
 
 ### Tooltip
 
@@ -91,6 +109,10 @@ To configure this plugin, you can simply add the following properties to your da
 | `shadowOffsetY` | `Number` | 0 | Indicates the vertical distance the shadow should extend from the tooltip.
 | `shadowBlur` | `Number` | 0 | Indicates the size of the blurring effect; this value doesn't correspond to a number of pixels.
 | `shadowColor` | `Color` | `'rgba(0, 0, 0, 0)'` | A standard CSS color value indicating the color of the shadow effect.
+| `innerGlowWidth` | `Number` | 0 | The width of the inner glow effect.
+| `innerGlowColor` | `Color` | `'rgba(0, 0, 0, 0)'` | The color of the inner glow effect.
+| `outerGlowWidth` | `Number` | 0 | The width of the outer glow effect.
+| `outerGlowColor` | `Color` | `'rgba(0, 0, 0, 0)'` | The color of the outer glow effect.
 
 For example:
 
@@ -112,10 +134,10 @@ For example:
             pointShadowOffsetY: 3,
             pointShadowBlur: 10,
             pointShadowColor: 'rgba(0, 0, 0, 0.5)',
-            pointHoverShadowOffsetX: 0,
-            pointHoverShadowOffsetY: 0,
-            pointHoverShadowBlur: 20,
-            pointHoverShadowColor: 'rgba(255, 255, 0, 1)'
+            pointHoverInnerGlowWidth: 20,
+            pointHoverInnerGlowColor: 'rgba(255, 255, 0, 0.5)',
+            pointHoverOuterGlowWidth: 20,
+            pointHoverOuterGlowColor: 'rgba(255, 255, 0, 1)'
         }]
     },
     options: {
