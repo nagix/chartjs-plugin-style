@@ -1,6 +1,6 @@
 {
   "name": "chartjs-plugin-style",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Chart.js plugin for more styling options",
   "main": "dist/chartjs-plugin-style.js",
   "directories": {
