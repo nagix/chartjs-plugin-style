@@ -17,11 +17,11 @@
     "gulp-file": "^0.3.0",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.6.1",
-    "gulp-streamify": "^1.0.2",
     "gulp-uglify": "~3.0.x",
     "gulp-zip": "~4.0.0",
     "merge-stream": "^1.0.1",
     "rollup-stream": "^1.24.1",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
   "repository": {
