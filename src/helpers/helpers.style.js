@@ -74,7 +74,12 @@ export default function() {
 			ctx.shadowOffsetY = -shadowOffset;
 			ctx.shadowBlur = shadowOffset;
 			ctx.shadowColor = shadowColor;
-			ctx.globalCompositeOperation = 'source-atop';
+			// Workaround for the issue on Windows version of FireFox
+			// https://bugzilla.mozilla.org/show_bug.cgi?id=1333090
+			// If the destination has transparency, the result will be different
+			if (!(navigator && navigator.userAgent.match('Windows.+Firefox'))) {
+				ctx.globalCompositeOperation = 'source-atop';
+			}
 			ctx.fill('evenodd');
 
 			// Draw Bevel highlight
