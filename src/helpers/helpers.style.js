@@ -2,6 +2,8 @@
 
 export default function() {
 
+	var OFFSET = 1000000;
+
 	return {
 		drawBackground: function(view, drawCallback) {
 			var borderWidth = view.borderWidth;
@@ -23,19 +25,18 @@ export default function() {
 
 		drawShadow: function(chart, offsetX, offsetY, blur, color, drawCallback, backmost) {
 			var ctx = chart.ctx;
-			var offset = chart.width;
 			var pixelRatio = chart.currentDevicePixelRatio;
 
 			ctx.save();
 
-			ctx.shadowOffsetX = (offsetX + offset) * pixelRatio;
+			ctx.shadowOffsetX = (offsetX + OFFSET) * pixelRatio;
 			ctx.shadowOffsetY = offsetY * pixelRatio;
 			ctx.shadowBlur = blur * pixelRatio;
 			ctx.shadowColor = color;
 			if (backmost) {
 				ctx.globalCompositeOperation = 'destination-over';
 			}
-			ctx.translate(-offset, 0);
+			ctx.translate(-OFFSET, 0);
 
 			drawCallback();
 
@@ -52,7 +53,6 @@ export default function() {
 
 		drawBevel: function(chart, width, highlightColor, shadowColor, drawCallback) {
 			var ctx = chart.ctx;
-			var offset = chart.width;
 			var pixelRatio = chart.currentDevicePixelRatio;
 			var shadowOffset = (width * pixelRatio) / 2;
 
@@ -64,13 +64,13 @@ export default function() {
 			ctx.clip();
 
 			// Make stencil
-			ctx.translate(-offset, 0);
+			ctx.translate(-OFFSET, 0);
 			this.setPath(ctx, drawCallback);
 			ctx.rect(0, 0, chart.width, chart.height);
 
 			// Draw bevel shadow
 			ctx.fillStyle = 'black';
-			ctx.shadowOffsetX = offset * pixelRatio - shadowOffset;
+			ctx.shadowOffsetX = OFFSET * pixelRatio - shadowOffset;
 			ctx.shadowOffsetY = -shadowOffset;
 			ctx.shadowBlur = shadowOffset;
 			ctx.shadowColor = shadowColor;
@@ -83,7 +83,7 @@ export default function() {
 			ctx.fill('evenodd');
 
 			// Draw Bevel highlight
-			ctx.shadowOffsetX = offset * pixelRatio + shadowOffset;
+			ctx.shadowOffsetX = OFFSET * pixelRatio + shadowOffset;
 			ctx.shadowOffsetY = shadowOffset;
 			ctx.shadowColor = highlightColor;
 			ctx.fill('evenodd');
@@ -93,7 +93,6 @@ export default function() {
 
 		drawGlow: function(chart, width, color, borderWidth, drawCallback, isOuter) {
 			var ctx = chart.ctx;
-			var offset = chart.width;
 			var pixelRatio = chart.currentDevicePixelRatio;
 
 			if (!width) {
@@ -110,7 +109,7 @@ export default function() {
 			ctx.clip('evenodd');
 
 			// Set path
-			ctx.translate(-offset, 0);
+			ctx.translate(-OFFSET, 0);
 			this.setPath(ctx, drawCallback);
 			if (!isOuter) {
 				ctx.rect(0, 0, chart.width, chart.height);
@@ -120,7 +119,7 @@ export default function() {
 			ctx.lineWidth = borderWidth;
 			ctx.strokeStyle = 'black';
 			ctx.fillStyle = 'black';
-			ctx.shadowOffsetX = offset * pixelRatio;
+			ctx.shadowOffsetX = OFFSET * pixelRatio;
 			ctx.shadowBlur = width * pixelRatio;
 			ctx.shadowColor = color;
 			ctx.fill('evenodd');
