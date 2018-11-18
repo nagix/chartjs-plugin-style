@@ -13,7 +13,7 @@ export default function(Chart) {
 
 		dataElementType: elements.StylePoint,
 
-		// Ported from Chart.js 2.7.2. Modified for style radar.
+		// Ported from Chart.js 2.7.3. Modified for style radar.
 		update: function(reset) {
 			var me = this;
 			var meta = me.getMeta();

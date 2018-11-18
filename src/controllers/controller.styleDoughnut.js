@@ -5,7 +5,7 @@ export default function(Chart) {
 	var elements = Chart.elements;
 	var helpers = Chart.helpers;
 
-	// Ported from Chart.js 2.7.2. Modified for style doughnut.
+	// Ported from Chart.js 2.7.3. Modified for style doughnut.
 	Chart.defaults.doughnut.legend.labels.generateLabels = function(chart) {
 		var data = chart.data;
 		if (data.labels.length && data.datasets.length) {
@@ -53,7 +53,7 @@ export default function(Chart) {
 
 		dataElementType: elements.StyleArc,
 
-		// Ported from Chart.js 2.7.2. Modified for style doughnut.
+		// Ported from Chart.js 2.7.3. Modified for style doughnut.
 		updateElement: function(arc, index, reset) {
 			var me = this;
 			var chart = me.chart;

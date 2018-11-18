@@ -5,7 +5,7 @@ export default function(Chart) {
 	var styleHelpers = Chart.helpers.style;
 	var layouts = Chart.layouts;
 
-	// Ported from Chart.js 2.7.2. Modified for style legend.
+	// Ported from Chart.js 2.7.3. Modified for style legend.
 	// Generates labels shown in the legend
 	defaults.global.legend.labels.generateLabels = function(chart) {
 		var data = chart.data;
@@ -41,7 +41,7 @@ export default function(Chart) {
 	};
 
 	/**
-	 * Ported from Chart.js 2.7.2.
+	 * Ported from Chart.js 2.7.3.
 	 *
 	 * Helper function to get the box width based on the usePointStyle option
 	 * @param labelopts {Object} the label options on the legend
@@ -56,7 +56,7 @@ export default function(Chart) {
 
 	var StyleLegend = Chart.Legend.extend({
 
-		// Ported from Chart.js 2.7.2. Modified for style legend.
+		// Ported from Chart.js 2.7.3. Modified for style legend.
 		// Actually draw the legend on the canvas
 		draw: function() {
 			var me = this;
@@ -237,7 +237,7 @@ export default function(Chart) {
 		},
 	});
 
-	// Ported from Chart.js 2.7.2. Modified for style legend.
+	// Ported from Chart.js 2.7.3. Modified for style legend.
 	function createNewLegendAndAttach(chart, legendOpts) {
 		var legend = new StyleLegend({
 			ctx: chart.ctx,
@@ -255,7 +255,7 @@ export default function(Chart) {
 
 		_element: StyleLegend,
 
-		// Ported from Chart.js 2.7.2.
+		// Ported from Chart.js 2.7.3.
 		beforeInit: function(chart) {
 			var legendOpts = chart.options.legend;
 
@@ -264,7 +264,7 @@ export default function(Chart) {
 			}
 		},
 
-		// Ported from Chart.js 2.7.2.
+		// Ported from Chart.js 2.7.3.
 		beforeUpdate: function(chart) {
 			var legendOpts = chart.options.legend;
 			var legend = chart.legend;
@@ -284,7 +284,7 @@ export default function(Chart) {
 			}
 		},
 
-		// Ported from Chart.js 2.7.2.
+		// Ported from Chart.js 2.7.3.
 		afterEvent: function(chart, e) {
 			var legend = chart.legend;
 			if (legend) {

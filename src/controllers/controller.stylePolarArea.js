@@ -5,7 +5,7 @@ export default function(Chart) {
 	var elements = Chart.elements;
 	var helpers = Chart.helpers;
 
-	// Ported from Chart.js 2.7.2. Modified for style polarArea.
+	// Ported from Chart.js 2.7.3. Modified for style polarArea.
 	Chart.defaults.doughnut.legend.labels.generateLabels = function(chart) {
 		var data = chart.data;
 		if (data.labels.length && data.datasets.length) {
@@ -53,7 +53,7 @@ export default function(Chart) {
 
 		dataElementType: elements.StyleArc,
 
-		// Ported from Chart.js 2.7.2. Modified for style polarArea.
+		// Ported from Chart.js 2.7.3. Modified for style polarArea.
 		updateElement: function(arc, index, reset) {
 			var me = this;
 			var chart = me.chart;
@@ -63,30 +63,34 @@ export default function(Chart) {
 			var scale = chart.scale;
 			var labels = chart.data.labels;
 
-			// For Chart.js 2.7.2 backward compatibility
-			var circumference = me.calculateCircumference(dataset.data[index]);
-
 			var centerX = scale.xCenter;
 			var centerY = scale.yCenter;
-
-			// For Chart.js 2.7.2 backward compatibility
-			// If there is NaN data before us, we need to calculate the starting angle correctly.
-			// We could be way more efficient here, but its unlikely that the polar area chart will have a lot of data
-			var visibleCount = 0;
-			var meta = me.getMeta();
-			for (var i = 0; i < index; ++i) {
-				if (!isNaN(dataset.data[i]) && !meta.data[i].hidden) {
-					++visibleCount;
-				}
-			}
 
 			// var negHalfPI = -0.5 * Math.PI;
 			var datasetStartAngle = opts.startAngle;
 			var distance = arc.hidden ? 0 : scale.getDistanceFromCenterForValue(dataset.data[index]);
 
 			// For Chart.js 2.7.2 backward compatibility
-			var startAngle = circumference ? datasetStartAngle + (circumference * visibleCount) : me._starts[index];
-			var endAngle = startAngle + (arc.hidden ? 0 : (circumference || me._angles[index]));
+			var startAngle, endAngle;
+			if (me.calculateCircumference) {
+				var circumference = me.calculateCircumference(dataset.data[index]);
+
+				// If there is NaN data before us, we need to calculate the starting angle correctly.
+				// We could be way more efficient here, but its unlikely that the polar area chart will have a lot of data
+				var visibleCount = 0;
+				var meta = me.getMeta();
+				for (var i = 0; i < index; ++i) {
+					if (!isNaN(dataset.data[i]) && !meta.data[i].hidden) {
+						++visibleCount;
+					}
+				}
+
+				startAngle = datasetStartAngle + (circumference * visibleCount);
+				endAngle = startAngle + (arc.hidden ? 0 : circumference);
+			} else {
+				startAngle = me._starts[index];
+				endAngle = startAngle + (arc.hidden ? 0 : me._angles[index]);
+			}
 
 			var resetRadius = animationOpts.animateScale ? 0 : scale.getDistanceFromCenterForValue(dataset.data[index]);
 

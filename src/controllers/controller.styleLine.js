@@ -7,7 +7,7 @@ export default function(Chart) {
 
 	var LineController = Chart.controllers.line;
 
-	// Ported from Chart.js 2.7.2.
+	// Ported from Chart.js 2.7.3.
 	function lineEnabled(dataset, options) {
 		return helpers.valueOrDefault(dataset.showLine, options.showLines);
 	}
@@ -18,7 +18,7 @@ export default function(Chart) {
 
 		dataElementType: elements.StylePoint,
 
-		// Ported from Chart.js 2.7.2. Modified for style line.
+		// Ported from Chart.js 2.7.3. Modified for style line.
 		update: function(reset) {
 			var me = this;
 			var meta = me.getMeta();

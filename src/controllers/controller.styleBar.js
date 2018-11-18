@@ -11,7 +11,7 @@ export default function(Chart) {
 
 		dataElementType: elements.StyleRectangle,
 
-		// Ported from Chart.js 2.7.2. Modified for style bar.
+		// Ported from Chart.js 2.7.3. Modified for style bar.
 		updateElement: function(rectangle, index, reset) {
 			var me = this;
 			var chart = me.chart;

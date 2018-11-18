@@ -12,7 +12,7 @@ export default function(Chart) {
 		dataElementType: elements.StylePoint,
 
 		/**
-		 * Ported from Chart.js 2.7.2. Modified for style bubble.
+		 * Ported from Chart.js 2.7.3. Modified for style bubble.
 		 * @protected
 		 */
 		updateElement: function(point, index, reset) {
@@ -39,6 +39,7 @@ export default function(Chart) {
 				borderWidth: options.borderWidth,
 				hitRadius: options.hitRadius,
 				pointStyle: options.pointStyle,
+				rotation: options.rotation,
 				radius: reset ? 0 : options.radius,
 				skip: custom.skip || isNaN(x) || isNaN(y),
 				x: x,
@@ -123,7 +124,7 @@ export default function(Chart) {
 		},
 
 		/**
-		 * Ported from Chart.js 2.7.2. Modified for style bubble.
+		 * Ported from Chart.js 2.7.3. Modified for style bubble.
 		 * @private
 		 */
 		_resolveElementOptions: function(point, index) {
@@ -156,6 +157,7 @@ export default function(Chart) {
 				'hoverRadius',
 				'hitRadius',
 				'pointStyle',
+				'rotation',
 				'shadowOffsetX',
 				'shadowOffsetY',
 				'shadowBlur',
@@ -196,7 +198,6 @@ export default function(Chart) {
 				dataset.radius,
 				options.radius
 			], context, index);
-
 			return values;
 		}
 	});

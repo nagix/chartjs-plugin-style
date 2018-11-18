@@ -6,7 +6,7 @@ export default function(Chart) {
 
 	helpers.extend(Chart.prototype, {
 
-		// Ported from Chart.js 2.7.2. Modified for style tooltip.
+		// Ported from Chart.js 2.7.3. Modified for style tooltip.
 		initToolTip: function() {
 			var me = this;
 			me.tooltip = new Chart.StyleTooltip({
