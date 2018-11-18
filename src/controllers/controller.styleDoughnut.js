@@ -2,11 +2,12 @@
 
 export default function(Chart) {
 
+	var defaults = Chart.defaults;
 	var elements = Chart.elements;
 	var helpers = Chart.helpers;
 
 	// Ported from Chart.js 2.7.3. Modified for style doughnut.
-	Chart.defaults.doughnut.legend.labels.generateLabels = function(chart) {
+	defaults.doughnut.legend.labels.generateLabels = defaults.pie.legend.labels.generateLabels = function(chart) {
 		var data = chart.data;
 		if (data.labels.length && data.datasets.length) {
 			return data.labels.map(function(label, i) {

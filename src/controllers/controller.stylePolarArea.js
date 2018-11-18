@@ -6,7 +6,7 @@ export default function(Chart) {
 	var helpers = Chart.helpers;
 
 	// Ported from Chart.js 2.7.3. Modified for style polarArea.
-	Chart.defaults.doughnut.legend.labels.generateLabels = function(chart) {
+	Chart.defaults.polarArea.legend.labels.generateLabels = function(chart) {
 		var data = chart.data;
 		if (data.labels.length && data.datasets.length) {
 			return data.labels.map(function(label, i) {
