@@ -141,9 +141,8 @@ var StyleLegend = Chart.Legend.extend({
 				styleHelpers.drawShadow(me.chart, legendItem.shadowOffsetX, legendItem.shadowOffsetY,
 					legendItem.shadowBlur, legendItem.shadowColor, drawCallback, true);
 
-				if (helpers.color(ctx.fillStyle).alpha() > 0) {
-					var borderAlpha = helpers.color(ctx.strokeStyle).alpha();
-					var bevelExtra = borderAlpha > 0 && ctx.lineWidth > 0 ? ctx.lineWidth / 2 : 0;
+				if (styleHelpers.opaque(ctx.fillStyle)) {
+					var bevelExtra = styleHelpers.opaque(ctx.strokeStyle) && ctx.lineWidth > 0 ? ctx.lineWidth / 2 : 0;
 
 					ctx.save();
 

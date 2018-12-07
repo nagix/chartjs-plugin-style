@@ -64,9 +64,7 @@ export default Tooltip.extend({
 		var me = this;
 		var args = arguments;
 		var chart = me._chart;
-		var borderAlpha = helpers.color(vm.borderColor).alpha();
-		var backgroundAlpha = helpers.color(vm.backgroundColor).alpha();
-		var bevelExtra = borderAlpha > 0 && vm.borderWidth > 0 ? vm.borderWidth / 2 : 0;
+		var bevelExtra = styleHelpers.opaque(vm.borderColor) && vm.borderWidth > 0 ? vm.borderWidth / 2 : 0;
 
 		var drawCallback = function() {
 			Tooltip.prototype.drawBackground.apply(me, args);
@@ -75,7 +73,7 @@ export default Tooltip.extend({
 		styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
 			vm.shadowBlur, vm.shadowColor, drawCallback);
 
-		if (backgroundAlpha > 0) {
+		if (styleHelpers.opaque(vm.backgroundColor)) {
 			styleHelpers.drawBackground(vm, drawCallback);
 			styleHelpers.drawBevel(chart, vm.bevelWidth + bevelExtra,
 				mergeOpacity(vm.bevelHighlightColor, opacity),

@@ -3,8 +3,6 @@
 import Chart from 'chart.js';
 import styleHelpers from '../helpers/helpers.style';
 
-var helpers = Chart.helpers;
-
 var Point = Chart.elements.Point;
 
 export default Point.extend({
@@ -14,9 +12,7 @@ export default Point.extend({
 		var args = arguments;
 		var chart = me._chart;
 		var vm = me._view;
-		var borderAlpha = helpers.color(vm.borderColor).alpha();
-		var backgroundAlpha = helpers.color(vm.backgroundColor).alpha();
-		var bevelExtra = borderAlpha > 0 && vm.borderWidth > 0 ? vm.borderWidth / 2 : 0;
+		var bevelExtra = styleHelpers.opaque(vm.borderColor) && vm.borderWidth > 0 ? vm.borderWidth / 2 : 0;
 
 		var drawCallback = function() {
 			Point.prototype.draw.apply(me, args);
@@ -25,7 +21,7 @@ export default Point.extend({
 		styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
 			vm.shadowBlur, vm.shadowColor, drawCallback, true);
 
-		if (backgroundAlpha > 0) {
+		if (styleHelpers.opaque(vm.backgroundColor)) {
 			styleHelpers.drawBackground(vm, drawCallback);
 			styleHelpers.drawBevel(chart, vm.bevelWidth + bevelExtra,
 				vm.bevelHighlightColor, vm.bevelShadowColor, drawCallback);

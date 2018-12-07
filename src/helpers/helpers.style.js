@@ -1,5 +1,7 @@
 'use strict';
 
+import Chart from 'chart.js';
+
 var OFFSET = 1000000;
 
 export default {
@@ -135,5 +137,9 @@ export default {
 
 	drawOuterGlow: function(chart, width, color, borderWidth, drawCallback) {
 		this.drawGlow(chart, width, color, borderWidth, drawCallback, true);
+	},
+
+	opaque: function(color) {
+		return Chart.helpers.color(color).alpha() > 0;
 	}
 };
