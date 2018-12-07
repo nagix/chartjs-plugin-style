@@ -1,6 +1,7 @@
 'use strict';
 
-import Chart from 'chart.js';
+import Chart from './core/core.js';
+import StyleTooltip from './core/core.styleTooltip';
 
 import StyleHelper from './helpers/helpers.style';
 
@@ -9,8 +10,6 @@ import StyleLineElement from './elements/element.styleLine';
 import StylePointElement from './elements/element.stylePoint';
 import StyleRectangleElement from './elements/element.styleRectangle';
 
-import StyleTooltip from './core/core.styleTooltip';
-import StyleController from './core/core.styleController';
 import StyleBarController from './controllers/controller.styleBar';
 import StyleBubbleController from './controllers/controller.styleBubble';
 import StyleDoughnutController from './controllers/controller.styleDoughnut';
@@ -21,60 +20,27 @@ import StyleRadarController from './controllers/controller.styleRadar';
 
 import StyleLegendPlugin from './plugins/plugin.styleLegend';
 
-// For Chart.js 2.6.0 backward compatibility
-Chart.helpers.valueOrDefault = Chart.helpers.valueOrDefault || Chart.helpers.getValueOrDefault;
-Chart.helpers.valueAtIndexOrDefault = Chart.helpers.valueAtIndexOrDefault || Chart.helpers.getValueAtIndexOrDefault;
-Chart.helpers.mergeIf = Chart.helpers.mergeIf || function(target, source) {
-	return Chart.helpers.configMerge.call(this, source, target);
-};
-Chart.helpers.options = Chart.helpers.options || {};
-Chart.helpers.options.resolve = Chart.helpers.options.resolve || function(inputs, context, index) {
-	var i, ilen, value;
+Chart.StyleTooltip = StyleTooltip;
 
-	for (i = 0, ilen = inputs.length; i < ilen; ++i) {
-		value = inputs[i];
-		if (value === undefined) {
-			continue;
-		}
-		if (context !== undefined && typeof value === 'function') {
-			value = value(context);
-		}
-		if (index !== undefined && Chart.helpers.isArray(value)) {
-			value = value[index];
-		}
-		if (value !== undefined) {
-			return value;
-		}
-	}
-};
+Chart.helpers.style = StyleHelper;
 
-// For Chart.js 2.7.1 backward compatibility
-Chart.layouts = Chart.layouts || Chart.layoutService;
+Chart.elements.StyleArc = StyleArcElement;
+Chart.elements.StyleLine = StyleLineElement;
+Chart.elements.StylePoint = StylePointElement;
+Chart.elements.StyleRectangle = StyleRectangleElement;
 
-Chart.helpers.style = StyleHelper(Chart);
-
-Chart.elements.StyleArc = StyleArcElement(Chart);
-Chart.elements.StyleLine = StyleLineElement(Chart);
-Chart.elements.StylePoint = StylePointElement(Chart);
-Chart.elements.StyleRectangle = StyleRectangleElement(Chart);
-
-Chart.StyleTooltip = StyleTooltip(Chart);
-StyleController(Chart);
-
-Chart.controllers.bar = StyleBarController(Chart);
-Chart.controllers.bubble = StyleBubbleController(Chart);
-Chart.controllers.doughnut = StyleDoughnutController(Chart);
-Chart.controllers.horizontalBar = StyleHorizontalBarController(Chart);
-Chart.controllers.line = StyleLineController(Chart);
-Chart.controllers.pie = Chart.controllers.doughnut;
-Chart.controllers.polarArea = StylePolarAreaController(Chart);
-Chart.controllers.radar = StyleRadarController(Chart);
-Chart.controllers.scatter = Chart.controllers.line;
+Chart.controllers.bar = StyleBarController;
+Chart.controllers.bubble = StyleBubbleController;
+Chart.controllers.doughnut = Chart.controllers.pie = StyleDoughnutController;
+Chart.controllers.horizontalBar = StyleHorizontalBarController;
+Chart.controllers.line = Chart.controllers.scatter = StyleLineController;
+Chart.controllers.polarArea = StylePolarAreaController;
+Chart.controllers.radar = StyleRadarController;
 
 Chart.plugins.getAll().forEach(function(plugin) {
 	if (plugin.id === 'legend') {
 		Chart.plugins.unregister(plugin);
 	}
 });
-Chart.plugins.register(StyleLegendPlugin(Chart));
+Chart.plugins.register(StyleLegendPlugin);
 Chart.Legend = StyleLegendPlugin._element;

@@ -1,40 +1,41 @@
 'use strict';
 
-export default function(Chart) {
+import Chart from 'chart.js';
+import styleHelpers from '../helpers/helpers.style';
 
-	var helpers = Chart.helpers;
-	var styleHelpers = helpers.style;
+var helpers = Chart.helpers;
 
-	return Chart.elements.Rectangle.extend({
+var Rectangle = Chart.elements.Rectangle;
 
-		draw: function() {
-			var me = this;
-			var args = arguments;
-			var chart = me._chart;
-			var vm = me._view;
-			var borderAlpha = helpers.color(vm.borderColor).alpha();
-			var backgroundAlpha = helpers.color(vm.backgroundColor).alpha();
-			var bevelExtra = borderAlpha > 0 && vm.borderWidth > 0 ? vm.borderWidth / 2 : 0;
+export default Rectangle.extend({
 
-			var drawCallback = function() {
-				Chart.elements.Rectangle.prototype.draw.apply(me, args);
-			};
+	draw: function() {
+		var me = this;
+		var args = arguments;
+		var chart = me._chart;
+		var vm = me._view;
+		var borderAlpha = helpers.color(vm.borderColor).alpha();
+		var backgroundAlpha = helpers.color(vm.backgroundColor).alpha();
+		var bevelExtra = borderAlpha > 0 && vm.borderWidth > 0 ? vm.borderWidth / 2 : 0;
 
-			styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
-				vm.shadowBlur, vm.shadowColor, drawCallback, true);
+		var drawCallback = function() {
+			Rectangle.prototype.draw.apply(me, args);
+		};
 
-			if (backgroundAlpha > 0) {
-				styleHelpers.drawBackground(vm, drawCallback);
-				styleHelpers.drawBevel(chart, vm.bevelWidth + bevelExtra,
-					vm.bevelHighlightColor, vm.bevelShadowColor, drawCallback);
-			}
+		styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
+			vm.shadowBlur, vm.shadowColor, drawCallback, true);
 
-			styleHelpers.drawInnerGlow(chart, vm.innerGlowWidth, vm.innerGlowColor,
-				vm.borderWidth, drawCallback);
-			styleHelpers.drawOuterGlow(chart, vm.outerGlowWidth, vm.outerGlowColor,
-				vm.borderWidth, drawCallback);
-
-			styleHelpers.drawBorder(vm, drawCallback);
+		if (backgroundAlpha > 0) {
+			styleHelpers.drawBackground(vm, drawCallback);
+			styleHelpers.drawBevel(chart, vm.bevelWidth + bevelExtra,
+				vm.bevelHighlightColor, vm.bevelShadowColor, drawCallback);
 		}
-	});
-}
+
+		styleHelpers.drawInnerGlow(chart, vm.innerGlowWidth, vm.innerGlowColor,
+			vm.borderWidth, drawCallback);
+		styleHelpers.drawOuterGlow(chart, vm.outerGlowWidth, vm.outerGlowColor,
+			vm.borderWidth, drawCallback);
+
+		styleHelpers.drawBorder(vm, drawCallback);
+	}
+});

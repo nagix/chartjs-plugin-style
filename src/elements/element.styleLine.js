@@ -1,28 +1,28 @@
 'use strict';
 
-export default function(Chart) {
+import Chart from 'chart.js';
+import styleHelpers from '../helpers/helpers.style';
 
-	var styleHelpers = Chart.helpers.style;
+var Line = Chart.elements.Line;
 
-	return Chart.elements.Line.extend({
+export default Line.extend({
 
-		draw: function() {
-			var me = this;
-			var args = arguments;
-			var chart = me._chart;
-			var vm = me._view;
+	draw: function() {
+		var me = this;
+		var args = arguments;
+		var chart = me._chart;
+		var vm = me._view;
 
-			var drawCallback = function() {
-				Chart.elements.Line.prototype.draw.apply(me, args);
-			};
+		var drawCallback = function() {
+			Line.prototype.draw.apply(me, args);
+		};
 
-			styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
-				vm.shadowBlur, vm.shadowColor, drawCallback);
+		styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
+			vm.shadowBlur, vm.shadowColor, drawCallback);
 
-			styleHelpers.drawOuterGlow(chart, vm.outerGlowWidth, vm.outerGlowColor,
-				vm.borderWidth, drawCallback);
+		styleHelpers.drawOuterGlow(chart, vm.outerGlowWidth, vm.outerGlowColor,
+			vm.borderWidth, drawCallback);
 
-			styleHelpers.drawBorder(vm, drawCallback);
-		}
-	});
-}
+		styleHelpers.drawBorder(vm, drawCallback);
+	}
+});

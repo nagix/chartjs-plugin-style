@@ -2,20 +2,18 @@
 
 import StyleBarController from './controller.styleBar';
 
-export default function(Chart) {
-	return StyleBarController(Chart).extend({
-		/**
-		 * @private
-		 */
-		getValueScaleId: function() {
-			return this.getMeta().xAxisID;
-		},
+export default StyleBarController.extend({
+	/**
+	 * @private
+	 */
+	getValueScaleId: function() {
+		return this.getMeta().xAxisID;
+	},
 
-		/**
-		 * @private
-		 */
-		getIndexScaleId: function() {
-			return this.getMeta().yAxisID;
-		}
-	});
-}
+	/**
+	 * @private
+	 */
+	getIndexScaleId: function() {
+		return this.getMeta().yAxisID;
+	}
+});
