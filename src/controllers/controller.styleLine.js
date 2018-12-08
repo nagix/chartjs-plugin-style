@@ -3,6 +3,7 @@
 import Chart from '../core/core.js';
 import StyleLine from '../elements/element.styleLine';
 import StylePoint from '../elements/element.stylePoint';
+import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
@@ -298,19 +299,7 @@ export default LineController.extend({
 		var custom = element.custom || {};
 		var model = element._model;
 
-		if (element.$previousStyle) {
-			element.$previousStyle.shadowOffsetX = model.shadowOffsetX;
-			element.$previousStyle.shadowOffsetY = model.shadowOffsetY;
-			element.$previousStyle.shadowBlur = model.shadowBlur;
-			element.$previousStyle.shadowColor = model.shadowColor;
-			element.$previousStyle.bevelWidth = model.bevelWidth;
-			element.$previousStyle.bevelHighlightColor = model.bevelHighlightColor;
-			element.$previousStyle.bevelShadowColor = model.bevelShadowColor;
-			element.$previousStyle.innerGlowWidth = model.innerGlowWidth;
-			element.$previousStyle.innerGlowColor = model.innerGlowColor;
-			element.$previousStyle.outerGlowWidth = model.outerGlowWidth;
-			element.$previousStyle.outerGlowColor = model.outerGlowColor;
-		}
+		styleHelpers.saveStyle(element, model);
 
 		model.shadowOffsetX = custom.hoverShadowOffsetX || valueAtIndexOrDefault(dataset.pointHoverShadowOffsetX, index, model.shadowOffsetX);
 		model.shadowOffsetY = custom.hoverShadowOffsetY || valueAtIndexOrDefault(dataset.pointHoverShadowOffsetY, index, model.shadowOffsetY);

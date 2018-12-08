@@ -2,11 +2,11 @@
 
 import Chart from '../core/core.js';
 import StyleArc from '../elements/element.styleArc';
+import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
 var valueAtIndexOrDefault = helpers.valueAtIndexOrDefault;
-var getHoverColor = helpers.getHoverColor;
 
 // Ported from Chart.js 2.7.3. Modified for style polarArea.
 Chart.defaults.polarArea.legend.labels.generateLabels = function(chart) {
@@ -140,61 +140,11 @@ export default PolarAreaController.extend({
 
 	setHoverStyle: function(element) {
 		PolarAreaController.prototype.setHoverStyle.apply(this, arguments);
-
-		var dataset = this.chart.data.datasets[element._datasetIndex];
-		var index = element._index;
-		var custom = element.custom || {};
-		var model = element._model;
-
-		if (element.$previousStyle) {
-			element.$previousStyle.shadowOffsetX = model.shadowOffsetX;
-			element.$previousStyle.shadowOffsetY = model.shadowOffsetY;
-			element.$previousStyle.shadowBlur = model.shadowBlur;
-			element.$previousStyle.shadowColor = model.shadowColor;
-			element.$previousStyle.bevelWidth = model.bevelWidth;
-			element.$previousStyle.bevelHighlightColor = model.bevelHighlightColor;
-			element.$previousStyle.bevelShadowColor = model.bevelShadowColor;
-			element.$previousStyle.innerGlowWidth = model.innerGlowWidth;
-			element.$previousStyle.innerGlowColor = model.innerGlowColor;
-			element.$previousStyle.outerGlowWidth = model.outerGlowWidth;
-			element.$previousStyle.outerGlowColor = model.outerGlowColor;
-		}
-
-		model.shadowOffsetX = custom.hoverShadowOffsetX ? custom.hoverShadowOffsetX : valueAtIndexOrDefault(dataset.hoverShadowOffsetX, index, model.shadowOffsetX);
-		model.shadowOffsetY = custom.hoverShadowOffsetY ? custom.hoverShadowOffsetY : valueAtIndexOrDefault(dataset.hoverShadowOffsetY, index, model.shadowOffsetY);
-		model.shadowBlur = custom.hoverShadowBlur ? custom.hoverShadowBlur : valueAtIndexOrDefault(dataset.hoverShadowBlur, index, model.shadowBlur);
-		model.shadowColor = custom.hoverShadowColor ? custom.hoverShadowColor : valueAtIndexOrDefault(dataset.hoverShadowColor, index, getHoverColor(model.shadowColor));
-		model.bevelWidth = custom.hoverBevelWidth ? custom.hoverBevelWidth : valueAtIndexOrDefault(dataset.hoverBevelWidth, index, model.bevelWidth);
-		model.bevelHighlightColor = custom.hoverBevelHighlightColor ? custom.hoverBevelHighlightColor : valueAtIndexOrDefault(dataset.hoverBevelHighlightColor, index, getHoverColor(model.bevelHighlightColor));
-		model.bevelShadowColor = custom.hoverBevelShadowColor ? custom.hoverBevelShadowColor : valueAtIndexOrDefault(dataset.hoverBevelShadowColor, index, getHoverColor(model.bevelShadowColor));
-		model.innerGlowWidth = custom.hoverInnerGlowWidth ? custom.hoverInnerGlowWidth : valueAtIndexOrDefault(dataset.hoverInnerGlowWidth, index, model.innerGlowWidth);
-		model.innerGlowColor = custom.hoverInnerGlowColor ? custom.hoverInnerGlowColor : valueAtIndexOrDefault(dataset.hoverInnerGlowColor, index, getHoverColor(model.innerGlowColor));
-		model.outerGlowWidth = custom.hoverOuterGlowWidth ? custom.hoverOuterGlowWidth : valueAtIndexOrDefault(dataset.hoverOuterGlowWidth, index, model.outerGlowWidth);
-		model.outerGlowColor = custom.hoverOuterGlowColor ? custom.hoverOuterGlowColor : valueAtIndexOrDefault(dataset.hoverOuterGlowColor, index, getHoverColor(model.outerGlowColor));
+		styleHelpers.setHoverStyle(this.chart, element);
 	},
 
 	removeHoverStyle: function(element) {
-		var dataset = this.chart.data.datasets[element._datasetIndex];
-		var index = element._index;
-		var custom = element.custom || {};
-		var model = element._model;
-		var elementOpts = this.chart.options.elements.arc;
-
-		// For Chart.js 2.7.2 backward compatibility
-		if (!element.$previousStyle) {
-			model.shadowOffsetX = custom.shadowOffsetX ? custom.shadowOffsetX : valueAtIndexOrDefault(dataset.shadowOffsetX, index, elementOpts.shadowOffsetX);
-			model.shadowOffsetY = custom.shadowOffsetY ? custom.shadowOffsetY : valueAtIndexOrDefault(dataset.shadowOffsetY, index, elementOpts.shadowOffsetY);
-			model.shadowBlur = custom.shadowBlur ? custom.shadowBlur : valueAtIndexOrDefault(dataset.shadowBlur, index, elementOpts.shadowBlur);
-			model.shadowColor = custom.shadowColor ? custom.shadowColor : valueAtIndexOrDefault(dataset.shadowColor, index, elementOpts.shadowColor);
-			model.bevelWidth = custom.bevelWidth ? custom.bevelWidth : valueAtIndexOrDefault(dataset.bevelWidth, index, elementOpts.bevelWidth);
-			model.bevelHighlightColor = custom.bevelHighlightColor ? custom.bevelHighlightColor : valueAtIndexOrDefault(dataset.bevelHighlightColor, index, elementOpts.bevelHighlightColor);
-			model.bevelShadowColor = custom.bevelShadowColor ? custom.bevelShadowColor : valueAtIndexOrDefault(dataset.bevelShadowColor, index, elementOpts.bevelShadowColor);
-			model.innerGlowWidth = custom.innerGlowWidth ? custom.innerGlowWidth : valueAtIndexOrDefault(dataset.innerGlowWidth, index, elementOpts.innerGlowWidth);
-			model.innerGlowColor = custom.innerGlowColor ? custom.innerGlowColor : valueAtIndexOrDefault(dataset.innerGlowColor, index, elementOpts.innerGlowColor);
-			model.outerGlowWidth = custom.outerGlowWidth ? custom.outerGlowWidth : valueAtIndexOrDefault(dataset.outerGlowWidth, index, elementOpts.outerGlowWidth);
-			model.outerGlowColor = custom.outerGlowColor ? custom.outerGlowColor : valueAtIndexOrDefault(dataset.outerGlowColor, index, elementOpts.outerGlowColor);
-		}
-
+		styleHelpers.removeHoverStyle(this.chart, element, 'arc');
 		PolarAreaController.prototype.removeHoverStyle.apply(this, arguments);
 	}
 });
