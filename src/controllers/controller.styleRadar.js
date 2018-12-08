@@ -8,8 +8,6 @@ import styleHelpers from '../helpers/helpers.style';
 var helpers = Chart.helpers;
 
 var valueOrDefault = helpers.valueOrDefault;
-var valueAtIndexOrDefault = helpers.valueAtIndexOrDefault;
-var getHoverColor = helpers.getHoverColor;
 
 var RadarController = Chart.controllers.radar;
 
@@ -54,15 +52,10 @@ export default RadarController.extend({
 				borderDash: custom.borderDash ? custom.borderDash : (dataset.borderDash || lineElementOptions.borderDash),
 				borderDashOffset: custom.borderDashOffset ? custom.borderDashOffset : (dataset.borderDashOffset || lineElementOptions.borderDashOffset),
 				borderJoinStyle: custom.borderJoinStyle ? custom.borderJoinStyle : (dataset.borderJoinStyle || lineElementOptions.borderJoinStyle),
-
-				shadowOffsetX: custom.shadowOffsetX ? custom.shadowOffsetX : (dataset.shadowOffsetX || lineElementOptions.shadowOffsetX),
-				shadowOffsetY: custom.shadowOffsetY ? custom.shadowOffsetY : (dataset.shadowOffsetY || lineElementOptions.shadowOffsetY),
-				shadowBlur: custom.shadowBlur ? custom.shadowBlur : (dataset.shadowBlur || lineElementOptions.shadowBlur),
-				shadowColor: custom.shadowColor ? custom.shadowColor : (dataset.shadowColor || lineElementOptions.shadowColor),
-				outerGlowWidth: custom.outerGlowWidth ? custom.outerGlowWidth : (dataset.outerGlowWidth || lineElementOptions.outerGlowWidth),
-				outerGlowColor: custom.outerGlowColor ? custom.outerGlowColor : (dataset.outerGlowColor || lineElementOptions.outerGlowColor)
 			}
 		});
+
+		helpers.merge(meta.dataset, styleHelpers.resolveLineStyle(custom, dataset, lineElementOptions));
 
 		meta.dataset.pivot();
 
@@ -76,72 +69,32 @@ export default RadarController.extend({
 	},
 
 	updateElement: function(point, index) {
-		RadarController.prototype.updateElement.apply(this, arguments);
-
 		var me = this;
-		var custom = point.custom || {};
-		var dataset = me.getDataset();
-		var pointElementOptions = me.chart.options.elements.point;
 
-		point._model.shadowOffsetX = !isNaN(custom.shadowOffsetX) ? custom.shadowOffsetX : valueAtIndexOrDefault(dataset.pointShadowOffsetX, index, !isNaN(dataset.shadowOffsetX) ? dataset.shadowOffsetX : pointElementOptions.shadowOffsetX);
-		point._model.shadowOffsetY = !isNaN(custom.shadowOffsetY) ? custom.shadowOffsetY : valueAtIndexOrDefault(dataset.pointShadowOffsetY, index, !isNaN(dataset.shadowOffsetY) ? dataset.shadowOffsetY : pointElementOptions.shadowOffsetY);
-		point._model.shadowBlur = !isNaN(custom.shadowBlur) ? custom.shadowBlur : valueAtIndexOrDefault(dataset.pointShadowBlur, index, !isNaN(dataset.shadowBlur) ? dataset.shadowBlur : pointElementOptions.shadowBlur);
-		point._model.shadowColor = custom.shadowColor ? custom.shadowColor : valueAtIndexOrDefault(dataset.pointShadowColor, index, dataset.shadowColor ? dataset.shadowColor : pointElementOptions.shadowColor);
-		point._model.bevelWidth = !isNaN(custom.bevelWidth) ? custom.bevelWidth : valueAtIndexOrDefault(dataset.pointBevelWidth, index, !isNaN(dataset.bevelWidth) ? dataset.bevelWidth : pointElementOptions.bevelWidth);
-		point._model.bevelHighlightColor = custom.bevelHighlightColor ? custom.bevelHighlightColor : valueAtIndexOrDefault(dataset.pointBevelHighlightColor, index, dataset.bevelHighlightColor ? dataset.bevelHighlightColor : pointElementOptions.bevelHighlightColor);
-		point._model.bevelShadowColor = custom.bevelShadowColor ? custom.bevelShadowColor : valueAtIndexOrDefault(dataset.pointBevelShadowColor, index, dataset.bevelShadowColor ? dataset.bevelShadowColor : pointElementOptions.bevelShadowColor);
-		point._model.innerGlowWidth = !isNaN(custom.innerGlowWidth) ? custom.innerGlowWidth : valueAtIndexOrDefault(dataset.pointInnerGlowWidth, index, !isNaN(dataset.innerGlowWidth) ? dataset.innerGlowWidth : pointElementOptions.innerGlowWidth);
-		point._model.innerGlowColor = custom.innerGlowColor ? custom.innerGlowColor : valueAtIndexOrDefault(dataset.pointInnerGlowColor, index, dataset.innerGlowColor ? dataset.innerGlowColor : pointElementOptions.innerGlowColor);
-		point._model.outerGlowWidth = !isNaN(custom.outerGlowWidth) ? custom.outerGlowWidth : valueAtIndexOrDefault(dataset.pointOuterGlowWidth, index, !isNaN(dataset.outerGlowWidth) ? dataset.outerGlowWidth : pointElementOptions.outerGlowWidth);
-		point._model.outerGlowColor = custom.outerGlowColor ? custom.outerGlowColor : valueAtIndexOrDefault(dataset.pointOuterGlowColor, index, dataset.outerGlowColor ? dataset.outerGlowColor : pointElementOptions.outerGlowColor);
+		RadarController.prototype.updateElement.apply(me, arguments);
+
+		helpers.merge(point._model, styleHelpers.resolvePointStyle(me.chart, point, index, me.chart.options.elements.point));
 	},
 
 	setHoverStyle: function(element) {
-		RadarController.prototype.setHoverStyle.apply(this, arguments);
-
 		// Point
-		var dataset = this.chart.data.datasets[element._datasetIndex];
-		var index = element._index;
-		var custom = element.custom || {};
+		var me = this;
 		var model = element._model;
 
-		styleHelpers.saveStyle(element, model);
+		RadarController.prototype.setHoverStyle.apply(me, arguments);
 
-		model.shadowOffsetX = custom.hoverShadowOffsetX ? custom.hoverShadowOffsetX : valueAtIndexOrDefault(dataset.pointHoverShadowOffsetX, index, model.shadowOffsetX);
-		model.shadowOffsetY = custom.hoverShadowOffsetY ? custom.hoverShadowOffsetY : valueAtIndexOrDefault(dataset.pointHoverShadowOffsetY, index, model.shadowOffsetY);
-		model.shadowBlur = custom.hoverShadowBlur ? custom.hoverShadowBlur : valueAtIndexOrDefault(dataset.pointHoverShadowBlur, index, model.shadowBlur);
-		model.shadowColor = custom.hoverShadowColor ? custom.hoverShadowColor : valueAtIndexOrDefault(dataset.pointHoverShadowColor, index, getHoverColor(model.shadowColor));
-		model.bevelWidth = custom.hoverBevelWidth ? custom.hoverBevelWidth : valueAtIndexOrDefault(dataset.pointHoverBevelWidth, index, model.bevelWidth);
-		model.bevelHighlightColor = custom.hoverBevelHighlightColor ? custom.hoverBevelHighlightColor : valueAtIndexOrDefault(dataset.pointHoverBevelHighlightColor, index, getHoverColor(model.bevelHighlightColor));
-		model.bevelShadowColor = custom.hoverBevelShadowColor ? custom.hoverBevelShadowColor : valueAtIndexOrDefault(dataset.pointHoverBevelShadowColor, index, getHoverColor(model.bevelShadowColor));
-		model.innerGlowWidth = custom.hoverInnerGlowWidth ? custom.hoverInnerGlowWidth : valueAtIndexOrDefault(dataset.pointHoverInnerGlowWidth, index, model.innerGlowWidth);
-		model.innerGlowColor = custom.hoverInnerGlowColor ? custom.hoverInnerGlowColor : valueAtIndexOrDefault(dataset.pointHoverInnerGlowColor, index, getHoverColor(model.innerGlowColor));
-		model.outerGlowWidth = custom.hoverOuterGlowWidth ? custom.hoverOuterGlowWidth : valueAtIndexOrDefault(dataset.pointHoverOuterGlowWidth, index, model.outerGlowWidth);
-		model.outerGlowColor = custom.hoverOuterGlowColor ? custom.hoverOuterGlowColor : valueAtIndexOrDefault(dataset.pointHoverOuterGlowColor, index, getHoverColor(model.outerGlowColor));
+		styleHelpers.saveStyle(element);
+		helpers.merge(model, styleHelpers.resolvePointStyle(me.chart, element, element._index, model, true));
 	},
 
 	removeHoverStyle: function(element) {
-		var dataset = this.chart.data.datasets[element._datasetIndex];
-		var index = element._index;
-		var custom = element.custom || {};
-		var model = element._model;
-		var elementOpts = this.chart.options.elements.point;
+		var me = this;
 
 		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			model.shadowOffsetX = !isNaN(custom.shadowOffsetX) ? custom.shadowOffsetX : valueAtIndexOrDefault(dataset.pointShadowOffsetX, index, !isNaN(dataset.shadowOffsetX) ? dataset.shadowOffsetX : elementOpts.shadowOffsetX);
-			model.shadowOffsetY = !isNaN(custom.shadowOffsetY) ? custom.shadowOffsetY : valueAtIndexOrDefault(dataset.pointShadowOffsetY, index, !isNaN(dataset.shadowOffsetY) ? dataset.shadowOffsetY : elementOpts.shadowOffsetY);
-			model.shadowBlur = !isNaN(custom.shadowBlur) ? custom.shadowBlur : valueAtIndexOrDefault(dataset.pointShadowBlur, index, !isNaN(dataset.shadowBlur) ? dataset.shadowBlur : elementOpts.shadowBlur);
-			model.shadowColor = custom.shadowColor ? custom.shadowColor : valueAtIndexOrDefault(dataset.pointShadowColor, index, dataset.shadowColor ? dataset.shadowColor : elementOpts.shadowColor);
-			model.bevelWidth = !isNaN(custom.bevelWidth) ? custom.bevelWidth : valueAtIndexOrDefault(dataset.pointBevelWidth, index, !isNaN(dataset.bevelWidth) ? dataset.bevelWidth : elementOpts.bevelWidth);
-			model.bevelHighlightColor = custom.bevelHighlightColor ? custom.bevelHighlightColor : valueAtIndexOrDefault(dataset.pointBevelHighlightColor, index, dataset.bevelHighlightColor ? dataset.bevelHighlightColor : elementOpts.bevelHighlightColor);
-			model.bevelShadowColor = custom.bevelShadowColor ? custom.bevelShadowColor : valueAtIndexOrDefault(dataset.pointBevelShadowColor, index, dataset.bevelShadowColor ? dataset.bevelShadowColor : elementOpts.bevelShadowColor);
-			model.innerGlowWidth = !isNaN(custom.innerGlowWidth) ? custom.innerGlowWidth : valueAtIndexOrDefault(dataset.pointInnerGlowWidth, index, !isNaN(dataset.innerGlowWidth) ? dataset.innerGlowWidth : elementOpts.innerGlowWidth);
-			model.innerGlowColor = custom.innerGlowColor ? custom.innerGlowColor : valueAtIndexOrDefault(dataset.pointInnerGlowColor, index, dataset.innerGlowColor ? dataset.innerGlowColor : elementOpts.innerGlowColor);
-			model.outerGlowWidth = !isNaN(custom.outerGlowWidth) ? custom.outerGlowWidth : valueAtIndexOrDefault(dataset.pointOuterGlowWidth, index, !isNaN(dataset.outerGlowWidth) ? dataset.outerGlowWidth : elementOpts.outerGlowWidth);
-			model.outerGlowColor = custom.outerGlowColor ? custom.outerGlowColor : valueAtIndexOrDefault(dataset.pointOuterGlowColor, index, dataset.outerGlowColor ? dataset.outerGlowColor : elementOpts.outerGlowColor);
+			helpers.merge(element._model, styleHelpers.resolvePointStyle(me.chart, element, element._index, me.chart.options.elements.point));
 		}
 
-		RadarController.prototype.removeHoverStyle.apply(this, arguments);
+		RadarController.prototype.removeHoverStyle.apply(me, arguments);
 	}
 });

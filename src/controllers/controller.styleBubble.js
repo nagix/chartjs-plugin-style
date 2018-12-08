@@ -48,19 +48,9 @@ export default BubbleController.extend({
 			skip: custom.skip || isNaN(x) || isNaN(y),
 			x: x,
 			y: y,
-
-			shadowOffsetX: options.shadowOffsetX,
-			shadowOffsetY: options.shadowOffsetY,
-			shadowBlur: options.shadowBlur,
-			shadowColor: options.shadowColor,
-			bevelWidth: options.bevelWidth,
-			bevelHighlightColor: options.bevelHighlightColor,
-			bevelShadowColor: options.bevelShadowColor,
-			innerGlowWidth: options.innerGlowWidth,
-			innerGlowColor: options.innerGlowColor,
-			outerGlowWidth: options.outerGlowWidth,
-			outerGlowColor: options.outerGlowColor
 		};
+
+		styleHelpers.mergeStyle(point._model, options);
 
 		point.pivot();
 	},
@@ -74,7 +64,7 @@ export default BubbleController.extend({
 		var model = element._model;
 		var options = element._options;
 
-		styleHelpers.saveStyle(element, model);
+		styleHelpers.saveStyle(element);
 
 		model.shadowOffsetX = valueOrDefault(options.hoverShadowOffsetX, options.shadowOffsetX);
 		model.shadowOffsetY = valueOrDefault(options.hoverShadowOffsetY, options.shadowOffsetY);
@@ -93,22 +83,9 @@ export default BubbleController.extend({
 	 * @protected
 	 */
 	removeHoverStyle: function(element) {
-		var model = element._model;
-		var options = element._options;
-
 		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			model.shadowOffsetX = options.shadowOffsetX;
-			model.shadowOffsetY = options.shadowOffsetY;
-			model.shadowBlur = options.shadowBlur;
-			model.shadowColor = options.shadowColor;
-			model.bevelWidth = options.bevelWidth;
-			model.bevelHighlightColor = options.bevelHighlightColor;
-			model.bevelShadowColor = options.bevelShadowColor;
-			model.innerGlowWidth = options.innerGlowWidth;
-			model.innerGlowColor = options.innerGlowColor;
-			model.outerGlowWidth = options.outerGlowWidth;
-			model.outerGlowColor = options.outerGlowColor;
+			styleHelpers.mergeStyle(element._model, element._options);
 		}
 
 		BubbleController.prototype.removeHoverStyle.apply(this, arguments);

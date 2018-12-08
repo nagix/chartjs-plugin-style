@@ -35,19 +35,9 @@ export default BarController.extend({
 			backgroundColor: custom.backgroundColor ? custom.backgroundColor : valueAtIndexOrDefault(dataset.backgroundColor, index, rectangleOptions.backgroundColor),
 			borderColor: custom.borderColor ? custom.borderColor : valueAtIndexOrDefault(dataset.borderColor, index, rectangleOptions.borderColor),
 			borderWidth: custom.borderWidth ? custom.borderWidth : valueAtIndexOrDefault(dataset.borderWidth, index, rectangleOptions.borderWidth),
-
-			shadowOffsetX: custom.shadowOffsetX ? custom.shadowOffsetX : valueAtIndexOrDefault(dataset.shadowOffsetX, index, rectangleOptions.shadowOffsetX),
-			shadowOffsetY: custom.shadowOffsetY ? custom.shadowOffsetY : valueAtIndexOrDefault(dataset.shadowOffsetY, index, rectangleOptions.shadowOffsetY),
-			shadowBlur: custom.shadowBlur ? custom.shadowBlur : valueAtIndexOrDefault(dataset.shadowBlur, index, rectangleOptions.shadowBlur),
-			shadowColor: custom.shadowColor ? custom.shadowColor : valueAtIndexOrDefault(dataset.shadowColor, index, rectangleOptions.shadowColor),
-			bevelWidth: custom.bevelWidth ? custom.bevelWidth : valueAtIndexOrDefault(dataset.bevelWidth, index, rectangleOptions.bevelWidth),
-			bevelHighlightColor: custom.bevelHighlightColor ? custom.bevelHighlightColor : valueAtIndexOrDefault(dataset.bevelHighlightColor, index, rectangleOptions.bevelHighlightColor),
-			bevelShadowColor: custom.bevelShadowColor ? custom.bevelShadowColor : valueAtIndexOrDefault(dataset.bevelShadowColor, index, rectangleOptions.bevelShadowColor),
-			innerGlowWidth: custom.innerGlowWidth ? custom.innerGlowWidth : valueAtIndexOrDefault(dataset.innerGlowWidth, index, rectangleOptions.innerGlowWidth),
-			innerGlowColor: custom.innerGlowColor ? custom.innerGlowColor : valueAtIndexOrDefault(dataset.innerGlowColor, index, rectangleOptions.innerGlowColor),
-			outerGlowWidth: custom.outerGlowWidth ? custom.outerGlowWidth : valueAtIndexOrDefault(dataset.outerGlowWidth, index, rectangleOptions.outerGlowWidth),
-			outerGlowColor: custom.outerGlowColor ? custom.outerGlowColor : valueAtIndexOrDefault(dataset.outerGlowColor, index, rectangleOptions.outerGlowColor)
 		};
+
+		helpers.merge(rectangle._model, styleHelpers.resolveStyle(chart, rectangle, index, rectangleOptions));
 
 		me.updateElementGeometry(rectangle, index, reset);
 
@@ -55,12 +45,22 @@ export default BarController.extend({
 	},
 
 	setHoverStyle: function(element) {
-		BarController.prototype.setHoverStyle.apply(this, arguments);
-		styleHelpers.setHoverStyle(this.chart, element);
+		var me = this;
+		var model = element._model;
+
+		BarController.prototype.setHoverStyle.apply(me, arguments);
+
+		styleHelpers.saveStyle(element);
+		helpers.merge(model, styleHelpers.resolveStyle(me.chart, element, element._index, model, true));
 	},
 
 	removeHoverStyle: function(element) {
-		styleHelpers.removeHoverStyle(this.chart, element, 'rectangle');
-		BarController.prototype.removeHoverStyle.apply(this, arguments);
+		var me = this;
+
+		if (!element.$previousStyle) {
+			helpers.merge(element._model, styleHelpers.resolveStyle(me.chart, element, element._index, me.chart.options.elements.rectangle));
+		}
+
+		BarController.prototype.removeHoverStyle.apply(me, arguments);
 	}
 });

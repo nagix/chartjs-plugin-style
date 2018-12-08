@@ -4,12 +4,78 @@ import Chart from 'chart.js';
 
 var helpers = Chart.helpers;
 
-var valueAtIndexOrDefault = helpers.valueAtIndexOrDefault;
-var getHoverColor = helpers.getHoverColor;
-
 var OFFSET = 1000000;
 
+function isColorOption(key) {
+	return key.indexOf('Color') !== -1;
+}
+
 export default {
+
+	styleKeys: [
+		'shadowOffsetX',
+		'shadowOffsetY',
+		'shadowBlur',
+		'shadowColor',
+		'bevelWidth',
+		'bevelHighlightColor',
+		'bevelShadowColor',
+		'innerGlowWidth',
+		'innerGlowColor',
+		'outerGlowWidth',
+		'outerGlowColor'
+	],
+
+	lineStyleKeys: [
+		'shadowOffsetX',
+		'shadowOffsetY',
+		'shadowBlur',
+		'shadowColor',
+		'outerGlowWidth',
+		'outerGlowColor'
+	],
+
+	pointStyleKeys: [
+		'pointShadowOffsetX',
+		'pointShadowOffsetY',
+		'pointShadowBlur',
+		'pointShadowColor',
+		'pointBevelWidth',
+		'pointBevelHighlightColor',
+		'pointBevelShadowColor',
+		'pointInnerGlowWidth',
+		'pointInnerGlowColor',
+		'pointOuterGlowWidth',
+		'pointOuterGlowColor'
+	],
+
+	hoverStyleKeys: [
+		'hoverShadowOffsetX',
+		'hoverShadowOffsetY',
+		'hoverShadowBlur',
+		'hoverShadowColor',
+		'hoverBevelWidth',
+		'hoverBevelHighlightColor',
+		'hoverBevelShadowColor',
+		'hoverInnerGlowWidth',
+		'hoverInnerGlowColor',
+		'hoverOuterGlowWidth',
+		'hoverOuterGlowColor'
+	],
+
+	pointHoverStyleKeys: [
+		'pointHoverShadowOffsetX',
+		'pointHoverShadowOffsetY',
+		'pointHoverShadowBlur',
+		'pointHoverShadowColor',
+		'pointHoverBevelWidth',
+		'pointHoverBevelHighlightColor',
+		'pointHoverBevelShadowColor',
+		'pointHoverInnerGlowWidth',
+		'pointHoverInnerGlowColor',
+		'pointHoverOuterGlowWidth',
+		'pointHoverOuterGlowColor'
+	],
 
 	drawBackground: function(view, drawCallback) {
 		var borderWidth = view.borderWidth;
@@ -148,65 +214,98 @@ export default {
 		return Chart.helpers.color(color).alpha() > 0;
 	},
 
-	saveStyle: function(element, model) {
+	mergeStyle: function(target, source) {
+		this.styleKeys.forEach(function(key) {
+			target[key] = source[key];
+		});
+		return target;
+	},
+
+	mergeLineStyle: function(target, source) {
+		this.lineStyleKeys.forEach(function(key) {
+			target[key] = source[key];
+		});
+		return target;
+	},
+
+	saveStyle: function(element) {
+		var model = element._model;
 		var previousStyle = element.$previousStyle;
 
 		if (previousStyle) {
-			previousStyle.shadowOffsetX = model.shadowOffsetX;
-			previousStyle.shadowOffsetY = model.shadowOffsetY;
-			previousStyle.shadowBlur = model.shadowBlur;
-			previousStyle.shadowColor = model.shadowColor;
-			previousStyle.bevelWidth = model.bevelWidth;
-			previousStyle.bevelHighlightColor = model.bevelHighlightColor;
-			previousStyle.bevelShadowColor = model.bevelShadowColor;
-			previousStyle.innerGlowWidth = model.innerGlowWidth;
-			previousStyle.innerGlowColor = model.innerGlowColor;
-			previousStyle.outerGlowWidth = model.outerGlowWidth;
-			previousStyle.outerGlowColor = model.outerGlowColor;
+			this.mergeStyle(previousStyle, model);
 		}
 	},
 
-	setHoverStyle: function(chart, element) {
+	resolveStyle: function(chart, element, index, defaults, hover) {
 		var dataset = chart.data.datasets[element._datasetIndex];
-		var index = element._index;
 		var custom = element.custom || {};
-		var model = element._model;
+		var keys = this.styleKeys;
+		var hoverableKeys = hover ? this.hoverStyleKeys : keys;
+		var values = {};
+		var i, ilen, key, hoverableKey, defaultValue, value;
 
-		this.saveStyle(element, model);
+		for (i = 0, ilen = keys.length; i < ilen; ++i) {
+			key = keys[i];
+			hoverableKey = hoverableKeys[i];
+			defaultValue = defaults[key];
+			value = custom[hoverableKey];
+			if (value === undefined) {
+				value = helpers.valueAtIndexOrDefault(dataset[hoverableKey], index,
+					(hover && isColorOption(key)) ? helpers.getHoverColor(defaultValue) : defaultValue);
+			}
+			values[key] = value;
+		}
 
-		model.shadowOffsetX = custom.hoverShadowOffsetX ? custom.hoverShadowOffsetX : valueAtIndexOrDefault(dataset.hoverShadowOffsetX, index, model.shadowOffsetX);
-		model.shadowOffsetY = custom.hoverShadowOffsetY ? custom.hoverShadowOffsetY : valueAtIndexOrDefault(dataset.hoverShadowOffsetY, index, model.shadowOffsetY);
-		model.shadowBlur = custom.hoverShadowBlur ? custom.hoverShadowBlur : valueAtIndexOrDefault(dataset.hoverShadowBlur, index, model.shadowBlur);
-		model.shadowColor = custom.hoverShadowColor ? custom.hoverShadowColor : valueAtIndexOrDefault(dataset.hoverShadowColor, index, getHoverColor(model.shadowColor));
-		model.bevelWidth = custom.hoverBevelWidth ? custom.hoverBevelWidth : valueAtIndexOrDefault(dataset.hoverBevelWidth, index, model.bevelWidth);
-		model.bevelHighlightColor = custom.hoverBevelHighlightColor ? custom.hoverBevelHighlightColor : valueAtIndexOrDefault(dataset.hoverBevelHighlightColor, index, getHoverColor(model.bevelHighlightColor));
-		model.bevelShadowColor = custom.hoverBevelShadowColor ? custom.hoverBevelShadowColor : valueAtIndexOrDefault(dataset.hoverBevelShadowColor, index, getHoverColor(model.bevelShadowColor));
-		model.innerGlowWidth = custom.hoverInnerGlowWidth ? custom.hoverInnerGlowWidth : valueAtIndexOrDefault(dataset.hoverInnerGlowWidth, index, model.innerGlowWidth);
-		model.innerGlowColor = custom.hoverInnerGlowColor ? custom.hoverInnerGlowColor : valueAtIndexOrDefault(dataset.hoverInnerGlowColor, index, getHoverColor(model.innerGlowColor));
-		model.outerGlowWidth = custom.hoverOuterGlowWidth ? custom.hoverOuterGlowWidth : valueAtIndexOrDefault(dataset.hoverOuterGlowWidth, index, model.outerGlowWidth);
-		model.outerGlowColor = custom.hoverOuterGlowColor ? custom.hoverOuterGlowColor : valueAtIndexOrDefault(dataset.hoverOuterGlowColor, index, getHoverColor(model.outerGlowColor));
+		return values;
 	},
 
-	removeHoverStyle: function(chart, element, type) {
-		var dataset = chart.data.datasets[element._datasetIndex];
-		var index = element._index;
-		var custom = element.custom || {};
-		var model = element._model;
-		var elementOpts = chart.options.elements[type];
+	resolveLineStyle: function(custom, dataset, options) {
+		var keys = this.lineStyleKeys;
+		var values = {};
+		var i, ilen, key, value;
 
-		// For Chart.js 2.7.2 backward compatibility
-		if (!element.$previousStyle) {
-			model.shadowOffsetX = custom.shadowOffsetX ? custom.shadowOffsetX : valueAtIndexOrDefault(dataset.shadowOffsetX, index, elementOpts.shadowOffsetX);
-			model.shadowOffsetY = custom.shadowOffsetY ? custom.shadowOffsetY : valueAtIndexOrDefault(dataset.shadowOffsetY, index, elementOpts.shadowOffsetY);
-			model.shadowBlur = custom.shadowBlur ? custom.shadowBlur : valueAtIndexOrDefault(dataset.shadowBlur, index, elementOpts.shadowBlur);
-			model.shadowColor = custom.shadowColor ? custom.shadowColor : valueAtIndexOrDefault(dataset.shadowColor, index, elementOpts.shadowColor);
-			model.bevelWidth = custom.bevelWidth ? custom.bevelWidth : valueAtIndexOrDefault(dataset.bevelWidth, index, elementOpts.bevelWidth);
-			model.bevelHighlightColor = custom.bevelHighlightColor ? custom.bevelHighlightColor : valueAtIndexOrDefault(dataset.bevelHighlightColor, index, elementOpts.bevelHighlightColor);
-			model.bevelShadowColor = custom.bevelShadowColor ? custom.bevelShadowColor : valueAtIndexOrDefault(dataset.bevelShadowColor, index, elementOpts.bevelShadowColor);
-			model.innerGlowWidth = custom.innerGlowWidth ? custom.innerGlowWidth : valueAtIndexOrDefault(dataset.innerGlowWidth, index, elementOpts.innerGlowWidth);
-			model.innerGlowColor = custom.innerGlowColor ? custom.innerGlowColor : valueAtIndexOrDefault(dataset.innerGlowColor, index, elementOpts.innerGlowColor);
-			model.outerGlowWidth = custom.outerGlowWidth ? custom.outerGlowWidth : valueAtIndexOrDefault(dataset.outerGlowWidth, index, elementOpts.outerGlowWidth);
-			model.outerGlowColor = custom.outerGlowColor ? custom.outerGlowColor : valueAtIndexOrDefault(dataset.outerGlowColor, index, elementOpts.outerGlowColor);
+		for (i = 0, ilen = keys.length; i < ilen; ++i) {
+			key = keys[i];
+			value = custom[key];
+			if (value === undefined) {
+				value = helpers.valueOrDefault(dataset[key], options[key]);
+			}
+			values[key] = value;
 		}
+
+		return values;
+	},
+
+	resolvePointStyle: function(chart, element, index, defaults, hover) {
+		var dataset = chart.data.datasets[element._datasetIndex];
+		var custom = element.custom || {};
+		var keys = this.styleKeys;
+		var customKeys = hover ? this.hoverStyleKeys : keys;
+		var pointKeys = hover ? this.pointHoverStyleKeys : this.pointStyleKeys;
+		var values = {};
+		var i, ilen, key, customValue, pointValue, lineValue, defaultValue, value, color;
+
+		for (i = 0, ilen = keys.length; i < ilen; ++i) {
+			key = keys[i];
+			customValue = custom[customKeys[i]];
+			pointValue = dataset[pointKeys[i]];
+			lineValue = dataset[key];
+			value = defaultValue = defaults[key];
+			color = isColorOption(key);
+
+			if (color && customValue || !color && !isNaN(customValue)) {
+				value = customValue;
+			} else if (color && pointValue || !color && (!isNaN(pointValue) || helpers.isArray(pointValue)) || hover) {
+				value = helpers.valueAtIndexOrDefault(pointValue, index,
+					(hover && color) ? helpers.getHoverColor(defaultValue) : defaultValue);
+			} else if (color && lineValue || !color && !isNaN(lineValue)) {
+				value = lineValue;
+			}
+
+			values[key] = value;
+		}
+
+		return values;
 	}
 };
