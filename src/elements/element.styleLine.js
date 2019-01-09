@@ -20,8 +20,9 @@ export default Line.extend({
 		styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
 			vm.shadowBlur, vm.shadowColor, drawCallback);
 
-		styleHelpers.drawOuterGlow(chart, vm.outerGlowWidth, vm.outerGlowColor,
-			vm.borderWidth, drawCallback);
+		// For outer glow
+		styleHelpers.drawShadow(chart, 0, 0,
+			vm.outerGlowWidth, vm.outerGlowColor, drawCallback);
 
 		styleHelpers.drawBorder(vm, drawCallback);
 	}
