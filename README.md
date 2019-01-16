@@ -30,6 +30,16 @@ chartjs-plugin-style requires [Chart.js](https://www.chartjs.org). Include Chart
 
 Version 0.3 supports the bevel, drop shadow, inner glow and outer glow effects for datasets and the tooltip. More options are to be added in the upcoming releases.
 
+### Usage in ES6 as module
+
+Nothing else than importing the module should be enough.
+
+```js
+
+import 'chartjs-plugin-style';
+
+```
+
 ## Tutorial and Samples
 
 You can find a tutorial and samples at [nagix.github.io/chartjs-plugin-style](https://nagix.github.io/chartjs-plugin-style).
