@@ -136,7 +136,7 @@ export default {
 	drawBevel: function(chart, width, highlightColor, shadowColor, drawCallback) {
 		var ctx = chart.ctx;
 		var pixelRatio = chart.currentDevicePixelRatio;
-		var shadowOffset = (width * pixelRatio) / 2;
+		var shadowOffset = (width * pixelRatio) * 5 / 6;
 
 		if (!width) {
 			return;
