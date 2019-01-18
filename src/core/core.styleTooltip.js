@@ -9,8 +9,13 @@ var helpers = Chart.helpers;
  * Ported from Chart.js 2.7.3.
  *
  * Helper method to merge the opacity into a color
+ * For Chart.js 2.7.3 backward compatibility
  */
 function mergeOpacity(colorString, opacity) {
+	// opacity is not used in Chart.js 2.8 or later
+	if (opacity === undefined) {
+		return colorString;
+	}
 	var color = helpers.color(colorString);
 	return color.alpha(opacity * color.alpha()).rgbaString();
 }
