@@ -6,7 +6,7 @@ import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
-var valueAtIndexOrDefault = helpers.valueAtIndexOrDefault;
+var resolve = helpers.options.resolve;
 
 var BarController = Chart.controllers.bar;
 
@@ -31,10 +31,10 @@ export default BarController.extend({
 		rectangle._model = {
 			datasetLabel: dataset.label,
 			label: chart.data.labels[index],
-			borderSkipped: custom.borderSkipped ? custom.borderSkipped : rectangleOptions.borderSkipped,
-			backgroundColor: custom.backgroundColor ? custom.backgroundColor : valueAtIndexOrDefault(dataset.backgroundColor, index, rectangleOptions.backgroundColor),
-			borderColor: custom.borderColor ? custom.borderColor : valueAtIndexOrDefault(dataset.borderColor, index, rectangleOptions.borderColor),
-			borderWidth: custom.borderWidth ? custom.borderWidth : valueAtIndexOrDefault(dataset.borderWidth, index, rectangleOptions.borderWidth),
+			borderSkipped: helpers.valueOrDefault(custom.borderSkipped, rectangleOptions.borderSkipped),
+			backgroundColor: resolve([custom.backgroundColor, dataset.backgroundColor, rectangleOptions.backgroundColor], undefined, index),
+			borderColor: resolve([custom.borderColor, dataset.borderColor, rectangleOptions.borderColor], undefined, index),
+			borderWidth: resolve([custom.borderWidth, dataset.borderWidth, rectangleOptions.borderWidth], undefined, index),
 		};
 
 		helpers.merge(rectangle._model, styleHelpers.resolveStyle(chart, rectangle, index, rectangleOptions));

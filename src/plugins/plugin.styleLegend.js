@@ -7,6 +7,7 @@ var layouts = Chart.layouts;
 
 var isArray = helpers.isArray;
 var valueOrDefault = helpers.valueOrDefault;
+var resolve = helpers.options.resolve;
 
 // Ported from Chart.js 2.7.3. Modified for style legend.
 // Generates labels shown in the legend
@@ -15,7 +16,7 @@ defaults.global.legend.labels.generateLabels = function(chart) {
 	return isArray(data.datasets) ? data.datasets.map(function(dataset, i) {
 		return {
 			text: dataset.label,
-			fillStyle: (!isArray(dataset.backgroundColor) ? dataset.backgroundColor : dataset.backgroundColor[0]),
+			fillStyle: helpers.valueAtIndexOrDefault(dataset.backgroundColor, 0),
 			hidden: !chart.isDatasetVisible(i),
 			lineCap: dataset.borderCapStyle,
 			lineDash: dataset.borderDash,
@@ -25,17 +26,19 @@ defaults.global.legend.labels.generateLabels = function(chart) {
 			strokeStyle: dataset.borderColor,
 			pointStyle: dataset.pointStyle,
 
-			shadowOffsetX: (!isArray(dataset.shadowOffsetX) ? dataset.shadowOffsetX : dataset.shadowOffsetX[0]),
-			shadowOffsetY: (!isArray(dataset.shadowOffsetY) ? dataset.shadowOffsetY : dataset.shadowOffsetY[0]),
-			shadowBlur: (!isArray(dataset.shadowBlur) ? dataset.shadowBlur : dataset.shadowBlur[0]),
-			shadowColor: (!isArray(dataset.shadowColor) ? dataset.shadowColor : dataset.shadowColor[0]),
-			bevelWidth: valueOrDefault((!isArray(dataset.pointBevelWidth) ? dataset.pointBevelWidth : dataset.pointBevelWidth[0]), dataset.bevelWidth),
-			bevelHighlightColor: valueOrDefault((!isArray(dataset.pointBevelHighlightColor) ? dataset.pointBevelHighlightColor : dataset.pointBevelHighlightColor[0]), dataset.bevelHighlightColor),
-			bevelShadowColor: valueOrDefault((!isArray(dataset.pointBevelShadowColor) ? dataset.pointBevelShadowColor : dataset.pointBevelShadowColor[0]), dataset.bevelShadowColor),
-			innerGlowWidth: valueOrDefault((!isArray(dataset.pointInnerGlowWidth) ? dataset.pointInnerGlowWidth : dataset.pointInnerGlowWidth[0]), dataset.innerGlowWidth),
-			innerGlowColor: valueOrDefault((!isArray(dataset.pointInnerGlowColor) ? dataset.pointInnerGlowColor : dataset.pointInnerGlowColor[0]), dataset.innerGlowColor),
-			outerGlowWidth: valueOrDefault((!isArray(dataset.pointOuterGlowWidth) ? dataset.pointOuterGlowWidth : dataset.pointOuterGlowWidth[0]), dataset.outerGlowWidth),
-			outerGlowColor: valueOrDefault((!isArray(dataset.pointOuterGlowColor) ? dataset.pointOuterGlowColor : dataset.pointOuterGlowColor[0]), dataset.outerGlowColor),
+			shadowOffsetX: resolve([dataset.pointShadowOffsetX, dataset.shadowOffsetX], undefined, 0),
+			shadowOffsetY: resolve([dataset.pointShadowOffsetY, dataset.shadowOffsetY], undefined, 0),
+			shadowBlur: resolve([dataset.pointShadowBlur, dataset.shadowBlur], undefined, 0),
+			shadowColor: resolve([dataset.pointShadowColor, dataset.shadowColor], undefined, 0),
+			bevelWidth: resolve([dataset.pointBevelWidth, dataset.bevelWidth], undefined, 0),
+			bevelHighlightColor: resolve([dataset.pointBevelHighlightColor, dataset.bevelHighlightColor], undefined, 0),
+			bevelShadowColor: resolve([dataset.pointBevelShadowColor, dataset.bevelShadowColor], undefined, 0),
+			innerGlowWidth: resolve([dataset.pointInnerGlowWidth, dataset.innerGlowWidth], undefined, 0),
+			innerGlowColor: resolve([dataset.pointInnerGlowColor, dataset.innerGlowColor], undefined, 0),
+			outerGlowWidth: resolve([dataset.pointOuterGlowWidth, dataset.outerGlowWidth], undefined, 0),
+			outerGlowColor: resolve([dataset.pointOuterGlowColor, dataset.outerGlowColor], undefined, 0),
+			backgroundOverlayColor: resolve([dataset.pointBackgroundOverlayColor, dataset.backgroundOverlayColor], undefined, 0),
+			backgroundOverlayMode: resolve([dataset.pointBackgroundOverlayMode, dataset.backgroundOverlayMode], undefined, 0),
 
 			// Below is extra data used for toggling the datasets
 			datasetIndex: i
@@ -149,6 +152,8 @@ var StyleLegend = Chart.Legend.extend({
 					ctx.strokeStyle = 'rgba(0, 0, 0, 0)';
 					drawCallback();
 
+					styleHelpers.drawBackgroundOverlay(me.chart, legendItem.backgroundOverlayColor,
+						legendItem.backgroundOverlayMode, drawCallback);
 					styleHelpers.drawBevel(me.chart, legendItem.bevelWidth + bevelExtra,
 						legendItem.bevelHighlightColor, legendItem.bevelShadowColor, drawCallback);
 

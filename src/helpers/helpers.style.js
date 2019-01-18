@@ -4,6 +4,8 @@ import Chart from 'chart.js';
 
 var helpers = Chart.helpers;
 
+var resolve = helpers.options.resolve;
+
 var OFFSET = 1000000;
 
 function isColorOption(key) {
@@ -23,7 +25,9 @@ export default {
 		'innerGlowWidth',
 		'innerGlowColor',
 		'outerGlowWidth',
-		'outerGlowColor'
+		'outerGlowColor',
+		'backgroundOverlayColor',
+		'backgroundOverlayMode'
 	],
 
 	lineStyleKeys: [
@@ -46,7 +50,9 @@ export default {
 		'pointInnerGlowWidth',
 		'pointInnerGlowColor',
 		'pointOuterGlowWidth',
-		'pointOuterGlowColor'
+		'pointOuterGlowColor',
+		'pointBackgroundOverlayColor',
+		'pointBackgroundOverlayMode'
 	],
 
 	hoverStyleKeys: [
@@ -60,7 +66,9 @@ export default {
 		'hoverInnerGlowWidth',
 		'hoverInnerGlowColor',
 		'hoverOuterGlowWidth',
-		'hoverOuterGlowColor'
+		'hoverOuterGlowColor',
+		'hoverBackgroundOverlayColor',
+		'hoverBackgroundOverlayMode'
 	],
 
 	pointHoverStyleKeys: [
@@ -74,7 +82,9 @@ export default {
 		'pointHoverInnerGlowWidth',
 		'pointHoverInnerGlowColor',
 		'pointHoverOuterGlowWidth',
-		'pointHoverOuterGlowColor'
+		'pointHoverOuterGlowColor',
+		'pointHoverBackgroundOverlayColor',
+		'pointHoverBackgroundOverlayMode'
 	],
 
 	drawBackground: function(view, drawCallback) {
@@ -210,19 +220,31 @@ export default {
 		this.drawGlow(chart, width, color, borderWidth, drawCallback, true);
 	},
 
+	drawBackgroundOverlay: function(chart, color, mode, drawCallback) {
+		var ctx = chart.ctx;
+
+		if (!color) {
+			return;
+		}
+
+		ctx.save();
+		this.setPath(ctx, drawCallback);
+		ctx.fillStyle = color;
+		ctx.globalCompositeOperation = mode;
+		ctx.fill();
+		ctx.restore();
+	},
+
 	opaque: function(color) {
-		return Chart.helpers.color(color).alpha() > 0;
+		return helpers.color(color).alpha() > 0;
+	},
+
+	getHoverColor: function(color) {
+		return color !== undefined ? helpers.getHoverColor(color) : color;
 	},
 
 	mergeStyle: function(target, source) {
 		this.styleKeys.forEach(function(key) {
-			target[key] = source[key];
-		});
-		return target;
-	},
-
-	mergeLineStyle: function(target, source) {
-		this.lineStyleKeys.forEach(function(key) {
 			target[key] = source[key];
 		});
 		return target;
@@ -237,24 +259,23 @@ export default {
 		}
 	},
 
-	resolveStyle: function(chart, element, index, defaults, hover) {
+	resolveStyle: function(chart, element, index, options, hover) {
 		var dataset = chart.data.datasets[element._datasetIndex];
 		var custom = element.custom || {};
 		var keys = this.styleKeys;
 		var hoverableKeys = hover ? this.hoverStyleKeys : keys;
 		var values = {};
-		var i, ilen, key, hoverableKey, defaultValue, value;
+		var i, ilen, key, hoverableKey, optionValue;
 
 		for (i = 0, ilen = keys.length; i < ilen; ++i) {
 			key = keys[i];
 			hoverableKey = hoverableKeys[i];
-			defaultValue = defaults[key];
-			value = custom[hoverableKey];
-			if (value === undefined) {
-				value = helpers.valueAtIndexOrDefault(dataset[hoverableKey], index,
-					(hover && isColorOption(key)) ? helpers.getHoverColor(defaultValue) : defaultValue);
-			}
-			values[key] = value;
+			optionValue = options[key];
+			values[key] = resolve([
+				custom[hoverableKey],
+				dataset[hoverableKey],
+				hover && isColorOption(key) ? this.getHoverColor(optionValue) : optionValue
+			], undefined, index);
 		}
 
 		return values;
@@ -263,47 +284,34 @@ export default {
 	resolveLineStyle: function(custom, dataset, options) {
 		var keys = this.lineStyleKeys;
 		var values = {};
-		var i, ilen, key, value;
+		var i, ilen, key;
 
 		for (i = 0, ilen = keys.length; i < ilen; ++i) {
 			key = keys[i];
-			value = custom[key];
-			if (value === undefined) {
-				value = helpers.valueOrDefault(dataset[key], options[key]);
-			}
-			values[key] = value;
+			values[key] = resolve([custom[key], dataset[key], options[key]]);
 		}
 
 		return values;
 	},
 
-	resolvePointStyle: function(chart, element, index, defaults, hover) {
+	resolvePointStyle: function(chart, element, index, options, hover) {
 		var dataset = chart.data.datasets[element._datasetIndex];
 		var custom = element.custom || {};
 		var keys = this.styleKeys;
 		var customKeys = hover ? this.hoverStyleKeys : keys;
 		var pointKeys = hover ? this.pointHoverStyleKeys : this.pointStyleKeys;
 		var values = {};
-		var i, ilen, key, customValue, pointValue, lineValue, defaultValue, value, color;
+		var i, ilen, key, optionValue;
 
 		for (i = 0, ilen = keys.length; i < ilen; ++i) {
 			key = keys[i];
-			customValue = custom[customKeys[i]];
-			pointValue = dataset[pointKeys[i]];
-			lineValue = dataset[key];
-			value = defaultValue = defaults[key];
-			color = isColorOption(key);
-
-			if (color && customValue || !color && !isNaN(customValue)) {
-				value = customValue;
-			} else if (color && pointValue || !color && (!isNaN(pointValue) || helpers.isArray(pointValue)) || hover) {
-				value = helpers.valueAtIndexOrDefault(pointValue, index,
-					(hover && color) ? helpers.getHoverColor(defaultValue) : defaultValue);
-			} else if (color && lineValue || !color && !isNaN(lineValue)) {
-				value = lineValue;
-			}
-
-			values[key] = value;
+			optionValue = options[key];
+			values[key] = resolve([
+				custom[customKeys[i]],
+				dataset[pointKeys[i]],
+				!hover ? dataset[key] : isColorOption(key) ? this.getHoverColor(optionValue) : optionValue,
+				optionValue
+			], undefined, index);
 		}
 
 		return values;

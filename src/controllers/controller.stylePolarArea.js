@@ -6,7 +6,7 @@ import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
-var valueAtIndexOrDefault = helpers.valueAtIndexOrDefault;
+var resolve = helpers.options.resolve;
 
 // Ported from Chart.js 2.7.3. Modified for style polarArea.
 Chart.defaults.polarArea.legend.labels.generateLabels = function(chart) {
@@ -18,9 +18,9 @@ Chart.defaults.polarArea.legend.labels.generateLabels = function(chart) {
 			var arc = meta.data[i];
 			var custom = arc.custom || {};
 			var arcOpts = chart.options.elements.arc;
-			var fill = custom.backgroundColor ? custom.backgroundColor : valueAtIndexOrDefault(ds.backgroundColor, i, arcOpts.backgroundColor);
-			var stroke = custom.borderColor ? custom.borderColor : valueAtIndexOrDefault(ds.borderColor, i, arcOpts.borderColor);
-			var bw = custom.borderWidth ? custom.borderWidth : valueAtIndexOrDefault(ds.borderWidth, i, arcOpts.borderWidth);
+			var fill = resolve([custom.backgroundColor, ds.backgroundColor, arcOpts.backgroundColor], undefined, i);
+			var stroke = resolve([custom.borderColor, ds.borderColor, arcOpts.borderColor], undefined, i);
+			var bw = resolve([custom.borderWidth, ds.borderWidth, arcOpts.borderWidth], undefined, i);
 
 			return helpers.merge({
 				text: label,
@@ -98,7 +98,7 @@ export default PolarAreaController.extend({
 				outerRadius: reset ? resetRadius : distance,
 				startAngle: reset && animationOpts.animateRotate ? datasetStartAngle : startAngle,
 				endAngle: reset && animationOpts.animateRotate ? datasetStartAngle : endAngle,
-				label: valueAtIndexOrDefault(labels, index, labels[index])
+				label: helpers.valueAtIndexOrDefault(labels, index, labels[index])
 			}
 		});
 
@@ -107,9 +107,9 @@ export default PolarAreaController.extend({
 		var custom = arc.custom || {};
 		var model = arc._model;
 
-		model.backgroundColor = custom.backgroundColor ? custom.backgroundColor : valueAtIndexOrDefault(dataset.backgroundColor, index, elementOpts.backgroundColor);
-		model.borderColor = custom.borderColor ? custom.borderColor : valueAtIndexOrDefault(dataset.borderColor, index, elementOpts.borderColor);
-		model.borderWidth = custom.borderWidth ? custom.borderWidth : valueAtIndexOrDefault(dataset.borderWidth, index, elementOpts.borderWidth);
+		model.backgroundColor = resolve([custom.backgroundColor, dataset.backgroundColor, elementOpts.backgroundColor], undefined, index);
+		model.borderColor = resolve([custom.borderColor, dataset.borderColor, elementOpts.borderColor], undefined, index);
+		model.borderWidth = resolve([custom.borderWidth, dataset.borderWidth, elementOpts.borderWidth], undefined, index);
 
 		helpers.merge(model, styleHelpers.resolveStyle(chart, arc, index, elementOpts));
 

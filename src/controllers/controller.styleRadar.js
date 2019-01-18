@@ -7,7 +7,7 @@ import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
-var valueOrDefault = helpers.valueOrDefault;
+var resolve = helpers.options.resolve;
 
 var RadarController = Chart.controllers.radar;
 
@@ -43,15 +43,15 @@ export default RadarController.extend({
 			// Model
 			_model: {
 				// Appearance
-				tension: custom.tension ? custom.tension : valueOrDefault(dataset.lineTension, lineElementOptions.tension),
-				backgroundColor: custom.backgroundColor ? custom.backgroundColor : (dataset.backgroundColor || lineElementOptions.backgroundColor),
-				borderWidth: custom.borderWidth ? custom.borderWidth : (dataset.borderWidth || lineElementOptions.borderWidth),
-				borderColor: custom.borderColor ? custom.borderColor : (dataset.borderColor || lineElementOptions.borderColor),
-				fill: custom.fill ? custom.fill : (dataset.fill !== undefined ? dataset.fill : lineElementOptions.fill),
-				borderCapStyle: custom.borderCapStyle ? custom.borderCapStyle : (dataset.borderCapStyle || lineElementOptions.borderCapStyle),
-				borderDash: custom.borderDash ? custom.borderDash : (dataset.borderDash || lineElementOptions.borderDash),
-				borderDashOffset: custom.borderDashOffset ? custom.borderDashOffset : (dataset.borderDashOffset || lineElementOptions.borderDashOffset),
-				borderJoinStyle: custom.borderJoinStyle ? custom.borderJoinStyle : (dataset.borderJoinStyle || lineElementOptions.borderJoinStyle),
+				tension: resolve([custom.tension, dataset.lineTension, lineElementOptions.tension]),
+				backgroundColor: resolve([custom.backgroundColor, dataset.backgroundColor, lineElementOptions.backgroundColor]),
+				borderWidth: resolve([custom.borderWidth, dataset.borderWidth, lineElementOptions.borderWidth]),
+				borderColor: resolve([custom.borderColor, dataset.borderColor, lineElementOptions.borderColor]),
+				fill: resolve([custom.fill, dataset.fill, lineElementOptions.fill]),
+				borderCapStyle: resolve([custom.borderCapStyle, dataset.borderCapStyle, lineElementOptions.borderCapStyle]),
+				borderDash: resolve([custom.borderDash, dataset.borderDash, lineElementOptions.borderDash]),
+				borderDashOffset: resolve([custom.borderDashOffset, dataset.borderDashOffset, lineElementOptions.borderDashOffset]),
+				borderJoinStyle: resolve([custom.borderJoinStyle, dataset.borderJoinStyle, lineElementOptions.borderJoinStyle]),
 			}
 		});
 

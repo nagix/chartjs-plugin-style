@@ -8,6 +8,7 @@ import styleHelpers from '../helpers/helpers.style';
 var helpers = Chart.helpers;
 
 var valueOrDefault = helpers.valueOrDefault;
+var resolve = helpers.options.resolve;
 
 var LineController = Chart.controllers.line;
 
@@ -55,18 +56,18 @@ export default LineController.extend({
 				// The default behavior of lines is to break at null values, according
 				// to https://github.com/chartjs/Chart.js/issues/2435#issuecomment-216718158
 				// This option gives lines the ability to span gaps
-				spanGaps: dataset.spanGaps ? dataset.spanGaps : options.spanGaps,
-				tension: custom.tension ? custom.tension : valueOrDefault(dataset.lineTension, lineElementOptions.tension),
-				backgroundColor: custom.backgroundColor ? custom.backgroundColor : (dataset.backgroundColor || lineElementOptions.backgroundColor),
-				borderWidth: custom.borderWidth ? custom.borderWidth : (dataset.borderWidth || lineElementOptions.borderWidth),
-				borderColor: custom.borderColor ? custom.borderColor : (dataset.borderColor || lineElementOptions.borderColor),
-				borderCapStyle: custom.borderCapStyle ? custom.borderCapStyle : (dataset.borderCapStyle || lineElementOptions.borderCapStyle),
-				borderDash: custom.borderDash ? custom.borderDash : (dataset.borderDash || lineElementOptions.borderDash),
-				borderDashOffset: custom.borderDashOffset ? custom.borderDashOffset : (dataset.borderDashOffset || lineElementOptions.borderDashOffset),
-				borderJoinStyle: custom.borderJoinStyle ? custom.borderJoinStyle : (dataset.borderJoinStyle || lineElementOptions.borderJoinStyle),
-				fill: custom.fill ? custom.fill : (dataset.fill !== undefined ? dataset.fill : lineElementOptions.fill),
-				steppedLine: custom.steppedLine ? custom.steppedLine : valueOrDefault(dataset.steppedLine, lineElementOptions.stepped),
-				cubicInterpolationMode: custom.cubicInterpolationMode ? custom.cubicInterpolationMode : valueOrDefault(dataset.cubicInterpolationMode, lineElementOptions.cubicInterpolationMode),
+				spanGaps: valueOrDefault(dataset.spanGaps, options.spanGaps),
+				tension: resolve([custom.tension, dataset.lineTension, lineElementOptions.tension]),
+				backgroundColor: resolve([custom.backgroundColor, dataset.backgroundColor, lineElementOptions.backgroundColor]),
+				borderWidth: resolve([custom.borderWidth, dataset.borderWidth, lineElementOptions.borderWidth]),
+				borderColor: resolve([custom.borderColor, dataset.borderColor, lineElementOptions.borderColor]),
+				borderCapStyle: resolve([custom.borderCapStyle, dataset.borderCapStyle, lineElementOptions.borderCapStyle]),
+				borderDash: resolve([custom.borderDash, dataset.borderDash, lineElementOptions.borderDash]),
+				borderDashOffset: resolve([custom.borderDashOffset, dataset.borderDashOffset, lineElementOptions.borderDashOffset]),
+				borderJoinStyle: resolve([custom.borderJoinStyle, dataset.borderJoinStyle, lineElementOptions.borderJoinStyle]),
+				fill: resolve([custom.fill, dataset.fill, lineElementOptions.fill]),
+				steppedLine: resolve([custom.steppedLine, dataset.steppedLine, lineElementOptions.stepped]),
+				cubicInterpolationMode: resolve([custom.cubicInterpolationMode, dataset.cubicInterpolationMode, lineElementOptions.cubicInterpolationMode]),
 			};
 
 			helpers.merge(line._model, styleHelpers.resolveLineStyle(custom, dataset, lineElementOptions));

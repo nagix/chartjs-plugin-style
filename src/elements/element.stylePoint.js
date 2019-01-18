@@ -23,6 +23,8 @@ export default Point.extend({
 
 		if (styleHelpers.opaque(vm.backgroundColor)) {
 			styleHelpers.drawBackground(vm, drawCallback);
+			styleHelpers.drawBackgroundOverlay(chart, vm.backgroundOverlayColor,
+				vm.backgroundOverlayMode, drawCallback);
 			styleHelpers.drawBevel(chart, vm.bevelWidth + bevelExtra,
 				vm.bevelHighlightColor, vm.bevelShadowColor, drawCallback);
 		}

@@ -7,7 +7,7 @@ import styleHelpers from '../helpers/helpers.style';
 var helpers = Chart.helpers;
 
 var valueOrDefault = helpers.valueOrDefault;
-var getHoverColor = helpers.getHoverColor;
+var getHoverColor = styleHelpers.getHoverColor;
 
 var BubbleController = Chart.controllers.bubble;
 
@@ -77,6 +77,8 @@ export default BubbleController.extend({
 		model.innerGlowColor = valueOrDefault(options.hoverInnerGlowColor, getHoverColor(options.innerGlowColor));
 		model.outerGlowWidth = valueOrDefault(options.hoverOuterGlowWidth, options.outerGlowWidth);
 		model.outerGlowColor = valueOrDefault(options.hoverOuterGlowColor, getHoverColor(options.outerGlowColor));
+		model.backgroundOverlayColor = valueOrDefault(options.hoverBackgroundOverlayColor, getHoverColor(options.backgroundOverlayColor));
+		model.backgroundOverlayMode = valueOrDefault(options.hoverBackgroundOverlayMode, options.backgroundOverlayMode);
 	},
 
 	/**
@@ -147,7 +149,11 @@ export default BubbleController.extend({
 			'hoverInnerGlowWidth',
 			'hoverInnerGlowColor',
 			'hoverOuterGlowWidth',
-			'hoverOuterGlowColor'
+			'hoverOuterGlowColor',
+			'backgroundOverlayColor',
+			'backgroundOverlayMode',
+			'hoverBackgroundOverlayColor',
+			'hoverBackgroundOverlayMode'
 		];
 
 		for (i = 0, ilen = keys.length; i < ilen; ++i) {
