@@ -55,7 +55,7 @@ export default RadarController.extend({
 			}
 		});
 
-		helpers.merge(meta.dataset, styleHelpers.resolveLineStyle(custom, dataset, lineElementOptions));
+		helpers.merge(meta.dataset._model, styleHelpers.resolveLineStyle(custom, dataset, lineElementOptions));
 
 		meta.dataset.pivot();
 
