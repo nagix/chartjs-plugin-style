@@ -5,13 +5,13 @@ var eslint = require('gulp-eslint');
 var file = require('gulp-file');
 var rename = require('gulp-rename');
 var replace = require('gulp-replace');
+var streamify = require('gulp-streamify');
 var uglify = require('gulp-uglify');
 var zip = require('gulp-zip');
 var merge = require('merge2');
 var path = require('path');
 var rollup = require('rollup-stream');
 var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
 var pkg = require('./package.json');
 
 var srcDir = './src/';
@@ -46,10 +46,9 @@ gulp.task('bower', function() {
 gulp.task('build', function() {
 	return rollup('rollup.config.js')
 		.pipe(source(pkg.name + '.js'))
-		.pipe(buffer())
 		.pipe(gulp.dest(outDir))
 		.pipe(rename(pkg.name + '.min.js'))
-		.pipe(uglify({output: {comments: 'some'}}))
+		.pipe(streamify(uglify({output: {comments: 'some'}})))
 		.pipe(gulp.dest(outDir));
 });
 
@@ -61,8 +60,7 @@ gulp.task('package', function() {
 		// since we moved the dist files one folder up (package root), we need to rewrite
 		// samples src="../dist/ to src="../ and then copy them in the /samples directory.
 		gulp.src(path.join(samplesDir, '**/*'), {base: '.'})
-			.pipe(buffer())
-			.pipe(replace(/src="((?:\.\.\/)+)dist\//g, 'src="$1'))
+			.pipe(streamify(replace(/src="((?:\.\.\/)+)dist\//g, 'src="$1')))
 	)
 		// finally, create the zip archive
 		.pipe(zip(pkg.name + '.zip'))

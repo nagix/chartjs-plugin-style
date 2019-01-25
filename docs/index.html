@@ -15,12 +15,12 @@
     <meta name="theme-color" content="#ffffff">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <script type="text/javascript" src="https://github.com/chartjs/chartjs-plugin-deferred/releases/download/v1.0.1/chartjs-plugin-deferred.js"></script>
-    <script type="text/javascript" src="https://github.com/nagix/chartjs-plugin-style/releases/download/v0.3.2/chartjs-plugin-style.min.js"></script>
+    <script type="text/javascript" src="https://github.com/nagix/chartjs-plugin-style/releases/download/v0.4.0/chartjs-plugin-style.min.js"></script>
   </head>
   <body>
     <section id="hero-spot" class="hero-spot">
       <h1>chartjs-plugin-style</h1>
-      <h2><a href="https://github.com/nagix/chartjs-plugin-style">GitHub</a></h2>
+      <h2><a href="./samples">Samples</a> | <a href="https://github.com/nagix/chartjs-plugin-style">GitHub</a></h2>
     </section>
     <section id="tutorial" class="tutorial">
       <h2><a href="https://www.chartjs.org">Chart.js</a> plugin for more styling options.</h2>
@@ -70,7 +70,7 @@
               <p>&nbsp;&nbsp;&nbsp;&nbsp;labels: ['January', 'February', 'March', 'April', 'May', 'June'],</p>
               <p>&nbsp;&nbsp;&nbsp;&nbsp;datasets: [{</p>
               <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data: [45, 20, 64, 32, 76, 51],</p>
-              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;borderColor: 'rgba(0, 0, 0, 0)',</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;borderWidth: 0,</p>
               <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backgroundColor: 'rgb(255, 99, 132)'</p>
               <p>&nbsp;&nbsp;&nbsp;&nbsp;}]</p>
               <p>&nbsp;&nbsp;}</p>
@@ -178,36 +178,36 @@
         </li>
 
         <li>
-          <h4>See a few other examples</h4>
-          <p>Line Chart</p>
+          <h4>Overlay colors</h4>
+          <p>Colors, gradations and patterns can be overlaid.</p>
+          <div class="terminal">
+            <div class="header"></div>
+            <div class="shell">
+              <p>var img = new Image();</p>
+              <p>img.src = 'blocks.png';</p>
+              <p>img.onload = function() {</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;...</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;data: {</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datasets: [{</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backgroundOverlayColor: ctx.createPattern(img, null),</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backgroundOverlayMode: 'multiply',</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}]</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;},</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;...</p>
+            </div>
+          </div>
           <p>
             <div style="width:580px; margin:auto;">
               <canvas id="chart5"></canvas>
-            </div>
-          </p>
-          <p>Bubble Chart</p>
-          <p>
-            <div style="width:580px; margin:auto;">
-              <canvas id="chart6"></canvas>
-            </div>
-          </p>
-          <p>Doughnut Chart</p>
-          <p>
-            <div style="width:580px; margin:auto;">
-              <canvas id="chart7"></canvas>
-            </div>
-          </p>
-          <p>Radar Chart</p>
-          <p>
-            <div style="width:580px; margin:auto;">
-              <canvas id="chart8"></canvas>
             </div>
           </p>
         </li>
 
         <li>
           <h4>...and you're done!</h4>
-          <p>See also <a href="https://github.com/nagix/chartjs-plugin-style">GitHub repository</a></p>
+          <p>See also <a href="https://github.com/nagix/chartjs-plugin-style">GitHub repository</a> and <a href="./samples">samples</a></p>
           <div class="hero-octicon">
             <span class="mega-octicon octicon-check"></span>
           </div>
@@ -233,7 +233,7 @@
           labels: ['January', 'February', 'March', 'April', 'May', 'June'],
           datasets: [{
             data: [45, 20, 64, 32, 76, 51],
-            borderColor: 'rgba(0, 0, 0, 0)',
+            borderWidth: 0,
             backgroundColor: 'rgb(255, 99, 132)'
           }]
         }
@@ -246,7 +246,7 @@
           labels: ['January', 'February', 'March', 'April', 'May', 'June'],
           datasets: [{
             data: [45, 20, 64, 32, 76, 51],
-            borderColor: 'rgba(0, 0, 0, 0)',
+            borderWidth: 0,
             backgroundColor: 'rgb(255, 99, 132)',
             bevelWidth: 3,
             bevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
@@ -269,7 +269,7 @@
           labels: ['January', 'February', 'March', 'April', 'May', 'June'],
           datasets: [{
             data: [45, 20, 64, 32, 76, 51],
-            borderColor: 'rgba(0, 0, 0, 0)',
+            borderWidth: 0,
             backgroundColor: 'rgb(255, 99, 132)',
             shadowOffsetX: 3,
             shadowOffsetY: 3,
@@ -300,7 +300,7 @@
           labels: ['January', 'February', 'March', 'April', 'May', 'June'],
           datasets: [{
             data: [45, 20, 64, 32, 76, 51],
-            borderColor: 'rgba(0, 0, 0, 0)',
+            borderWidth: 0,
             backgroundColor: 'rgb(255, 99, 132)',
             shadowOffsetX: 3,
             shadowOffsetY: 3,
@@ -328,190 +328,46 @@
         }
       });
 
-      var ctx5 = document.getElementById('chart5').getContext('2d');
-      var chart5 = new Chart(ctx5, {
-        type: 'bar',
-        data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-          datasets: [{
-            type: 'line',
-            label: 'Dataset',
-            data: [45, 20, 64, 32, 76, 51],
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgb(255, 99, 132)',
-            pointBorderColor: 'rgb(255, 99, 132)',
-            pointBackgroundColor: 'rgb(255, 99, 132)',
-            fill: false,
-            shadowOffsetX: 3,
-            shadowOffsetY: 3,
-            shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            pointRadius: 4,
-            pointBevelWidth: 3,
-            pointBevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
-            pointBevelShadowColor: 'rgba(0, 0, 0, 0.5)',
-            pointHoverRadius: 6,
-            pointHoverBevelWidth: 4.5,
-            pointHoverInnerGlowWidth: 20,
-            pointHoverInnerGlowColor: 'rgba(255, 255, 0, 0.5)',
-            pointHoverOuterGlowWidth: 20,
-            pointHoverOuterGlowColor: 'rgb(255, 255, 0)'
-          }]
-        },
-        options: {
-          tooltips: {
-            shadowOffsetX: 3,
-            shadowOffsetY: 3,
-            shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            bevelWidth: 3,
-            bevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
-            bevelShadowColor: 'rgba(0, 0, 0, 0.5)'
+      var img = new Image();
+      img.src = './samples/blocks.png';
+      img.onload = function() {
+        var ctx5 = document.getElementById('chart5').getContext('2d');
+        var chart5 = new Chart(ctx5, {
+          type: 'bar',
+          data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+            datasets: [{
+              data: [45, 20, 64, 32, 76, 51],
+              borderWidth: 0,
+              backgroundColor: 'rgb(255, 99, 132)',
+              shadowOffsetX: 3,
+              shadowOffsetY: 3,
+              shadowBlur: 10,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              bevelWidth: 3,
+              bevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
+              bevelShadowColor: 'rgba(0, 0, 0, 0.5)',
+              hoverInnerGlowWidth: 20,
+              hoverInnerGlowColor: 'rgb(255, 255, 0)',
+              hoverOuterGlowWidth: 20,
+              hoverOuterGlowColor: 'rgb(255, 255, 0)',
+              backgroundOverlayColor: ctx5.createPattern(img, 'repeat'),
+              backgroundOverlayMode: 'multiply'
+            }]
           },
-          legend: {
-            labels: {
-              usePointStyle: true
+          options: {
+            tooltips: {
+              shadowOffsetX: 3,
+              shadowOffsetY: 3,
+              shadowBlur: 10,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              bevelWidth: 3,
+              bevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
+              bevelShadowColor: 'rgba(0, 0, 0, 0.5)'
             }
           }
-        }
-      });
-
-      var ctx6 = document.getElementById('chart6').getContext('2d');
-      var chart6 = new Chart(ctx6, {
-        type: 'bar',
-        data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-          datasets: [{
-            type: 'bubble',
-            label: 'Dataset',
-            data: [45, 20, 64, 32, 76, 51],
-            radius: 30,
-            borderColor: 'rgba(0, 0, 0, 0)',
-            backgroundColor: 'rgb(255, 99, 132)',
-            shadowOffsetX: 3,
-            shadowOffsetY: 3,
-            shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            bevelWidth: 3,
-            bevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
-            bevelShadowColor: 'rgba(0, 0, 0, 0.5)',
-            hoverInnerGlowWidth: 20,
-            hoverInnerGlowColor: 'rgb(255, 255, 0)',
-            hoverOuterGlowWidth: 20,
-            hoverOuterGlowColor: 'rgb(255, 255, 0)'
-          }]
-        },
-        options: {
-          tooltips: {
-            shadowOffsetX: 3,
-            shadowOffsetY: 3,
-            shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            bevelWidth: 3,
-            bevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
-            bevelShadowColor: 'rgba(0, 0, 0, 0.5)'
-          },
-          layout: {
-            padding: {
-              bottom: 20
-            }
-          }
-        }
-      });
-
-      var ctx7 = document.getElementById('chart7').getContext('2d');
-      var chart7 = new Chart(ctx7, {
-        type: 'doughnut',
-        data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-          datasets: [{
-            label: 'Dataset',
-            data: [45, 20, 64, 32, 76, 51],
-            backgroundColor: [
-              'rgb(255, 99, 132)',
-              'rgb(255, 159, 64)',
-              'rgb(255, 205, 86)',
-              'rgb(75, 192, 192)',
-              'rgb(54, 162, 235)',
-              'rgb(153, 102, 255)'
-            ],
-            shadowOffsetX: 3,
-            shadowOffsetY: 3,
-            shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            bevelWidth: 3,
-            bevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
-            bevelShadowColor: 'rgba(0, 0, 0, 0.5)',
-            hoverInnerGlowWidth: 20,
-            hoverInnerGlowColor: 'rgb(255, 255, 0)',
-            hoverOuterGlowWidth: 20,
-            hoverOuterGlowColor: 'rgb(255, 255, 0)'
-          }]
-        },
-        options: {
-          tooltips: {
-            shadowOffsetX: 3,
-            shadowOffsetY: 3,
-            shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            bevelWidth: 3,
-            bevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
-            bevelShadowColor: 'rgba(0, 0, 0, 0.5)'
-          },
-          layout: {
-            padding: {
-              bottom: 20
-            }
-          }
-        }
-      });
-
-      var ctx8 = document.getElementById('chart8').getContext('2d');
-      var chart8 = new Chart(ctx8, {
-        type: 'radar',
-        data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-          datasets: [{
-            label: 'Dataset',
-            data: [45, 20, 64, 32, 76, 51],
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(0, 0, 0, 0)',
-            pointBorderColor: 'rgb(255, 99, 132)',
-            pointBackgroundColor: 'rgb(255, 99, 132)',
-            fill: false,
-            shadowOffsetX: 3,
-            shadowOffsetY: 3,
-            shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            pointRadius: 4,
-            pointBevelWidth: 3,
-            pointBevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
-            pointBevelShadowColor: 'rgba(0, 0, 0, 0.5)',
-            pointHoverRadius: 6,
-            pointHoverBevelWidth: 4.5,
-            pointHoverInnerGlowWidth: 20,
-            pointHoverInnerGlowColor: 'rgba(255, 255, 0, 0.5)',
-            pointHoverOuterGlowWidth: 20,
-            pointHoverOuterGlowColor: 'rgb(255, 255, 0)'
-          }]
-        },
-        options: {
-          scale: {
-            ticks: {
-              showLabelBackdrop: false
-            }
-          },
-          tooltips: {
-            shadowOffsetX: 3,
-            shadowOffsetY: 3,
-            shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            bevelWidth: 3,
-            bevelHighlightColor: 'rgba(255, 255, 255, 0.75)',
-            bevelShadowColor: 'rgba(0, 0, 0, 0.5)'
-          }
-        }
-      });
+        });
+      };
     </script>
     <footer class="page-footer">
       <ul class="site-footer-links right">
@@ -523,7 +379,7 @@
         <img src="/favicon-32x32-glay.png" style="position: absolute; top: 34px; left: 50%; margin-left: -16px;">
       </a>
       <ul class="site-footer-links">
-        <li>&copy; 2018 Akihiko Kusanagi</li>
+        <li>&copy; 2019 Akihiko Kusanagi</li>
       </ul>
     </footer>
     <script>
