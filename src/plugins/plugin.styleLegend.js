@@ -1,4 +1,6 @@
-import Chart from 'chart.js';
+'use strict';
+
+import Chart from '../core/core.js';
 import styleHelpers from '../helpers/helpers.style';
 
 var defaults = Chart.defaults;

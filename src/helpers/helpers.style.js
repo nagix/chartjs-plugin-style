@@ -1,6 +1,6 @@
 'use strict';
 
-import Chart from 'chart.js';
+import Chart from '../core/core.js';
 
 var helpers = Chart.helpers;
 
