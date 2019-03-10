@@ -44,63 +44,25 @@ export default DoughnutController.extend({
 
 	dataElementType: StyleArc,
 
-	// Ported from Chart.js 2.7.3. Modified for style doughnut.
-	updateElement: function(arc, index, reset) {
+	updateElement: function(arc, index) {
 		var me = this;
 		var chart = me.chart;
-		var chartArea = chart.chartArea;
-		var opts = chart.options;
-		var animationOpts = opts.animation;
-		var centerX = (chartArea.left + chartArea.right) / 2;
-		var centerY = (chartArea.top + chartArea.bottom) / 2;
-		var startAngle = opts.rotation; // non reset case handled later
-		var endAngle = opts.rotation; // non reset case handled later
-		var dataset = me.getDataset();
-		var circumference = reset && animationOpts.animateRotate ? 0 : arc.hidden ? 0 : me.calculateCircumference(dataset.data[index]) * (opts.circumference / (2.0 * Math.PI));
-		var innerRadius = reset && animationOpts.animateScale ? 0 : me.innerRadius;
-		var outerRadius = reset && animationOpts.animateScale ? 0 : me.outerRadius;
+		var model = {};
 
-		helpers.extend(arc, {
-			// Utility
-			_datasetIndex: me.index,
-			_index: index,
-
-			// Desired view properties
-			_model: {
-				x: centerX + chart.offsetX,
-				y: centerY + chart.offsetY,
-				startAngle: startAngle,
-				endAngle: endAngle,
-				circumference: circumference,
-				outerRadius: outerRadius,
-				innerRadius: innerRadius,
-				label: helpers.valueAtIndexOrDefault(dataset.label, index, chart.data.labels[index])
+		Object.defineProperty(arc, '_model', {
+			configurable: true,
+			get: function() {
+				return model;
+			},
+			set: function(value) {
+				helpers.merge(model, [value, styleHelpers.resolveStyle(chart, arc, index, chart.options.elements.arc)]);
 			}
 		});
 
-		var model = arc._model;
+		DoughnutController.prototype.updateElement.apply(me, arguments);
 
-		// Resets the visual styles
-		var custom = arc.custom || {};
-		var elementOpts = opts.elements.arc;
-		model.backgroundColor = resolve([custom.backgroundColor, dataset.backgroundColor, elementOpts.backgroundColor], undefined, index);
-		model.borderColor = resolve([custom.borderColor, dataset.borderColor, elementOpts.borderColor], undefined, index);
-		model.borderWidth = resolve([custom.borderWidth, dataset.borderWidth, elementOpts.borderWidth], undefined, index);
-
-		helpers.merge(model, styleHelpers.resolveStyle(chart, arc, index, elementOpts));
-
-		// Set correct angles if not resetting
-		if (!reset || !animationOpts.animateRotate) {
-			if (index === 0) {
-				model.startAngle = opts.rotation;
-			} else {
-				model.startAngle = me.getMeta().data[index - 1]._model.endAngle;
-			}
-
-			model.endAngle = model.startAngle + model.circumference;
-		}
-
-		arc.pivot();
+		delete arc._model;
+		arc._model = model;
 	},
 
 	setHoverStyle: function(element) {
@@ -115,9 +77,11 @@ export default DoughnutController.extend({
 
 	removeHoverStyle: function(element) {
 		var me = this;
+		var chart = me.chart;
 
+		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			helpers.merge(element._model, styleHelpers.resolveStyle(me.chart, element, element._index, me.chart.options.elements.arc));
+			helpers.merge(element._model, styleHelpers.resolveStyle(chart, element, element._index, chart.options.elements.arc));
 		}
 
 		DoughnutController.prototype.removeHoverStyle.apply(me, arguments);

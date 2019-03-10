@@ -7,8 +7,6 @@ import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
-var resolve = helpers.options.resolve;
-
 var RadarController = Chart.controllers.radar;
 
 export default RadarController.extend({
@@ -17,55 +15,26 @@ export default RadarController.extend({
 
 	dataElementType: StylePoint,
 
-	// Ported from Chart.js 2.7.3. Modified for style radar.
-	update: function(reset) {
+	update: function() {
 		var me = this;
-		var meta = me.getMeta();
-		var line = meta.dataset;
-		var points = meta.data;
-		var custom = line.custom || {};
-		var dataset = me.getDataset();
-		var lineElementOptions = me.chart.options.elements.line;
-		var scale = me.chart.scale;
+		var chart = me.chart;
+		var line = me.getMeta().dataset;
+		var model = {};
 
-		// Compatibility: If the properties are defined with only the old name, use those values
-		if ((dataset.tension !== undefined) && (dataset.lineTension === undefined)) {
-			dataset.lineTension = dataset.tension;
-		}
-
-		helpers.extend(meta.dataset, {
-			// Utility
-			_datasetIndex: me.index,
-			_scale: scale,
-			// Data
-			_children: points,
-			_loop: true,
-			// Model
-			_model: {
-				// Appearance
-				tension: resolve([custom.tension, dataset.lineTension, lineElementOptions.tension]),
-				backgroundColor: resolve([custom.backgroundColor, dataset.backgroundColor, lineElementOptions.backgroundColor]),
-				borderWidth: resolve([custom.borderWidth, dataset.borderWidth, lineElementOptions.borderWidth]),
-				borderColor: resolve([custom.borderColor, dataset.borderColor, lineElementOptions.borderColor]),
-				fill: resolve([custom.fill, dataset.fill, lineElementOptions.fill]),
-				borderCapStyle: resolve([custom.borderCapStyle, dataset.borderCapStyle, lineElementOptions.borderCapStyle]),
-				borderDash: resolve([custom.borderDash, dataset.borderDash, lineElementOptions.borderDash]),
-				borderDashOffset: resolve([custom.borderDashOffset, dataset.borderDashOffset, lineElementOptions.borderDashOffset]),
-				borderJoinStyle: resolve([custom.borderJoinStyle, dataset.borderJoinStyle, lineElementOptions.borderJoinStyle]),
+		Object.defineProperty(line, '_model', {
+			configurable: true,
+			get: function() {
+				return model;
+			},
+			set: function(value) {
+				helpers.merge(model, [value, styleHelpers.resolveLineStyle(chart, line, chart.options.elements.line)]);
 			}
 		});
 
-		helpers.merge(meta.dataset._model, styleHelpers.resolveLineStyle(custom, dataset, lineElementOptions));
+		RadarController.prototype.update.apply(me, arguments);
 
-		meta.dataset.pivot();
-
-		// Update Points
-		helpers.each(points, function(point, index) {
-			me.updateElement(point, index, reset);
-		}, me);
-
-		// Update bezier control points
-		me.updateBezierControlPoints();
+		delete line._model;
+		line._model = model;
 	},
 
 	updateElement: function(point, index) {
@@ -89,10 +58,11 @@ export default RadarController.extend({
 
 	removeHoverStyle: function(element) {
 		var me = this;
+		var chart = me.chart;
 
 		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			helpers.merge(element._model, styleHelpers.resolvePointStyle(me.chart, element, element._index, me.chart.options.elements.point));
+			helpers.merge(element._model, styleHelpers.resolvePointStyle(chart, element, element._index, chart.options.elements.point));
 		}
 
 		RadarController.prototype.removeHoverStyle.apply(me, arguments);

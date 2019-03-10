@@ -15,54 +15,35 @@ export default BubbleController.extend({
 
 	dataElementType: StylePoint,
 
-	/**
-	 * Ported from Chart.js 2.7.3. Modified for style bubble.
-	 * @protected
-	 */
-	updateElement: function(point, index, reset) {
+	updateElement: function(point) {
 		var me = this;
-		var meta = me.getMeta();
-		var custom = point.custom || {};
-		var xScale = me.getScaleForId(meta.xAxisID);
-		var yScale = me.getScaleForId(meta.yAxisID);
-		var options = me._resolveElementOptions(point, index);
-		var data = me.getDataset().data[index];
-		var dsIndex = me.index;
+		var model = {};
 
-		var x = reset ? xScale.getPixelForDecimal(0.5) : xScale.getPixelForValue(typeof data === 'object' ? data : NaN, index, dsIndex);
-		var y = reset ? yScale.getBasePixel() : yScale.getPixelForValue(data, index, dsIndex);
+		Object.defineProperty(point, '_model', {
+			configurable: true,
+			get: function() {
+				return model;
+			},
+			set: function(value) {
+				helpers.merge(model, value);
+				styleHelpers.mergeStyle(model, point._options);
+			}
+		});
 
-		point._xScale = xScale;
-		point._yScale = yScale;
-		point._options = options;
-		point._datasetIndex = dsIndex;
-		point._index = index;
-		point._model = {
-			backgroundColor: options.backgroundColor,
-			borderColor: options.borderColor,
-			borderWidth: options.borderWidth,
-			hitRadius: options.hitRadius,
-			pointStyle: options.pointStyle,
-			rotation: options.rotation,
-			radius: reset ? 0 : options.radius,
-			skip: custom.skip || isNaN(x) || isNaN(y),
-			x: x,
-			y: y,
-		};
+		BubbleController.prototype.updateElement.apply(me, arguments);
 
-		styleHelpers.mergeStyle(point._model, options);
-
-		point.pivot();
+		delete point._model;
+		point._model = model;
 	},
 
 	/**
 	 * @protected
 	 */
 	setHoverStyle: function(element) {
-		BubbleController.prototype.setHoverStyle.apply(this, arguments);
-
 		var model = element._model;
 		var options = element._options;
+
+		BubbleController.prototype.setHoverStyle.apply(this, arguments);
 
 		styleHelpers.saveStyle(element);
 
@@ -94,7 +75,6 @@ export default BubbleController.extend({
 	},
 
 	/**
-	 * Ported from Chart.js 2.7.3. Modified for style bubble.
 	 * @private
 	 */
 	_resolveElementOptions: function(point, index) {
@@ -104,9 +84,7 @@ export default BubbleController.extend({
 		var dataset = datasets[me.index];
 		var custom = point.custom || {};
 		var options = chart.options.elements.point;
-		var resolve = helpers.options.resolve;
-		var data = dataset.data[index];
-		var values = {};
+		var values = BubbleController.prototype._resolveElementOptions.apply(this, arguments);
 		var i, ilen, key;
 
 		// Scriptable options
@@ -118,16 +96,6 @@ export default BubbleController.extend({
 		};
 
 		var keys = [
-			'backgroundColor',
-			'borderColor',
-			'borderWidth',
-			'hoverBackgroundColor',
-			'hoverBorderColor',
-			'hoverBorderWidth',
-			'hoverRadius',
-			'hitRadius',
-			'pointStyle',
-			'rotation',
 			'shadowOffsetX',
 			'shadowOffsetY',
 			'shadowBlur',
@@ -158,20 +126,13 @@ export default BubbleController.extend({
 
 		for (i = 0, ilen = keys.length; i < ilen; ++i) {
 			key = keys[i];
-			values[key] = resolve([
+			values[key] = helpers.options.resolve([
 				custom[key],
 				dataset[key],
 				options[key]
 			], context, index);
 		}
 
-		// Custom radius resolution
-		values.radius = resolve([
-			custom.radius,
-			data ? data.r : undefined,
-			dataset.radius,
-			options.radius
-		], context, index);
 		return values;
 	}
 });

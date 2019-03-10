@@ -281,7 +281,9 @@ export default {
 		return values;
 	},
 
-	resolveLineStyle: function(custom, dataset, options) {
+	resolveLineStyle: function(chart, element, options) {
+		var dataset = chart.data.datasets[element._datasetIndex];
+		var custom = element.custom || {};
 		var keys = this.lineStyleKeys;
 		var values = {};
 		var i, ilen, key;

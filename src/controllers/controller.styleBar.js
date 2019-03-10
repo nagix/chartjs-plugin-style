@@ -6,42 +6,31 @@ import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
-var resolve = helpers.options.resolve;
-
 var BarController = Chart.controllers.bar;
 
 export default BarController.extend({
 
 	dataElementType: StyleRectangle,
 
-	// Ported from Chart.js 2.7.3. Modified for style bar.
-	updateElement: function(rectangle, index, reset) {
+	updateElement: function(rectangle, index) {
 		var me = this;
 		var chart = me.chart;
-		var meta = me.getMeta();
-		var dataset = me.getDataset();
-		var custom = rectangle.custom || {};
-		var rectangleOptions = chart.options.elements.rectangle;
+		var model = {};
 
-		rectangle._xScale = me.getScaleForId(meta.xAxisID);
-		rectangle._yScale = me.getScaleForId(meta.yAxisID);
-		rectangle._datasetIndex = me.index;
-		rectangle._index = index;
+		Object.defineProperty(rectangle, '_model', {
+			configurable: true,
+			get: function() {
+				return model;
+			},
+			set: function(value) {
+				helpers.merge(model, [value, styleHelpers.resolveStyle(chart, rectangle, index, chart.options.elements.rectangle)]);
+			}
+		});
 
-		rectangle._model = {
-			datasetLabel: dataset.label,
-			label: chart.data.labels[index],
-			borderSkipped: helpers.valueOrDefault(custom.borderSkipped, rectangleOptions.borderSkipped),
-			backgroundColor: resolve([custom.backgroundColor, dataset.backgroundColor, rectangleOptions.backgroundColor], undefined, index),
-			borderColor: resolve([custom.borderColor, dataset.borderColor, rectangleOptions.borderColor], undefined, index),
-			borderWidth: resolve([custom.borderWidth, dataset.borderWidth, rectangleOptions.borderWidth], undefined, index),
-		};
+		BarController.prototype.updateElement.apply(me, arguments);
 
-		helpers.merge(rectangle._model, styleHelpers.resolveStyle(chart, rectangle, index, rectangleOptions));
-
-		me.updateElementGeometry(rectangle, index, reset);
-
-		rectangle.pivot();
+		delete rectangle._model;
+		rectangle._model = model;
 	},
 
 	setHoverStyle: function(element) {
@@ -56,9 +45,11 @@ export default BarController.extend({
 
 	removeHoverStyle: function(element) {
 		var me = this;
+		var chart = me.chart;
 
+		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			helpers.merge(element._model, styleHelpers.resolveStyle(me.chart, element, element._index, me.chart.options.elements.rectangle));
+			helpers.merge(element._model, styleHelpers.resolveStyle(chart, element, element._index, chart.options.elements.rectangle));
 		}
 
 		BarController.prototype.removeHoverStyle.apply(me, arguments);
