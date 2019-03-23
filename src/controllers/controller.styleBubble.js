@@ -1,12 +1,15 @@
 'use strict';
 
-import Chart from '../core/core.js';
+import Chart from 'chart.js';
 import StylePoint from '../elements/element.stylePoint';
+import optionsHelpers from '../helpers/helpers.options';
 import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
-var valueOrDefault = helpers.valueOrDefault;
+// For Chart.js 2.6.0 backward compatibility
+var valueOrDefault = helpers.valueOrDefault || helpers.getValueOrDefault;
+
 var getHoverColor = styleHelpers.getHoverColor;
 
 var BubbleController = Chart.controllers.bubble;
@@ -126,7 +129,7 @@ export default BubbleController.extend({
 
 		for (i = 0, ilen = keys.length; i < ilen; ++i) {
 			key = keys[i];
-			values[key] = helpers.options.resolve([
+			values[key] = optionsHelpers.resolve([
 				custom[key],
 				dataset[key],
 				options[key]

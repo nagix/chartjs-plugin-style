@@ -1,10 +1,11 @@
 'use strict';
 
-import Chart from '../core/core.js';
+import Chart from 'chart.js';
+import optionsHelpers from './helpers.options';
 
 var helpers = Chart.helpers;
 
-var resolve = helpers.options.resolve;
+var resolve = optionsHelpers.resolve;
 
 var OFFSET = 1000000;
 

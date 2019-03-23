@@ -1,12 +1,13 @@
 'use strict';
 
-import Chart from '../core/core.js';
+import Chart from 'chart.js';
 import StyleArc from '../elements/element.styleArc';
+import optionsHelpers from '../helpers/helpers.options';
 import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
-var resolve = helpers.options.resolve;
+var resolve = optionsHelpers.resolve;
 
 // Ported from Chart.js 2.7.3. Modified for style polarArea.
 Chart.defaults.polarArea.legend.labels.generateLabels = function(chart) {

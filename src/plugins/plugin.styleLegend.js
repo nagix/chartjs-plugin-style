@@ -1,24 +1,36 @@
 'use strict';
 
-import Chart from '../core/core.js';
+import Chart from 'chart.js';
+import optionsHelpers from '../helpers/helpers.options';
 import styleHelpers from '../helpers/helpers.style';
 
 var defaults = Chart.defaults;
 var helpers = Chart.helpers;
-var layouts = Chart.layouts;
 
-var isArray = helpers.isArray;
-var valueOrDefault = helpers.valueOrDefault;
-var resolve = helpers.options.resolve;
+// For Chart.js 2.7.1 backward compatibility
+var layouts = Chart.layouts || Chart.layoutService;
+
+// For Chart.js 2.6.0 backward compatibility
+var valueOrDefault = helpers.valueOrDefault || helpers.getValueOrDefault;
+
+// For Chart.js 2.6.0 backward compatibility
+var valueAtIndexOrDefault = helpers.valueAtIndexOrDefault || helpers.getValueAtIndexOrDefault;
+
+// For Chart.js 2.6.0 backward compatibility
+var mergeIf = helpers.mergeIf || function(target, source) {
+	return helpers.configMerge.call(this, source, target);
+};
+
+var resolve = optionsHelpers.resolve;
 
 // Ported from Chart.js 2.7.3. Modified for style legend.
 // Generates labels shown in the legend
 defaults.global.legend.labels.generateLabels = function(chart) {
 	var data = chart.data;
-	return isArray(data.datasets) ? data.datasets.map(function(dataset, i) {
+	return helpers.isArray(data.datasets) ? data.datasets.map(function(dataset, i) {
 		return {
 			text: dataset.label,
-			fillStyle: helpers.valueAtIndexOrDefault(dataset.backgroundColor, 0),
+			fillStyle: valueAtIndexOrDefault(dataset.backgroundColor, 0),
 			hidden: !chart.isDatasetVisible(i),
 			lineCap: dataset.borderCapStyle,
 			lineDash: dataset.borderDash,
@@ -278,7 +290,7 @@ export default {
 		var legend = chart.legend;
 
 		if (legendOpts) {
-			helpers.mergeIf(legendOpts, defaults.global.legend);
+			mergeIf(legendOpts, defaults.global.legend);
 
 			if (legend) {
 				layouts.configure(chart, legend, legendOpts);

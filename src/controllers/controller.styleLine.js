@@ -1,6 +1,6 @@
 'use strict';
 
-import Chart from '../core/core.js';
+import Chart from 'chart.js';
 import StyleLine from '../elements/element.styleLine';
 import StylePoint from '../elements/element.stylePoint';
 import styleHelpers from '../helpers/helpers.style';

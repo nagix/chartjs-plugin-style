@@ -1,13 +1,14 @@
 'use strict';
 
-import Chart from '../core/core.js';
+import Chart from 'chart.js';
 import StyleArc from '../elements/element.styleArc';
+import optionsHelpers from '../helpers/helpers.options';
 import styleHelpers from '../helpers/helpers.style';
 
 var defaults = Chart.defaults;
 var helpers = Chart.helpers;
 
-var resolve = helpers.options.resolve;
+var resolve = optionsHelpers.resolve;
 
 // Ported from Chart.js 2.7.3. Modified for style doughnut.
 defaults.doughnut.legend.labels.generateLabels = defaults.pie.legend.labels.generateLabels = function(chart) {

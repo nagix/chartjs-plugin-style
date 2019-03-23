@@ -1,6 +1,6 @@
 'use strict';
 
-import Chart from '../core/core.js';
+import Chart from 'chart.js';
 import StyleRectangle from '../elements/element.styleRectangle';
 import styleHelpers from '../helpers/helpers.style';
 

@@ -1,6 +1,6 @@
 'use strict';
 
-import Chart from '../core/core.js';
+import Chart from 'chart.js';
 import styleHelpers from '../helpers/helpers.style';
 
 var Rectangle = Chart.elements.Rectangle;
