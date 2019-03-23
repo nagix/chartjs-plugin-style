@@ -7,6 +7,8 @@ import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
+var extend = helpers.extend;
+
 // For Chart.js 2.6.0 backward compatibility
 var valueOrDefault = helpers.valueOrDefault || helpers.getValueOrDefault;
 
@@ -18,7 +20,7 @@ export default BubbleController.extend({
 
 	dataElementType: StylePoint,
 
-	updateElement: function(point) {
+	updateElement: function(point, index) {
 		var me = this;
 		var model = {};
 
@@ -28,8 +30,16 @@ export default BubbleController.extend({
 				return model;
 			},
 			set: function(value) {
-				helpers.merge(model, value);
-				styleHelpers.mergeStyle(model, point._options);
+				var chart = me.chart;
+				var options = point._options;
+
+				if (options) {
+					extend(model, value);
+					styleHelpers.mergeStyle(model, options);
+				} else {
+					// For Chart.js 2.6.0 backward compatibility
+					extend(model, value, styleHelpers.resolveStyle(chart, point, index, chart.options.elements.point));
+				}
 			}
 		});
 
@@ -43,38 +53,54 @@ export default BubbleController.extend({
 	 * @protected
 	 */
 	setHoverStyle: function(element) {
+		var me = this;
 		var model = element._model;
 		var options = element._options;
 
-		BubbleController.prototype.setHoverStyle.apply(this, arguments);
+		BubbleController.prototype.setHoverStyle.apply(me, arguments);
 
 		styleHelpers.saveStyle(element);
 
-		model.shadowOffsetX = valueOrDefault(options.hoverShadowOffsetX, options.shadowOffsetX);
-		model.shadowOffsetY = valueOrDefault(options.hoverShadowOffsetY, options.shadowOffsetY);
-		model.shadowBlur = valueOrDefault(options.hoverShadowBlur, options.shadowBlur);
-		model.shadowColor = valueOrDefault(options.hoverShadowColor, getHoverColor(options.shadowColor));
-		model.bevelWidth = valueOrDefault(options.hoverBevelWidth, options.bevelWidth);
-		model.bevelHighlightColor = valueOrDefault(options.hoverBevelHighlightColor, getHoverColor(options.bevelHighlightColor));
-		model.bevelShadowColor = valueOrDefault(options.hoverBevelShadowColor, getHoverColor(options.bevelShadowColor));
-		model.innerGlowWidth = valueOrDefault(options.hoverInnerGlowWidth, options.innerGlowWidth);
-		model.innerGlowColor = valueOrDefault(options.hoverInnerGlowColor, getHoverColor(options.innerGlowColor));
-		model.outerGlowWidth = valueOrDefault(options.hoverOuterGlowWidth, options.outerGlowWidth);
-		model.outerGlowColor = valueOrDefault(options.hoverOuterGlowColor, getHoverColor(options.outerGlowColor));
-		model.backgroundOverlayColor = valueOrDefault(options.hoverBackgroundOverlayColor, getHoverColor(options.backgroundOverlayColor));
-		model.backgroundOverlayMode = valueOrDefault(options.hoverBackgroundOverlayMode, options.backgroundOverlayMode);
+		if (options) {
+			model.shadowOffsetX = valueOrDefault(options.hoverShadowOffsetX, options.shadowOffsetX);
+			model.shadowOffsetY = valueOrDefault(options.hoverShadowOffsetY, options.shadowOffsetY);
+			model.shadowBlur = valueOrDefault(options.hoverShadowBlur, options.shadowBlur);
+			model.shadowColor = valueOrDefault(options.hoverShadowColor, getHoverColor(options.shadowColor));
+			model.bevelWidth = valueOrDefault(options.hoverBevelWidth, options.bevelWidth);
+			model.bevelHighlightColor = valueOrDefault(options.hoverBevelHighlightColor, getHoverColor(options.bevelHighlightColor));
+			model.bevelShadowColor = valueOrDefault(options.hoverBevelShadowColor, getHoverColor(options.bevelShadowColor));
+			model.innerGlowWidth = valueOrDefault(options.hoverInnerGlowWidth, options.innerGlowWidth);
+			model.innerGlowColor = valueOrDefault(options.hoverInnerGlowColor, getHoverColor(options.innerGlowColor));
+			model.outerGlowWidth = valueOrDefault(options.hoverOuterGlowWidth, options.outerGlowWidth);
+			model.outerGlowColor = valueOrDefault(options.hoverOuterGlowColor, getHoverColor(options.outerGlowColor));
+			model.backgroundOverlayColor = valueOrDefault(options.hoverBackgroundOverlayColor, getHoverColor(options.backgroundOverlayColor));
+			model.backgroundOverlayMode = valueOrDefault(options.hoverBackgroundOverlayMode, options.backgroundOverlayMode);
+		} else {
+			// For Chart.js 2.6.0 backward compatibility
+			extend(model, styleHelpers.resolveStyle(me.chart, element, element._index, model, true));
+		}
 	},
 
 	/**
 	 * @protected
 	 */
 	removeHoverStyle: function(element) {
+		var me = this;
+		var chart = me.chart;
+		var model = element._model;
+		var options = element._options;
+
 		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			styleHelpers.mergeStyle(element._model, element._options);
+			if (options) {
+				styleHelpers.mergeStyle(model, options);
+			} else {
+				// For Chart.js 2.6.0 backward compatibility
+				extend(model, styleHelpers.resolveStyle(chart, element, element._index, chart.options.elements.rectangle));
+			}
 		}
 
-		BubbleController.prototype.removeHoverStyle.apply(this, arguments);
+		BubbleController.prototype.removeHoverStyle.apply(me, arguments);
 	},
 
 	/**

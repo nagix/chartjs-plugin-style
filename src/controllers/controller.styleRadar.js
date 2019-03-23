@@ -7,6 +7,8 @@ import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
+var extend = helpers.extend;
+
 var RadarController = Chart.controllers.radar;
 
 export default RadarController.extend({
@@ -27,7 +29,7 @@ export default RadarController.extend({
 				return model;
 			},
 			set: function(value) {
-				helpers.merge(model, [value, styleHelpers.resolveLineStyle(chart, line, chart.options.elements.line)]);
+				extend(model, value, styleHelpers.resolveLineStyle(chart, line, chart.options.elements.line));
 			}
 		});
 
@@ -42,7 +44,7 @@ export default RadarController.extend({
 
 		RadarController.prototype.updateElement.apply(me, arguments);
 
-		helpers.merge(point._model, styleHelpers.resolvePointStyle(me.chart, point, index, me.chart.options.elements.point));
+		extend(point._model, styleHelpers.resolvePointStyle(me.chart, point, index, me.chart.options.elements.point));
 	},
 
 	setHoverStyle: function(element) {
@@ -53,7 +55,7 @@ export default RadarController.extend({
 		RadarController.prototype.setHoverStyle.apply(me, arguments);
 
 		styleHelpers.saveStyle(element);
-		helpers.merge(model, styleHelpers.resolvePointStyle(me.chart, element, element._index, model, true));
+		extend(model, styleHelpers.resolvePointStyle(me.chart, element, element._index, model, true));
 	},
 
 	removeHoverStyle: function(element) {
@@ -62,7 +64,7 @@ export default RadarController.extend({
 
 		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			helpers.merge(element._model, styleHelpers.resolvePointStyle(chart, element, element._index, chart.options.elements.point));
+			extend(element._model, styleHelpers.resolvePointStyle(chart, element, element._index, chart.options.elements.point));
 		}
 
 		RadarController.prototype.removeHoverStyle.apply(me, arguments);

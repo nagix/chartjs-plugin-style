@@ -6,6 +6,8 @@ import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
+var extend = helpers.extend;
+
 var BarController = Chart.controllers.bar;
 
 export default BarController.extend({
@@ -23,7 +25,7 @@ export default BarController.extend({
 				return model;
 			},
 			set: function(value) {
-				helpers.merge(model, [value, styleHelpers.resolveStyle(chart, rectangle, index, chart.options.elements.rectangle)]);
+				extend(model, value, styleHelpers.resolveStyle(chart, rectangle, index, chart.options.elements.rectangle));
 			}
 		});
 
@@ -40,7 +42,7 @@ export default BarController.extend({
 		BarController.prototype.setHoverStyle.apply(me, arguments);
 
 		styleHelpers.saveStyle(element);
-		helpers.merge(model, styleHelpers.resolveStyle(me.chart, element, element._index, model, true));
+		extend(model, styleHelpers.resolveStyle(me.chart, element, element._index, model, true));
 	},
 
 	removeHoverStyle: function(element) {
@@ -49,7 +51,7 @@ export default BarController.extend({
 
 		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			helpers.merge(element._model, styleHelpers.resolveStyle(chart, element, element._index, chart.options.elements.rectangle));
+			extend(element._model, styleHelpers.resolveStyle(chart, element, element._index, chart.options.elements.rectangle));
 		}
 
 		BarController.prototype.removeHoverStyle.apply(me, arguments);

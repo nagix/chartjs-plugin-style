@@ -7,6 +7,7 @@ import styleHelpers from '../helpers/helpers.style';
 
 var helpers = Chart.helpers;
 
+var extend = helpers.extend;
 var resolve = optionsHelpers.resolve;
 
 // Ported from Chart.js 2.7.3. Modified for style polarArea.
@@ -23,7 +24,7 @@ Chart.defaults.polarArea.legend.labels.generateLabels = function(chart) {
 			var stroke = resolve([custom.borderColor, ds.borderColor, arcOpts.borderColor], undefined, i);
 			var bw = resolve([custom.borderWidth, ds.borderWidth, arcOpts.borderWidth], undefined, i);
 
-			return helpers.merge({
+			return extend({
 				text: label,
 				fillStyle: fill,
 				strokeStyle: stroke,
@@ -55,7 +56,7 @@ export default PolarAreaController.extend({
 				return model;
 			},
 			set: function(value) {
-				helpers.merge(model, [value, styleHelpers.resolveStyle(chart, arc, index, chart.options.elements.arc)]);
+				extend(model, value, styleHelpers.resolveStyle(chart, arc, index, chart.options.elements.arc));
 			}
 		});
 
@@ -72,7 +73,7 @@ export default PolarAreaController.extend({
 		PolarAreaController.prototype.setHoverStyle.apply(me, arguments);
 
 		styleHelpers.saveStyle(element);
-		helpers.merge(model, styleHelpers.resolveStyle(me.chart, element, element._index, model, true));
+		extend(model, styleHelpers.resolveStyle(me.chart, element, element._index, model, true));
 	},
 
 	removeHoverStyle: function(element) {
@@ -81,7 +82,7 @@ export default PolarAreaController.extend({
 
 		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			helpers.merge(element._model, styleHelpers.resolveStyle(chart, element, element._index, chart.options.elements.arc));
+			extend(element._model, styleHelpers.resolveStyle(chart, element, element._index, chart.options.elements.arc));
 		}
 
 		PolarAreaController.prototype.removeHoverStyle.apply(me, arguments);
