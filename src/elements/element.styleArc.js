@@ -3,6 +3,8 @@
 import Chart from 'chart.js';
 import styleHelpers from '../helpers/helpers.style';
 
+var helpers = Chart.helpers;
+
 var Arc = Chart.elements.Arc;
 
 export default Arc.extend({
@@ -22,7 +24,9 @@ export default Arc.extend({
 		if (styleHelpers.opaque(vm.backgroundColor)) {
 			styleHelpers.drawBackground(vm, drawCallback);
 			styleHelpers.drawBackgroundOverlay(chart, vm, drawCallback);
-			styleHelpers.drawBevel(chart, vm, drawCallback);
+			styleHelpers.drawBevel(chart, vm.borderAlign === 'inner' ? helpers.extend({}, vm, {
+				borderWidth: vm.borderWidth * 2
+			}) : vm, drawCallback);
 		}
 
 		styleHelpers.drawInnerGlow(chart, vm, drawCallback);
