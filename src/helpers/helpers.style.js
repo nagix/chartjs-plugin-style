@@ -144,6 +144,8 @@ export default {
 		}
 
 		ctx.save();
+
+		this.setPath(ctx, drawCallback);
 		ctx.clip();
 
 		// Make stencil
