@@ -106,16 +106,16 @@ export default {
 		}
 	},
 
-	drawShadow: function(chart, offsetX, offsetY, blur, color, drawCallback, backmost) {
+	drawShadow: function(chart, options, drawCallback, backmost) {
 		var ctx = chart.ctx;
 		var pixelRatio = chart.currentDevicePixelRatio;
 
 		ctx.save();
 
-		ctx.shadowOffsetX = (offsetX + OFFSET) * pixelRatio;
-		ctx.shadowOffsetY = offsetY * pixelRatio;
-		ctx.shadowBlur = blur * pixelRatio;
-		ctx.shadowColor = color;
+		ctx.shadowOffsetX = (options.shadowOffsetX + OFFSET) * pixelRatio;
+		ctx.shadowOffsetY = options.shadowOffsetY * pixelRatio;
+		ctx.shadowBlur = options.shadowBlur * pixelRatio;
+		ctx.shadowColor = options.shadowColor;
 		if (backmost) {
 			ctx.globalCompositeOperation = 'destination-over';
 		}
@@ -134,10 +134,13 @@ export default {
 		ctx.restore();
 	},
 
-	drawBevel: function(chart, width, highlightColor, shadowColor, drawCallback) {
+	drawBevel: function(chart, options, drawCallback) {
 		var ctx = chart.ctx;
+		var width = options.bevelWidth;
+		var borderWidth = options.borderWidth;
+		var bevelExtra = this.opaque(options.borderColor) && borderWidth > 0 ? borderWidth / 2 : 0;
 		var pixelRatio = chart.currentDevicePixelRatio;
-		var shadowOffset = (width * pixelRatio) * 5 / 6;
+		var shadowOffset = ((width + bevelExtra) * pixelRatio) * 5 / 6;
 
 		if (!width) {
 			return;
@@ -158,7 +161,7 @@ export default {
 		ctx.shadowOffsetX = OFFSET * pixelRatio - shadowOffset;
 		ctx.shadowOffsetY = -shadowOffset;
 		ctx.shadowBlur = shadowOffset;
-		ctx.shadowColor = shadowColor;
+		ctx.shadowColor = options.bevelShadowColor;
 		// Workaround for the issue on Windows version of FireFox
 		// https://bugzilla.mozilla.org/show_bug.cgi?id=1333090
 		// If the destination has transparency, the result will be different
@@ -170,14 +173,16 @@ export default {
 		// Draw Bevel highlight
 		ctx.shadowOffsetX = OFFSET * pixelRatio + shadowOffset;
 		ctx.shadowOffsetY = shadowOffset;
-		ctx.shadowColor = highlightColor;
+		ctx.shadowColor = options.bevelHighlightColor;
 		ctx.fill('evenodd');
 
 		ctx.restore();
 	},
 
-	drawGlow: function(chart, width, color, borderWidth, drawCallback, isOuter) {
+	drawGlow: function(chart, options, drawCallback, isOuter) {
 		var ctx = chart.ctx;
+		var width = isOuter ? options.outerGlowWidth : options.innerGlowWidth;
+		var borderWidth = options.borderWidth;
 		var pixelRatio = chart.currentDevicePixelRatio;
 
 		if (!width) {
@@ -206,7 +211,7 @@ export default {
 		ctx.fillStyle = 'black';
 		ctx.shadowOffsetX = OFFSET * pixelRatio;
 		ctx.shadowBlur = width * pixelRatio;
-		ctx.shadowColor = color;
+		ctx.shadowColor = isOuter ? options.outerGlowColor : options.innerGlowColor;
 		ctx.fill('evenodd');
 		if (borderWidth) {
 			ctx.stroke();
@@ -215,16 +220,17 @@ export default {
 		ctx.restore();
 	},
 
-	drawInnerGlow: function(chart, width, color, borderWidth, drawCallback) {
-		this.drawGlow(chart, width, color, borderWidth, drawCallback);
+	drawInnerGlow: function(chart, options, drawCallback) {
+		this.drawGlow(chart, options, drawCallback);
 	},
 
-	drawOuterGlow: function(chart, width, color, borderWidth, drawCallback) {
-		this.drawGlow(chart, width, color, borderWidth, drawCallback, true);
+	drawOuterGlow: function(chart, options, drawCallback) {
+		this.drawGlow(chart, options, drawCallback, true);
 	},
 
-	drawBackgroundOverlay: function(chart, color, mode, drawCallback) {
+	drawBackgroundOverlay: function(chart, options, drawCallback) {
 		var ctx = chart.ctx;
+		var color = options.backgroundOverlayColor;
 
 		if (!color) {
 			return;
@@ -233,7 +239,7 @@ export default {
 		ctx.save();
 		this.setPath(ctx, drawCallback);
 		ctx.fillStyle = color;
-		ctx.globalCompositeOperation = mode;
+		ctx.globalCompositeOperation = options.backgroundOverlayMode;
 		ctx.fill();
 		ctx.restore();
 	},

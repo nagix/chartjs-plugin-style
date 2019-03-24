@@ -109,7 +109,8 @@ var StyleLegend = Chart.Legend.extend({
 
 			// current position
 			var drawLegendBox = function(x, y, legendItem) {
-				var drawCallback;
+				var chart = me.chart;
+				var options, drawCallback;
 
 				if (isNaN(boxWidth) || boxWidth <= 0) {
 					return;
@@ -130,6 +131,11 @@ var StyleLegend = Chart.Legend.extend({
 					// IE 9 and 10 do not support line dash
 					ctx.setLineDash(valueOrDefault(legendItem.lineDash, lineDefault.borderDash));
 				}
+
+				options = helpers.extend({}, legendItem, {
+					borderColor: ctx.strokeStyle,
+					borderWidth: ctx.lineWidth
+				});
 
 				if (opts.labels && opts.labels.usePointStyle) {
 					// Recalculate x and y for drawPoint() because its expecting
@@ -155,29 +161,22 @@ var StyleLegend = Chart.Legend.extend({
 					};
 				}
 
-				styleHelpers.drawShadow(me.chart, legendItem.shadowOffsetX, legendItem.shadowOffsetY,
-					legendItem.shadowBlur, legendItem.shadowColor, drawCallback, true);
+				styleHelpers.drawShadow(chart, legendItem, drawCallback, true);
 
 				if (styleHelpers.opaque(ctx.fillStyle)) {
-					var bevelExtra = styleHelpers.opaque(ctx.strokeStyle) && ctx.lineWidth > 0 ? ctx.lineWidth / 2 : 0;
-
 					ctx.save();
 
 					ctx.strokeStyle = 'rgba(0, 0, 0, 0)';
 					drawCallback();
 
-					styleHelpers.drawBackgroundOverlay(me.chart, legendItem.backgroundOverlayColor,
-						legendItem.backgroundOverlayMode, drawCallback);
-					styleHelpers.drawBevel(me.chart, legendItem.bevelWidth + bevelExtra,
-						legendItem.bevelHighlightColor, legendItem.bevelShadowColor, drawCallback);
+					styleHelpers.drawBackgroundOverlay(chart, legendItem, drawCallback);
+					styleHelpers.drawBevel(chart, options, drawCallback);
 
 					ctx.restore();
 				}
 
-				styleHelpers.drawInnerGlow(me.chart, legendItem.innerGlowWidth, legendItem.innerGlowColor,
-					ctx.lineWidth, drawCallback);
-				styleHelpers.drawOuterGlow(me.chart, legendItem.outerGlowWidth, legendItem.outerGlowColor,
-					ctx.lineWidth, drawCallback);
+				styleHelpers.drawInnerGlow(chart, options, drawCallback);
+				styleHelpers.drawOuterGlow(chart, options, drawCallback);
 
 				if (!isLineWidthZero) {
 					ctx.fillStyle = 'rgba(0, 0, 0, 0)';

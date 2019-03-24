@@ -17,12 +17,15 @@ export default Line.extend({
 			Line.prototype.draw.apply(me, args);
 		};
 
-		styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
-			vm.shadowBlur, vm.shadowColor, drawCallback);
+		styleHelpers.drawShadow(chart, vm, drawCallback);
 
 		// For outer glow
-		styleHelpers.drawShadow(chart, 0, 0,
-			vm.outerGlowWidth, vm.outerGlowColor, drawCallback);
+		styleHelpers.drawShadow(chart, {
+			shadowOffsetX: 0,
+			shadowOffsetY: 0,
+			shadowBlur: vm.outerGlowWidth,
+			shadowColor: vm.outerGlowColor
+		}, drawCallback);
 
 		styleHelpers.drawBorder(vm, drawCallback);
 	}

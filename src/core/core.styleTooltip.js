@@ -69,26 +69,26 @@ export default Tooltip.extend({
 		var me = this;
 		var args = arguments;
 		var chart = me._chart;
-		var bevelExtra = styleHelpers.opaque(vm.borderColor) && vm.borderWidth > 0 ? vm.borderWidth / 2 : 0;
+		var options = helpers.extend({}, vm, {
+			bevelHighlightColor: mergeOpacity(vm.bevelHighlightColor, opacity),
+			bevelShadowColor: mergeOpacity(vm.bevelShadowColor, opacity),
+			innerGlowColor: mergeOpacity(vm.innerGlowColor, opacity),
+			outerGlowColor: mergeOpacity(vm.outerGlowColor, opacity)
+		});
 
 		var drawCallback = function() {
 			Tooltip.prototype.drawBackground.apply(me, args);
 		};
 
-		styleHelpers.drawShadow(chart, vm.shadowOffsetX, vm.shadowOffsetY,
-			vm.shadowBlur, vm.shadowColor, drawCallback);
+		styleHelpers.drawShadow(chart, vm, drawCallback);
 
 		if (styleHelpers.opaque(vm.backgroundColor)) {
 			styleHelpers.drawBackground(vm, drawCallback);
-			styleHelpers.drawBevel(chart, vm.bevelWidth + bevelExtra,
-				mergeOpacity(vm.bevelHighlightColor, opacity),
-				mergeOpacity(vm.bevelShadowColor, opacity), drawCallback);
+			styleHelpers.drawBevel(chart, options, drawCallback);
 		}
 
-		styleHelpers.drawInnerGlow(chart, vm.innerGlowWidth,
-			mergeOpacity(vm.innerGlowColor, opacity), vm.borderWidth, drawCallback);
-		styleHelpers.drawOuterGlow(chart, vm.outerGlowWidth,
-			mergeOpacity(vm.outerGlowColor, opacity), vm.borderWidth, drawCallback);
+		styleHelpers.drawInnerGlow(chart, options, drawCallback);
+		styleHelpers.drawOuterGlow(chart, options, drawCallback);
 
 		styleHelpers.drawBorder(vm, drawCallback);
 	}
