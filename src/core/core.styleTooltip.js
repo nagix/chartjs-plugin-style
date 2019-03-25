@@ -25,42 +25,19 @@ var Tooltip = Chart.Tooltip;
 export default Tooltip.extend({
 
 	initialize: function() {
-		Tooltip.prototype.initialize.apply(this, arguments);
+		var me = this;
 
-		var model = this._model;
-		var tooltipOpts = this._options;
+		Tooltip.prototype.initialize.apply(me, arguments);
 
-		model.shadowOffsetX = tooltipOpts.shadowOffsetX;
-		model.shadowOffsetY = tooltipOpts.shadowOffsetY;
-		model.shadowBlur = tooltipOpts.shadowBlur;
-		model.shadowColor = tooltipOpts.shadowColor;
-		model.bevelWidth = tooltipOpts.bevelWidth;
-		model.bevelHighlightColor = tooltipOpts.bevelHighlightColor;
-		model.bevelShadowColor = tooltipOpts.bevelShadowColor;
-		model.innerGlowWidth = tooltipOpts.innerGlowWidth;
-		model.innerGlowColor = tooltipOpts.innerGlowColor;
-		model.outerGlowWidth = tooltipOpts.outerGlowWidth;
-		model.outerGlowColor = tooltipOpts.outerGlowColor;
+		styleHelpers.mergeStyle(me._model, me._options);
 	},
 
 	update: function() {
-		Tooltip.prototype.update.apply(this, arguments);
-
 		var me = this;
-		var model = me._model;
-		var opts = me._options;
 
-		model.shadowOffsetX = opts.shadowOffsetX;
-		model.shadowOffsetY = opts.shadowOffsetY;
-		model.shadowBlur = opts.shadowBlur;
-		model.shadowColor = opts.shadowColor;
-		model.bevelWidth = opts.bevelWidth;
-		model.bevelHighlightColor = opts.bevelHighlightColor;
-		model.bevelShadowColor = opts.bevelShadowColor;
-		model.innerGlowWidth = opts.innerGlowWidth;
-		model.innerGlowColor = opts.innerGlowColor;
-		model.outerGlowWidth = opts.outerGlowWidth;
-		model.outerGlowColor = opts.outerGlowColor;
+		Tooltip.prototype.update.apply(me, arguments);
+
+		styleHelpers.mergeStyle(me._model, me._options);
 
 		return me;
 	},

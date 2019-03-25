@@ -253,9 +253,26 @@ export default {
 	},
 
 	mergeStyle: function(target, source) {
+		if (target === undefined || source === undefined) {
+			return;
+		}
 		this.styleKeys.forEach(function(key) {
 			target[key] = source[key];
 		});
+		return target;
+	},
+
+	setHoverStyle: function(target, source) {
+		var keys = this.styleKeys;
+		var hoverKeys = this.hoverStyleKeys;
+		var i, ilen;
+
+		if (target === undefined || source === undefined) {
+			return;
+		}
+		for (i = 0, ilen = keys.length; i < ilen; ++i) {
+			target[keys[i]] = source[hoverKeys[i]];
+		}
 		return target;
 	},
 
@@ -268,61 +285,103 @@ export default {
 		}
 	},
 
-	resolveStyle: function(chart, element, index, options, hover) {
-		var dataset = chart.data.datasets[element._datasetIndex];
+	resolveStyle: function(controller, element, index, options) {
+		var me = this;
+		var chart = controller.chart;
+		var dataset = chart.data.datasets[controller.index];
 		var custom = element.custom || {};
-		var keys = this.styleKeys;
-		var hoverableKeys = hover ? this.hoverStyleKeys : keys;
+		var keys = me.styleKeys;
+		var hoverKeys = me.hoverStyleKeys;
 		var values = {};
-		var i, ilen, key, hoverableKey, optionValue;
+		var i, ilen, key, value;
+
+		// Scriptable options
+		var context = {
+			chart: chart,
+			dataIndex: index,
+			dataset: dataset,
+			datasetIndex: element._datasetIndex
+		};
 
 		for (i = 0, ilen = keys.length; i < ilen; ++i) {
 			key = keys[i];
-			hoverableKey = hoverableKeys[i];
-			optionValue = options[key];
+			values[key] = value = resolve([
+				custom[key],
+				dataset[key],
+				options[key]
+			], context, index);
+
+			key = hoverKeys[i];
 			values[key] = resolve([
-				custom[hoverableKey],
-				dataset[hoverableKey],
-				hover && isColorOption(key) ? this.getHoverColor(optionValue) : optionValue
-			], undefined, index);
+				custom[key],
+				dataset[key],
+				options[key],
+				isColorOption(key) ? me.getHoverColor(value) : value
+			], context, index);
 		}
 
 		return values;
 	},
 
-	resolveLineStyle: function(chart, element, options) {
-		var dataset = chart.data.datasets[element._datasetIndex];
+	resolveLineStyle: function(controller, element, options) {
+		var chart = controller.chart;
+		var dataset = chart.data.datasets[controller.index];
 		var custom = element.custom || {};
 		var keys = this.lineStyleKeys;
 		var values = {};
 		var i, ilen, key;
 
+		// Scriptable options
+		var context = {
+			chart: chart,
+			dataset: dataset,
+			datasetIndex: element._datasetIndex
+		};
+
 		for (i = 0, ilen = keys.length; i < ilen; ++i) {
 			key = keys[i];
-			values[key] = resolve([custom[key], dataset[key], options[key]]);
+			values[key] = resolve([custom[key], dataset[key], options[key]], context);
 		}
 
 		return values;
 	},
 
-	resolvePointStyle: function(chart, element, index, options, hover) {
-		var dataset = chart.data.datasets[element._datasetIndex];
+	resolvePointStyle: function(controller, element, index, options) {
+		var me = this;
+		var chart = controller.chart;
+		var dataset = chart.data.datasets[controller.index];
 		var custom = element.custom || {};
-		var keys = this.styleKeys;
-		var customKeys = hover ? this.hoverStyleKeys : keys;
-		var pointKeys = hover ? this.pointHoverStyleKeys : this.pointStyleKeys;
+		var keys = me.styleKeys;
+		var hoverKeys = me.hoverStyleKeys;
+		var pointKeys = me.pointStyleKeys;
+		var pointHoverKeys = me.pointHoverStyleKeys;
 		var values = {};
-		var i, ilen, key, optionValue;
+		var i, ilen, key, value;
+
+		// Scriptable options
+		var context = {
+			chart: chart,
+			dataIndex: index,
+			dataset: dataset,
+			datasetIndex: element._datasetIndex
+		};
 
 		for (i = 0, ilen = keys.length; i < ilen; ++i) {
 			key = keys[i];
-			optionValue = options[key];
-			values[key] = resolve([
-				custom[customKeys[i]],
+			values[key] = value = resolve([
+				custom[key],
 				dataset[pointKeys[i]],
-				!hover ? dataset[key] : isColorOption(key) ? this.getHoverColor(optionValue) : optionValue,
-				optionValue
-			], undefined, index);
+				dataset[key],
+				options[key]
+			], context, index);
+
+			key = hoverKeys[i];
+			values[key] = resolve([
+				custom[key],
+				dataset[pointHoverKeys[i]],
+				options[key],
+				isColorOption(key) ? me.getHoverColor(value) : value
+			], context, index);
 		}
 
 		return values;

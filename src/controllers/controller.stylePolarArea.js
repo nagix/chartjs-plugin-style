@@ -17,7 +17,7 @@ Chart.defaults.polarArea.legend.labels.generateLabels = function(chart) {
 		return data.labels.map(function(label, i) {
 			var meta = chart.getDatasetMeta(0);
 			var ds = data.datasets[0];
-			var arc = meta.data[i];
+			var arc = meta.data[i] || {};
 			var custom = arc.custom || {};
 			var arcOpts = chart.options.elements.arc;
 			var fill = resolve([custom.backgroundColor, ds.backgroundColor, arcOpts.backgroundColor], undefined, i);
@@ -33,7 +33,7 @@ Chart.defaults.polarArea.legend.labels.generateLabels = function(chart) {
 
 				// Extra data used for toggling the correct item
 				index: i
-			}, styleHelpers.resolveStyle(chart, arc, i, arcOpts));
+			}, arc._styleOptions || styleHelpers.resolveStyle(meta.controller, arc, i, arcOpts));
 		});
 	}
 	return [];
@@ -47,7 +47,7 @@ export default PolarAreaController.extend({
 
 	updateElement: function(arc, index) {
 		var me = this;
-		var chart = me.chart;
+		var options = styleHelpers.resolveStyle(me, arc, index, me.chart.options.elements.arc);
 		var model = {};
 
 		Object.defineProperty(arc, '_model', {
@@ -56,7 +56,7 @@ export default PolarAreaController.extend({
 				return model;
 			},
 			set: function(value) {
-				extend(model, value, styleHelpers.resolveStyle(chart, arc, index, chart.options.elements.arc));
+				extend(model, value, options);
 			}
 		});
 
@@ -64,25 +64,24 @@ export default PolarAreaController.extend({
 
 		delete arc._model;
 		arc._model = model;
+		arc._styleOptions = options;
 	},
 
 	setHoverStyle: function(element) {
 		var me = this;
-		var model = element._model;
 
 		PolarAreaController.prototype.setHoverStyle.apply(me, arguments);
 
 		styleHelpers.saveStyle(element);
-		extend(model, styleHelpers.resolveStyle(me.chart, element, element._index, model, true));
+		styleHelpers.setHoverStyle(element._model, element._styleOptions);
 	},
 
 	removeHoverStyle: function(element) {
 		var me = this;
-		var chart = me.chart;
 
 		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			extend(element._model, styleHelpers.resolveStyle(chart, element, element._index, chart.options.elements.arc));
+			styleHelpers.mergeStyle(element._model, element._styleOptions);
 		}
 
 		PolarAreaController.prototype.removeHoverStyle.apply(me, arguments);

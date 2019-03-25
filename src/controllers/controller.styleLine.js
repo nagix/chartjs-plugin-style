@@ -19,8 +19,8 @@ export default LineController.extend({
 
 	update: function() {
 		var me = this;
-		var chart = me.chart;
 		var line = me.getMeta().dataset;
+		var options = styleHelpers.resolveLineStyle(me, line, me.chart.options.elements.line);
 		var model = {};
 
 		Object.defineProperty(line, '_model', {
@@ -29,7 +29,7 @@ export default LineController.extend({
 				return model;
 			},
 			set: function(value) {
-				extend(model, value, styleHelpers.resolveLineStyle(chart, line, chart.options.elements.line));
+				extend(model, value, options);
 			}
 		});
 
@@ -37,34 +37,35 @@ export default LineController.extend({
 
 		delete line._model;
 		line._model = model;
+		line._styleOptions = options;
 	},
 
 	updateElement: function(point, index) {
 		var me = this;
+		var options = styleHelpers.resolvePointStyle(me, point, index, me.chart.options.elements.point);
 
 		LineController.prototype.updateElement.apply(me, arguments);
 
-		extend(point._model, styleHelpers.resolvePointStyle(me.chart, point, index, me.chart.options.elements.point));
+		extend(point._model, options);
+		point._styleOptions = options;
 	},
 
 	setHoverStyle: function(element) {
 		// Point
 		var me = this;
-		var model = element._model;
 
 		LineController.prototype.setHoverStyle.apply(me, arguments);
 
 		styleHelpers.saveStyle(element);
-		extend(model, styleHelpers.resolvePointStyle(me.chart, element, element._index, model, true));
+		styleHelpers.setHoverStyle(element._model, element._styleOptions);
 	},
 
 	removeHoverStyle: function(element) {
 		var me = this;
-		var chart = me.chart;
 
 		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			extend(element._model, styleHelpers.resolvePointStyle(chart, element, element._index, chart.options.elements.point));
+			styleHelpers.mergeStyle(element._model, element._styleOptions);
 		}
 
 		LineController.prototype.removeHoverStyle.apply(me, arguments);

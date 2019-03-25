@@ -16,7 +16,7 @@ export default BarController.extend({
 
 	updateElement: function(rectangle, index) {
 		var me = this;
-		var chart = me.chart;
+		var options = styleHelpers.resolveStyle(me, rectangle, index, me.chart.options.elements.rectangle);
 		var model = {};
 
 		Object.defineProperty(rectangle, '_model', {
@@ -25,7 +25,7 @@ export default BarController.extend({
 				return model;
 			},
 			set: function(value) {
-				extend(model, value, styleHelpers.resolveStyle(chart, rectangle, index, chart.options.elements.rectangle));
+				extend(model, value, options);
 			}
 		});
 
@@ -33,25 +33,24 @@ export default BarController.extend({
 
 		delete rectangle._model;
 		rectangle._model = model;
+		rectangle._styleOptions = options;
 	},
 
 	setHoverStyle: function(element) {
 		var me = this;
-		var model = element._model;
 
 		BarController.prototype.setHoverStyle.apply(me, arguments);
 
 		styleHelpers.saveStyle(element);
-		extend(model, styleHelpers.resolveStyle(me.chart, element, element._index, model, true));
+		styleHelpers.setHoverStyle(element._model, element._styleOptions);
 	},
 
 	removeHoverStyle: function(element) {
 		var me = this;
-		var chart = me.chart;
 
 		// For Chart.js 2.7.2 backward compatibility
 		if (!element.$previousStyle) {
-			extend(element._model, styleHelpers.resolveStyle(chart, element, element._index, chart.options.elements.rectangle));
+			styleHelpers.mergeStyle(element._model, element._styleOptions);
 		}
 
 		BarController.prototype.removeHoverStyle.apply(me, arguments);

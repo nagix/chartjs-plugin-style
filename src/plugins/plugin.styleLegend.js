@@ -1,7 +1,6 @@
 'use strict';
 
 import Chart from 'chart.js';
-import optionsHelpers from '../helpers/helpers.options';
 import styleHelpers from '../helpers/helpers.style';
 
 var defaults = Chart.defaults;
@@ -21,14 +20,36 @@ var mergeIf = helpers.mergeIf || function(target, source) {
 	return helpers.configMerge.call(this, source, target);
 };
 
-var resolve = optionsHelpers.resolve;
+var extend = helpers.extend;
 
 // Ported from Chart.js 2.7.3. Modified for style legend.
 // Generates labels shown in the legend
 defaults.global.legend.labels.generateLabels = function(chart) {
 	var data = chart.data;
+	var options = chart.options.legend || {};
+	var usePointStyle = options.labels && options.labels.usePointStyle;
+
 	return helpers.isArray(data.datasets) ? data.datasets.map(function(dataset, i) {
-		return {
+		var meta = chart.getDatasetMeta(i);
+		var controller = meta.controller;
+		var elementOpts = chart.options.elements;
+		var element, styleOptions;
+
+		if (usePointStyle) {
+			element = meta.data[0] || {};
+			styleOptions = element._styleOptions ||
+				styleHelpers.resolvePointStyle(controller, element, i, elementOpts.point);
+		} else if (meta.dataset) {
+			element = meta.dataset;
+			styleOptions = element._styleOptions ||
+				styleHelpers.resolveLineStyle(controller, element, elementOpts.line);
+		} else {
+			element = meta.data[0] || {};
+			styleOptions = element._styleOptions ||
+				styleHelpers.resolveStyle(controller, element, i, meta.bar ? elementOpts.rectangle : elementOpts.point);
+		}
+
+		return extend({
 			text: dataset.label,
 			fillStyle: valueAtIndexOrDefault(dataset.backgroundColor, 0),
 			hidden: !chart.isDatasetVisible(i),
@@ -40,23 +61,9 @@ defaults.global.legend.labels.generateLabels = function(chart) {
 			strokeStyle: dataset.borderColor,
 			pointStyle: dataset.pointStyle,
 
-			shadowOffsetX: resolve([dataset.pointShadowOffsetX, dataset.shadowOffsetX], undefined, 0),
-			shadowOffsetY: resolve([dataset.pointShadowOffsetY, dataset.shadowOffsetY], undefined, 0),
-			shadowBlur: resolve([dataset.pointShadowBlur, dataset.shadowBlur], undefined, 0),
-			shadowColor: resolve([dataset.pointShadowColor, dataset.shadowColor], undefined, 0),
-			bevelWidth: resolve([dataset.pointBevelWidth, dataset.bevelWidth], undefined, 0),
-			bevelHighlightColor: resolve([dataset.pointBevelHighlightColor, dataset.bevelHighlightColor], undefined, 0),
-			bevelShadowColor: resolve([dataset.pointBevelShadowColor, dataset.bevelShadowColor], undefined, 0),
-			innerGlowWidth: resolve([dataset.pointInnerGlowWidth, dataset.innerGlowWidth], undefined, 0),
-			innerGlowColor: resolve([dataset.pointInnerGlowColor, dataset.innerGlowColor], undefined, 0),
-			outerGlowWidth: resolve([dataset.pointOuterGlowWidth, dataset.outerGlowWidth], undefined, 0),
-			outerGlowColor: resolve([dataset.pointOuterGlowColor, dataset.outerGlowColor], undefined, 0),
-			backgroundOverlayColor: resolve([dataset.pointBackgroundOverlayColor, dataset.backgroundOverlayColor], undefined, 0),
-			backgroundOverlayMode: resolve([dataset.pointBackgroundOverlayMode, dataset.backgroundOverlayMode], undefined, 0),
-
 			// Below is extra data used for toggling the datasets
 			datasetIndex: i
-		};
+		}, styleOptions);
 	}, this) : [];
 };
 
@@ -132,7 +139,7 @@ var StyleLegend = Chart.Legend.extend({
 					ctx.setLineDash(valueOrDefault(legendItem.lineDash, lineDefault.borderDash));
 				}
 
-				options = helpers.extend({}, legendItem, {
+				options = extend({}, legendItem, {
 					borderColor: ctx.strokeStyle,
 					borderWidth: ctx.lineWidth
 				});
