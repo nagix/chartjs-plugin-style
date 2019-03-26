@@ -10,7 +10,7 @@ var helpers = Chart.helpers;
 var extend = helpers.extend;
 var resolve = optionsHelpers.resolve;
 
-// Ported from Chart.js 2.7.3. Modified for style polarArea.
+// Ported from Chart.js 2.8.0. Modified for style polarArea.
 Chart.defaults.polarArea.legend.labels.generateLabels = function(chart) {
 	var data = chart.data;
 	if (data.labels.length && data.datasets.length) {
