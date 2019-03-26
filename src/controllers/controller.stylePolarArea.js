@@ -33,7 +33,7 @@ Chart.defaults.polarArea.legend.labels.generateLabels = function(chart) {
 
 				// Extra data used for toggling the correct item
 				index: i
-			}, arc._styleOptions || styleHelpers.resolveStyle(meta.controller, arc, i, arcOpts));
+			}, styleHelpers.resolveStyle(meta.controller, arc, i, arcOpts));
 		});
 	}
 	return [];

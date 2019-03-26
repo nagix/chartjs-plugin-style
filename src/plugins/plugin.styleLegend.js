@@ -37,16 +37,13 @@ defaults.global.legend.labels.generateLabels = function(chart) {
 
 		if (usePointStyle) {
 			element = meta.data[0] || {};
-			styleOptions = element._styleOptions ||
-				styleHelpers.resolvePointStyle(controller, element, i, elementOpts.point);
+			styleOptions = styleHelpers.resolvePointStyle(controller, element, i, elementOpts.point);
 		} else if (meta.dataset) {
 			element = meta.dataset;
-			styleOptions = element._styleOptions ||
-				styleHelpers.resolveLineStyle(controller, element, elementOpts.line);
+			styleOptions = styleHelpers.resolveLineStyle(controller, element, elementOpts.line);
 		} else {
 			element = meta.data[0] || {};
-			styleOptions = element._styleOptions ||
-				styleHelpers.resolveStyle(controller, element, i, meta.bar ? elementOpts.rectangle : elementOpts.point);
+			styleOptions = styleHelpers.resolveStyle(controller, element, i, meta.bar ? elementOpts.rectangle : elementOpts.point);
 		}
 
 		return extend({

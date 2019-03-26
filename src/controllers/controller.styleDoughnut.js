@@ -34,7 +34,7 @@ defaults.doughnut.legend.labels.generateLabels = defaults.pie.legend.labels.gene
 
 				// Extra data used for toggling the correct item
 				index: i
-			}, arc._styleOptions || styleHelpers.resolveStyle(meta.controller, arc, i, arcOpts));
+			}, styleHelpers.resolveStyle(meta.controller, arc, i, arcOpts));
 		});
 	}
 	return [];
