@@ -29,10 +29,6 @@
 	<div class="container mt-3">
 		<p class="text-center">
 			<button type="button" class="btn btn-outline-primary btn-sm" id="randomizeData">Randomize Data</button>
-			<button type="button" class="btn btn-outline-primary btn-sm" id="addDataset">Add Dataset</button>
-			<button type="button" class="btn btn-outline-primary btn-sm" id="removeDataset">Remove Dataset</button>
-			<button type="button" class="btn btn-outline-primary btn-sm" id="addData">Add Data</button>
-			<button type="button" class="btn btn-outline-primary btn-sm" id="removeData">Remove Data</button>
 		</p>
 	</div>
 	<div class="container mt-3">
@@ -48,12 +44,7 @@
 			<div class="tab-pane fade show active" id="js" role="tabpanel" aria-labelledby="js-tab">
 				<pre class="prettyprint lang-js p-3 bg-light">var chartColors = {
 	red: 'rgb(255, 99, 132)',
-	orange: 'rgb(255, 159, 64)',
-	yellow: 'rgb(255, 205, 86)',
-	green: 'rgb(75, 192, 192)',
-	blue: 'rgb(54, 162, 235)',
-	purple: 'rgb(153, 102, 255)',
-	grey: 'rgb(201, 203, 207)'
+	blue: 'rgb(54, 162, 235)'
 };
 var effectColors = {
 	highlight: 'rgba(255, 255, 255, 0.75)',
@@ -65,10 +56,9 @@ function randomScalingFactor() {
 	return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
 }
 
-var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var color = Chart.helpers.color;
 var config = {
-	type: 'horizontalBar',
+	type: 'bar',
 	data: {
 		labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 		datasets: [{
@@ -82,7 +72,7 @@ var config = {
 			shadowOffsetY: 3,
 			shadowBlur: 10,
 			shadowColor: effectColors.shadow,
-			bevelWidth: 2,
+			bevelWidth: function() {return Math.random() * 6 + 2;},
 			bevelHighlightColor: effectColors.highlight,
 			bevelShadowColor: effectColors.shadow,
 			hoverInnerGlowWidth: 20,
@@ -100,7 +90,7 @@ var config = {
 			shadowOffsetY: 3,
 			shadowBlur: 10,
 			shadowColor: effectColors.shadow,
-			bevelWidth: 2,
+			bevelWidth: function() {return Math.random() * 6 + 2;},
 			bevelHighlightColor: effectColors.highlight,
 			bevelShadowColor: effectColors.shadow,
 			hoverInnerGlowWidth: 20,
@@ -112,22 +102,19 @@ var config = {
 	options: {
 		title: {
 			display: true,
-			text: 'Mixed (horizontal bar chart) sample'
-		},
-		legend: {
-			position: 'right'
+			text: 'Scriptable options sample'
 		},
 		scales: {
 			xAxes: [{
 				scaleLabel: {
 					display: true,
-					labelString: 'Value'
+					labelString: 'Month'
 				}
 			}],
 			yAxes: [{
 				scaleLabel: {
 					display: true,
-					labelString: 'Month'
+					labelString: 'Value'
 				}
 			}]
 		},
@@ -155,64 +142,6 @@ document.getElementById('randomizeData').addEventListener('click', function() {
 		});
 	});
 	window.myChart.update();
-});
-
-var colorNames = Object.keys(chartColors);
-document.getElementById('addDataset').addEventListener('click', function() {
-	var colorName = colorNames[config.data.datasets.length % colorNames.length];
-	var newColor = chartColors[colorName];
-	var newDataset = {
-		label: 'Dataset ' + (config.data.datasets.length + 1),
-		backgroundColor: newColor,
-		borderWidth: 0,
-		data: [],
-		shadowOffsetX: 3,
-		shadowOffsetY: 3,
-		shadowBlur: 10,
-		shadowColor: effectColors.shadow,
-		bevelWidth: 2,
-		bevelHighlightColor: effectColors.highlight,
-		bevelShadowColor: effectColors.shadow,
-		hoverInnerGlowWidth: 20,
-		hoverInnerGlowColor: effectColors.glow,
-		hoverOuterGlowWidth: 20,
-		hoverOuterGlowColor: effectColors.glow
-	};
-
-	for (var index = 0; index < config.data.labels.length; ++index) {
-		newDataset.data.push(randomScalingFactor());
-	}
-
-	config.data.datasets.push(newDataset);
-	window.myChart.update();
-});
-
-document.getElementById('removeDataset').addEventListener('click', function() {
-	config.data.datasets.pop();
-	window.myChart.update();
-});
-
-document.getElementById('addData').addEventListener('click', function() {
-	if (config.data.datasets.length > 0) {
-		var month = MONTHS[config.data.labels.length % MONTHS.length];
-		config.data.labels.push(month);
-
-		config.data.datasets.forEach(function(dataset) {
-			dataset.data.push(randomScalingFactor());
-		});
-
-		window.myChart.update();
-	}
-});
-
-document.getElementById('removeData').addEventListener('click', function() {
-	config.data.labels.splice(-1, 1); // remove the label first
-
-	config.data.datasets.forEach(function(dataset) {
-		dataset.data.pop();
-	});
-
-	window.myChart.update();
 });</pre>
 			</div>
 			<div class="tab-pane fade" id="html" role="tabpanel" aria-labelledby="html-tab">
@@ -226,10 +155,6 @@ document.getElementById('removeData').addEventListener('click', function() {
 	&lt;/div&gt;
 	&lt;p&gt;
 		&lt;button id="randomizeData"&gt;Randomize Data&lt;/button&gt;
-		&lt;button id="addDataset"&gt;Add Dataset&lt;/button&gt;
-		&lt;button id="removeDataset"&gt;Remove Dataset&lt;/button&gt;
-		&lt;button id="addData"&gt;Add Data&lt;/button&gt;
-		&lt;button id="removeData"&gt;Remove Data&lt;/button&gt;
 	&lt;/p&gt;
 &lt;/body&gt;</pre>
 			</div>
@@ -239,12 +164,7 @@ document.getElementById('removeData').addEventListener('click', function() {
 	<script>
 		var chartColors = {
 			red: 'rgb(255, 99, 132)',
-			orange: 'rgb(255, 159, 64)',
-			yellow: 'rgb(255, 205, 86)',
-			green: 'rgb(75, 192, 192)',
-			blue: 'rgb(54, 162, 235)',
-			purple: 'rgb(153, 102, 255)',
-			grey: 'rgb(201, 203, 207)'
+			blue: 'rgb(54, 162, 235)'
 		};
 		var effectColors = {
 			highlight: 'rgba(255, 255, 255, 0.75)',
@@ -256,10 +176,9 @@ document.getElementById('removeData').addEventListener('click', function() {
 			return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
 		}
 
-		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		var color = Chart.helpers.color;
 		var config = {
-			type: 'horizontalBar',
+			type: 'bar',
 			data: {
 				labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 				datasets: [{
@@ -273,7 +192,7 @@ document.getElementById('removeData').addEventListener('click', function() {
 					shadowOffsetY: 3,
 					shadowBlur: 10,
 					shadowColor: effectColors.shadow,
-					bevelWidth: 2,
+					bevelWidth: function() {return Math.random() * 6 + 2;},
 					bevelHighlightColor: effectColors.highlight,
 					bevelShadowColor: effectColors.shadow,
 					hoverInnerGlowWidth: 20,
@@ -291,7 +210,7 @@ document.getElementById('removeData').addEventListener('click', function() {
 					shadowOffsetY: 3,
 					shadowBlur: 10,
 					shadowColor: effectColors.shadow,
-					bevelWidth: 2,
+					bevelWidth: function() {return Math.random() * 6 + 2;},
 					bevelHighlightColor: effectColors.highlight,
 					bevelShadowColor: effectColors.shadow,
 					hoverInnerGlowWidth: 20,
@@ -303,22 +222,19 @@ document.getElementById('removeData').addEventListener('click', function() {
 			options: {
 				title: {
 					display: true,
-					text: 'Mixed (horizontal bar chart) sample'
-				},
-				legend: {
-					position: 'right'
+					text: 'Scriptable options sample'
 				},
 				scales: {
 					xAxes: [{
 						scaleLabel: {
 							display: true,
-							labelString: 'Value'
+							labelString: 'Month'
 						}
 					}],
 					yAxes: [{
 						scaleLabel: {
 							display: true,
-							labelString: 'Month'
+							labelString: 'Value'
 						}
 					}]
 				},
@@ -345,64 +261,6 @@ document.getElementById('removeData').addEventListener('click', function() {
 					return randomScalingFactor();
 				});
 			});
-			window.myChart.update();
-		});
-
-		var colorNames = Object.keys(chartColors);
-		document.getElementById('addDataset').addEventListener('click', function() {
-			var colorName = colorNames[config.data.datasets.length % colorNames.length];
-			var newColor = chartColors[colorName];
-			var newDataset = {
-				label: 'Dataset ' + (config.data.datasets.length + 1),
-				backgroundColor: newColor,
-				borderWidth: 0,
-				data: [],
-				shadowOffsetX: 3,
-				shadowOffsetY: 3,
-				shadowBlur: 10,
-				shadowColor: effectColors.shadow,
-				bevelWidth: 2,
-				bevelHighlightColor: effectColors.highlight,
-				bevelShadowColor: effectColors.shadow,
-				hoverInnerGlowWidth: 20,
-				hoverInnerGlowColor: effectColors.glow,
-				hoverOuterGlowWidth: 20,
-				hoverOuterGlowColor: effectColors.glow
-			};
-
-			for (var index = 0; index < config.data.labels.length; ++index) {
-				newDataset.data.push(randomScalingFactor());
-			}
-
-			config.data.datasets.push(newDataset);
-			window.myChart.update();
-		});
-
-		document.getElementById('removeDataset').addEventListener('click', function() {
-			config.data.datasets.pop();
-			window.myChart.update();
-		});
-
-		document.getElementById('addData').addEventListener('click', function() {
-			if (config.data.datasets.length > 0) {
-				var month = MONTHS[config.data.labels.length % MONTHS.length];
-				config.data.labels.push(month);
-
-				config.data.datasets.forEach(function(dataset) {
-					dataset.data.push(randomScalingFactor());
-				});
-
-				window.myChart.update();
-			}
-		});
-
-		document.getElementById('removeData').addEventListener('click', function() {
-			config.data.labels.splice(-1, 1); // remove the label first
-
-			config.data.datasets.forEach(function(dataset) {
-				dataset.data.pop();
-			});
-
 			window.myChart.update();
 		});
 	</script>

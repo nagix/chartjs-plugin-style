@@ -3,7 +3,7 @@
   "homepage": "https://nagix.github.io/chartjs-plugin-style",
   "description": "Chart.js plugin for more styling options",
   "author": "Akihiko Kusanagi <nagi@nagi-p.com> (https://nagix.github.io/)",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "license": "MIT",
   "jsdelivr": "dist/chartjs-plugin-style.min.js",
   "unpkg": "dist/chartjs-plugin-style.min.js",
@@ -33,7 +33,7 @@
     "test": "test"
   },
   "devDependencies": {
-    "chart.js": "~2.7.3",
+    "chart.js": "~2.8.0",
     "eslint-config-chartjs": "^0.1.0",
     "gulp": "^4.0.0",
     "gulp-eslint": "^5.0.0",
