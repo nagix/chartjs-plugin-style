@@ -136,14 +136,29 @@ export default {
 
 	drawBevel: function(chart, options, drawCallback) {
 		var ctx = chart.ctx;
-		var width = options.bevelWidth;
-		var borderWidth = options.borderWidth;
-		var bevelExtra = this.opaque(options.borderColor) && borderWidth > 0 ? borderWidth / 2 : 0;
 		var pixelRatio = chart.currentDevicePixelRatio;
-		var shadowOffset = ((width + bevelExtra) * pixelRatio) * 5 / 6;
+		var shadowWidthFactor = pixelRatio * 5 / 6;
+		var width = options.bevelWidth * shadowWidthFactor;
+		var borderWidth = options.borderWidth;
+		var parsedBorderWidth = options.parsedBorderWidth;
+		var shadowOffset, offset;
 
 		if (!width) {
 			return;
+		}
+
+		if (!this.opaque(options.borderColor)) {
+			shadowOffset = {top: width, left: width, bottom: width, right: width};
+		} else if (parsedBorderWidth) {
+			shadowOffset = {
+				top: width + parsedBorderWidth.top * pixelRatio,
+				left: width + parsedBorderWidth.left * pixelRatio,
+				bottom: width + parsedBorderWidth.bottom * pixelRatio,
+				right: width + parsedBorderWidth.right * pixelRatio
+			};
+		} else {
+			offset = width + (borderWidth > 0 ? borderWidth : 0) * pixelRatio / 2;
+			shadowOffset = {top: offset, left: offset, bottom: offset, right: offset};
 		}
 
 		ctx.save();
@@ -158,9 +173,9 @@ export default {
 
 		// Draw bevel shadow
 		ctx.fillStyle = 'black';
-		ctx.shadowOffsetX = OFFSET * pixelRatio - shadowOffset;
-		ctx.shadowOffsetY = -shadowOffset;
-		ctx.shadowBlur = shadowOffset;
+		ctx.shadowOffsetX = OFFSET * pixelRatio - shadowOffset.right;
+		ctx.shadowOffsetY = -shadowOffset.bottom;
+		ctx.shadowBlur = width;
 		ctx.shadowColor = options.bevelShadowColor;
 		// Workaround for the issue on Windows version of FireFox
 		// https://bugzilla.mozilla.org/show_bug.cgi?id=1333090
@@ -171,8 +186,8 @@ export default {
 		ctx.fill('evenodd');
 
 		// Draw Bevel highlight
-		ctx.shadowOffsetX = OFFSET * pixelRatio + shadowOffset;
-		ctx.shadowOffsetY = shadowOffset;
+		ctx.shadowOffsetX = OFFSET * pixelRatio + shadowOffset.left;
+		ctx.shadowOffsetY = shadowOffset.top;
 		ctx.shadowColor = options.bevelHighlightColor;
 		ctx.fill('evenodd');
 
