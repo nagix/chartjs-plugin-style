@@ -103,15 +103,10 @@ var StyleLegend = Chart.Legend.extend({
 
 		helpers.each = function(loopable, fn) {
 			each(loopable, function(legendItem) {
-				var keys = Object.keys(legendItem);
-				var i, ilen;
-
-				options = {};
-				for (i = 0, ilen = keys.length; i < ilen; i++) {
-					options[keys[i]] = legendItem[keys[i]];
-				}
-				options.borderColor = valueOrDefault(legendItem.strokeStyle, globalDefaults.defaultColor);
-				options.borderWidth = valueOrDefault(legendItem.lineWidth, globalDefaults.elements.line.borderWidth);
+				options = styleHelpers.mergeStyle({
+					borderColor: valueOrDefault(legendItem.strokeStyle, globalDefaults.defaultColor),
+					borderWidth: valueOrDefault(legendItem.lineWidth, globalDefaults.elements.line.borderWidth)
+				}, legendItem);
 
 				fn.apply(null, arguments);
 			});

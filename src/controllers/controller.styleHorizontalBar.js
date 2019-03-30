@@ -18,7 +18,7 @@ export default StyleBarController.extend({
 	},
 
 	/**
-	 * For Chart.js 2.7.2 backward compatibility
+	 * For Chart.js 2.7.3 backward compatibility
 	 * @private
 	 */
 	getValueScaleId: function() {
@@ -26,7 +26,7 @@ export default StyleBarController.extend({
 	},
 
 	/**
-	 * For Chart.js 2.7.2 backward compatibility
+	 * For Chart.js 2.7.3 backward compatibility
 	 * @private
 	 */
 	getIndexScaleId: function() {
